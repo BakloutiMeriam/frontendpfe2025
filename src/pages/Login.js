@@ -1,4 +1,5 @@
 import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { GoogleLogin } from "@react-oauth/google";
@@ -7,6 +8,7 @@ import LoginForm from "../components/loginForm";
 const Login = () => {
   const { login, user, logout } = useContext(AuthContext);
   const [errors, setErrors] = useState({ email: "", mdp: "" });
+  const navigate = useNavigate();
 
   const handleSubmit = async (email, mdp) => {
     const newErrors = { email: "", mdp: "" };
@@ -66,7 +68,11 @@ const Login = () => {
 
         {/* Mot de passe oublié */}
         <div className="text-center mt-3">
-          <button className="btn btn-link" style={{ textDecoration: "none" }}>
+          <button
+            className="btn btn-link"
+            style={{ textDecoration: "none" }}
+            onClick={() => navigate("/forgot-password")}
+          >
             Mot de passe oublié ?
           </button>
         </div>

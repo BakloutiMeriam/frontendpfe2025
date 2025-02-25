@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api/auth/login";
+const API_URL = "http://localhost:3000/api/auth";
 
 const login = async (email, mdp) => {
   try {
-    const response = await axios.post(API_URL, { email, mdp });
+    const response = await axios.post(`${API_URL}/login`, { email, mdp });
 
     if (response.data.token) {
       localStorage.setItem("token", response.data.token);
@@ -19,6 +19,20 @@ const login = async (email, mdp) => {
       throw new Error("Une erreur est survenue. Veuillez réessayer.");
     }
   }
+};
+
+export const forgotPassword = async (email) => {
+  const response = await axios.post(`${API_URL}/forgot-password`, { email });
+  return response.data;
+};
+
+export const resetPassword = async (email, resetCode, newPassword) => {
+  const response = await axios.post(`${API_URL}/reset-password`, {
+    email,
+    resetCode,
+    newPassword,
+  });
+  return response.data;
 };
 
 const logout = () => {
