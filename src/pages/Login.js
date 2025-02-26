@@ -2,14 +2,17 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import LoginForm from "../components/loginForm";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../redux/authSlice";
 
 const Login = () => {
   const { login, user, logout } = useContext(AuthContext);
   const [errors, setErrors] = useState({ email: "", mdp: "" });
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleSubmit = async (email, mdp) => {
     const newErrors = { email: "", mdp: "" };
 
@@ -32,7 +35,12 @@ const Login = () => {
   };
   const handleGoogleLoginSuccess = (response) => {
     console.log("Google login success:", response);
-    // Logique pour connecter l'utilisateur avec Google ici
+    const token = response.credential;
+    // Simuler la récupération des infos utilisateur depuis Google
+    const userData = { name: "Utilisateur Google", role: "client", token };
+
+    dispatch(loginSuccess(userData)); // Stocker l'utilisateur dans Redux
+    login(token); // Si nécessaire, appeler la fonction de contexte Auth
   };
 
   const handleGoogleLoginFailure = (error) => {

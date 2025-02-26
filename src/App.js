@@ -5,7 +5,7 @@ import AppRoutes from "./routes/AppRoutes";
 
 const App = () => {
   return (
-    <GoogleOAuthProvider clientId="VOTRE_CLIENT_ID_GOOGLE">
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <Router>
         <AppRoutes />
       </Router>
