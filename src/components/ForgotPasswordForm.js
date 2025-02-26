@@ -1,8 +1,7 @@
-// ForgotPasswordForm.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { forgotPassword } from "../services/authService";
-import "../styles/auth.css"; // Assurez-vous d'avoir ce fichier dans votre dossier style
+import "../styles/auth.css";
 
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState("");
