@@ -2,19 +2,34 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-import LoginForm from "../components/loginForm";
+import { GoogleLogin } from "@react-oauth/google";
 import React from "react";
-import { useDispatch } from "react-redux";
-import { loginSuccess } from "../redux/authSlice";
 
 const Login = () => {
   const { login, user, logout } = useContext(AuthContext);
   const [errors, setErrors] = useState({ email: "", mdp: "" });
+  const [email, setEmail] = useState("");
+  const [mdp, setMdp] = useState("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const handleSubmit = async (email, mdp) => {
+
+  const validatePassword = (password) => {
+    return password.length >= 6;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const newErrors = { email: "", mdp: "" };
+
+    if (!email || !mdp) {
+      alert("Veuillez remplir tous les champs !");
+      return;
+    }
+
+    if (!validatePassword(mdp)) {
+      newErrors.mdp = "Le mot de passe doit comporter au moins 6 caractères.";
+      setErrors(newErrors);
+      return;
+    }
 
     try {
       await login(email, mdp);
@@ -33,19 +48,31 @@ const Login = () => {
   const handleLogout = () => {
     logout();
   };
-  const handleGoogleLoginSuccess = (response) => {
-    console.log("Google login success:", response);
-    const token = response.credential;
-    // Simuler la récupération des infos utilisateur depuis Google
-    const userData = { name: "Utilisateur Google", role: "client", token };
 
-    dispatch(loginSuccess(userData)); // Stocker l'utilisateur dans Redux
-    login(token); // Si nécessaire, appeler la fonction de contexte Auth
+  const handleGoogleLoginSuccess = async (response) => {
+    try {
+      const res = await fetch("http://localhost:3000/api/user/googleAuth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: response.credential }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || "Échec de l'authentification Google");
+      }
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      if (data.user.photo) {
+        localStorage.setItem("photo", data.user.photo);
+      }
+      data.isNewUser
+        ? navigate("/completer-profile", { state: { user: data.user } })
+        : navigate("/dashboard");
+    } catch (error) {
+      console.error("Erreur d'authentification Google", error);
+    }
   };
 
-  const handleGoogleLoginFailure = (error) => {
-    console.error("Google login error:", error);
-  };
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
       <div className="card p-4 shadow-lg" style={{ width: "400px" }}>
@@ -58,23 +85,49 @@ const Login = () => {
                 ? "Client"
                 : user.role === "proprietaire"
                 ? "Propriétaire"
-                : "Administrateur"}
-               !
+                : "Administrateur"}{" "}
+              !
             </p>
             <button className="btn btn-secondary mt-3" onClick={handleLogout}>
               Se déconnecter
             </button>
           </div>
         ) : (
-          <LoginForm
-            login={login}
-            errors={errors}
-            setErrors={setErrors}
-            handleSubmit={handleSubmit}
-          />
+          <form onSubmit={handleSubmit}>
+            {errors.general && (
+              <div className="alert alert-danger">{errors.general}</div>
+            )}
+            <div className="mb-3">
+              <label className="form-label">Email :</label>
+              <input
+                type="email"
+                className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              {errors.email && (
+                <div className="invalid-feedback">{errors.email}</div>
+              )}
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Mot de passe :</label>
+              <input
+                type="password"
+                className={`form-control ${errors.mdp ? "is-invalid" : ""}`}
+                value={mdp}
+                onChange={(e) => setMdp(e.target.value)}
+                required
+              />
+              {errors.mdp && (
+                <div className="invalid-feedback">{errors.mdp}</div>
+              )}
+            </div>
+            <button type="submit" className="btn btn-primary w-100">
+              Se connecter
+            </button>
+          </form>
         )}
-
-        {/* Mot de passe oublié */}
         <div className="text-center mt-3">
           <button
             className="btn btn-link"
@@ -84,11 +137,10 @@ const Login = () => {
             Mot de passe oublié ?
           </button>
         </div>
-        {/* Se connecter avec Google */}
-        <div className="text-center mt-3">
+        <div className="login-container">
           <GoogleLogin
             onSuccess={handleGoogleLoginSuccess}
-            onError={handleGoogleLoginFailure}
+            onError={(error) => console.error("Google login error:", error)}
           />
         </div>
       </div>
