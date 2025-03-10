@@ -60,7 +60,9 @@ const Register = () => {
         formDataObject.append(key, formData[key]);
       });
       console.log("📤 Données envoyées :", formDataObject);
-      await register(formDataObject);
+      await register(formDataObject, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       console.log("✅ Inscription réussie !");
     } catch (err) {
       setFormError(err.message);

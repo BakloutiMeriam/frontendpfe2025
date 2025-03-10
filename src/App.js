@@ -11,7 +11,7 @@ const App = () => {
         <AppRoutes />
       </div>
     </Router>*/
-    <GoogleOAuthProvider clientId="VOTRE_CLIENT_ID_GOOGLE">
+    <GoogleOAuthProvider>
       <Router>
         <ProfileProvider>
           <AppRoutes />

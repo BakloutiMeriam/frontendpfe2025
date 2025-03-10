@@ -1,5 +1,5 @@
-// src/components/LoginForm.jsx
 import { useState } from "react";
+import "../styles/auth.css";
 
 const LoginForm = ({ login, errors, setErrors, handleSubmit }) => {
   const [email, setEmail] = useState("");
@@ -63,5 +63,4 @@ const LoginForm = ({ login, errors, setErrors, handleSubmit }) => {
     </form>
   );
 };
-
 export default LoginForm;

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3000/api/auth";
 
-const login = async (email, mdp) => {
+export const login = async (email, mdp) => {
   try {
     const response = await axios.post(`${API_URL}/login`, { email, mdp });
 
@@ -35,13 +35,25 @@ export const resetPassword = async (email, resetCode, newPassword) => {
   return response.data;
 };
 
-const logout = () => {
+export const logout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
 };
 
-const getToken = () => {
+export const getToken = () => {
   return localStorage.getItem("token");
 };
 
-export default { login, logout, getToken };
+export const authHeader = () => {
+  const token = getToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
+export default {
+  authHeader,
+  getToken,
+  logout,
+  resetPassword,
+  forgotPassword,
+  login,
+};
