@@ -124,7 +124,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import LoginForm from "../components/loginForm";
 import FacebookLogin from "react-facebook-login";
+import { GoogleLogin } from "@react-oauth/google";
 import "../styles/auth.css";
+import Navbar from "../components/Navbar";
 
 const Login = () => {
   const { login, user } = useContext(AuthContext);
@@ -136,7 +138,7 @@ const Login = () => {
       if (user.role === "admin") {
         navigate("/users");
       } else {
-        navigate("/dashboard");
+        navigate("/profile");
       }
     }
   }, [user, navigate]);
@@ -182,7 +184,7 @@ const Login = () => {
           if (!data.user.tel || !data.user.adresse || !data.user.role) {
             navigate(`/completer-profil/${data.user._id}`);
           } else {
-            navigate("/dashboard");
+            navigate("/profile");
           }
         }
       } catch (error) {
@@ -199,19 +201,47 @@ const Login = () => {
     alert("Échec de la connexion avec Facebook. Veuillez réessayer.");
   };
 
+  const handleGoogleLoginSuccess = async (response) => {
+    try {
+      const res = await fetch("http://localhost:3000/api/user/googleAuth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: response.credential }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || "Échec de l'authentification Google");
+      }
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      if (data.user.photo) {
+        localStorage.setItem("photo", data.user.photo);
+      }
+      data.isNewUser
+        ? navigate("/completer-profileGoogle", { state: { user: data.user } })
+        : navigate("/dashboard");
+    } catch (error) {
+      console.error("Erreur d'authentification Google", error);
+    }
+  };
+
   return (
     <>
+      <Navbar />
       <div className="auth-container">
         <div className="auth-left">
           <div>
-            <h1>Bienvenue sur notre plateforme</h1>
+            <h1>Bienvenue sur Stayzy</h1>
             <p>Connectez-vous pour accéder à votre espace personnel.</p>
             <img src="/images/5.jpg" alt="Illustration" />
           </div>
         </div>
         <div className="auth-right">
           <div className="auth-card">
-            <h2>Connexion</h2>
+            <h2>Identifiez-vous !</h2>
+            <div className="reset-logo2">
+              <img src="/images/logo.jpg" alt="Logo" />
+            </div>
             <LoginForm
               login={login}
               errors={errors}
@@ -226,6 +256,17 @@ const Login = () => {
                 Mot de passe oublié ?
               </button>
             </div>
+            <div className="separator">
+              <hr className="separator-line" />
+              <span className="separator-text">ou</span>
+              <hr className="separator-line" />
+            </div>
+            <div className="social-login">
+              <GoogleLogin
+                onSuccess={handleGoogleLoginSuccess}
+                onError={(error) => console.error("Google login error:", error)}
+              />
+            </div>
             <div className="social-login">
               <FacebookLogin
                 appId="646369371125852"
@@ -234,9 +275,27 @@ const Login = () => {
                 callback={handleFacebookLoginSuccess}
                 onFailure={handleFacebookLoginFailure}
                 icon="bi-facebook"
-                textButton=" Se connecter avec Facebook"
+                textButton=" Continuer avec Facebook"
                 cssClass="btn-primary"
               />
+            </div>
+            <div className="text-center mt-3">
+              <p
+                style={{
+                  display: "inline",
+                  marginRight: "5px",
+                  fontSize: "12px",
+                }}
+              >
+                Vous n'avez pas de compte ?
+              </p>
+              <button
+                className="btn btn-link"
+                onClick={() => navigate("/register")}
+                style={{ padding: 0, margin: 0, verticalAlign: "baseline" }}
+              >
+                Inscrivez-vous
+              </button>
             </div>
           </div>
         </div>

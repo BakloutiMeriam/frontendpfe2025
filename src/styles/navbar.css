@@ -1,0 +1,68 @@
+/* Style de base pour la navbar */
+.navbar-custom {
+  background-color: #fffefe; /* Fond blanc */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre légère */
+  padding: 10px 0; /* Espacement interne */
+}
+
+/* Logo de la navbar */
+.navbar-brand-custom {
+  font-size: 1.5rem; /* Taille du texte */
+  font-weight: bold; /* Texte en gras */
+  color: #2653a4; /* Couleur bleu foncé */
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand-custom img {
+  height: 60px; /* Taille du logo */
+  margin-right: 10px; /* Espacement entre le logo et le texte */
+}
+
+/* Liens de la navbar */
+.nav-link-custom {
+  color: #2653a4 !important; /* Couleur bleu foncé */
+  font-size: 1rem; /* Taille du texte */
+  margin: 0 10px; /* Espacement entre les liens */
+  transition: color 0.3s ease; /* Transition fluide */
+}
+
+.nav-link-custom:hover {
+  color: #125be1 !important; /* Couleur bleu clair au survol */
+}
+
+/* Bouton de déconnexion */
+.btn-logout-custom {
+  background-color: #2653a4; /* Fond bleu foncé */
+  color: #fffefe !important; /* Texte blanc */
+  border: none; /* Pas de bordure */
+  padding: 8px 16px; /* Espacement interne */
+  border-radius: 4px; /* Coins arrondis */
+  transition: background-color 0.3s ease; /* Transition fluide */
+}
+
+.btn-logout-custom:hover {
+  background-color: #125be1; /* Fond bleu clair au survol */
+}
+
+/* Bouton toggler pour les écrans mobiles */
+.navbar-toggler-custom {
+  border: none; /* Pas de bordure */
+  outline: none; /* Pas de contour */
+}
+
+.navbar-toggler-custom:focus {
+  box-shadow: none; /* Pas d'ombre au focus */
+}
+
+/* Icône du toggler */
+.navbar-toggler-icon-custom {
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(38, 83, 164, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Conteneur de la navbar */
+.navbar-container-custom {
+  max-width: 1200px; /* Largeur maximale */
+  margin: 0 auto; /* Centrer horizontalement */
+  padding: 0 20px; /* Espacement interne */
+}

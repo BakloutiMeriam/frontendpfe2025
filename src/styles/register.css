@@ -1,79 +1,138 @@
-/* Container Formulaire */
+/* Fond dégradé pour la moitié de la page */
 .register-container {
-  max-width: 450px;
-  margin: 50px auto;
-  padding: 30px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 110vh;
+  background: linear-gradient(to bottom, #125be1 60%, #edf4f7 50%);
 }
 
-/* Hover effet */
-.register-container:hover {
-  transform: scale(1.02);
+/* Carte pour le formulaire */
+.register-card {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
 }
 
-/* Champs de texte et de sélection */
+/* Titre du formulaire */
+.register-title {
+  color: #dc3545;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+}
+
+/* Styles pour les champs du formulaire */
 .register-form input,
 .register-form select {
   width: 100%;
-  padding: 12px 40px; /* Ajout de padding pour l'icône */
-  margin: 12px 0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #f9f9f9;
-  font-size: 16px;
-  transition: border 0.3s ease, box-shadow 0.3s ease;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #4c4c4c;
+  border-radius: 60px;
+  font-size: 0.8rem;
 }
 
-/* Focus sur les champs */
-.register-form input:focus,
-.register-form select:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
-  outline: none;
-}
-
-/* Bouton */
-.register-form button {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(135deg, #007bff, #0056b3);
-  color: white;
+.register-form input[type="file"] {
   border: none;
-  border-radius: 6px;
+  border-radius: 0;
+}
+
+/* Bouton de soumission */
+.register-form button {
+  background-color: #125be1;
+  border: none;
+  padding: 10px;
+  border-radius: 60px;
+  width: 100%;
+  color: #ffffff;
+  font-size: 0.9rem;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-/* Hover sur le bouton */
-.register-form button:hover {
-  background: linear-gradient(135deg, #0056b3, #004494);
-  transform: translateY(-2px);
+.register-form button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 
-/* Message d'erreur */
-.error-message {
-  color: red;
-  font-size: 14px;
-  font-weight: bold;
+/* Style pour le reCAPTCHA */
+.register-form .recaptcha {
+  margin: 20px 0;
+}
+
+/* Message d'erreur ou de succès */
+.register-message {
+  margin-top: 15px;
+  font-size: 0.875rem;
   text-align: center;
-  margin-top: 5px;
 }
 
-/* Icônes à côté des champs */
-.input-container {
-  position: relative;
+.register-message.error {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 5px;
+  border-radius: 4px;
 }
 
-.input-container i {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #007bff;
-  font-size: 18px;
+/* Style pour les messages d'erreur */
+.error-message {
+  color: #dc3545; /* Couleur rouge pour les erreurs */
+  font-size: 0.875rem; /* Taille de police */
+  margin-top: 15px; /* Espacement depuis l'élément précédent */
+  text-align: center; /* Centrer le texte */
+  padding: 10px; /* Espacement interne */
+  background-color: #f8d7da; /* Fond légèrement rouge */
+  border: 1px solid #f5c6cb; /* Bordure rouge */
+  border-radius: 4px; /* Coins arrondis */
+  width: 100%; /* Largeur maximale */
+  max-width: 500px; /* Largeur maximale pour correspondre à la carte */
+  margin: 0 auto 20px; /* Centrer horizontalement et ajouter une marge en bas */
+}
+
+.register-message.success {
+  color: #28a745;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+/* Styles pour les rangées de formulaire */
+.form-row {
+  display: flex;
+  gap: 15px; /* Espace entre les champs */
+  margin-bottom: 15px;
+}
+
+.form-group {
+  flex: 1; /* Chaque groupe prend la moitié de l'espace */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #125be1;
+}
+
+/* Styles pour le lien de connexion */
+.login-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #000000;
+}
+
+.login-link a {
+  color: #125be1; /* Couleur du lien */
+  text-decoration: underline;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
 }

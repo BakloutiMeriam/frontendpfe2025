@@ -38,11 +38,11 @@ body {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
 }
 
 .auth-card h2 {
-  color: #2653a4;
+  color: #125be1;
   margin-bottom: 20px;
   text-align: center;
 }
@@ -50,17 +50,19 @@ body {
 .auth-card .form-control {
   border-radius: 60px;
   border: 1px solid #4c4c4c;
-  padding: 10px;
+  padding: 5px;
   margin-bottom: 15px;
+  font-size: 0.9rem;
 }
 
 .auth-card .btn-primary {
   background-color: #125be1;
   border: none;
-  padding: 10px;
+  padding: 5px;
   border-radius: 60px;
   width: 100%;
   color: #fffefe;
+  font-size: 0.9rem;
 }
 
 .auth-card .btn-primary:hover {
@@ -68,8 +70,9 @@ body {
 }
 
 .auth-card .btn-link {
-  color: #2653a4;
-  text-decoration: none;
+  color: #125be1;
+  text-decoration: underline;
+  font-size: 0.8rem;
 }
 
 .auth-card .btn-link:hover {
@@ -105,8 +108,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 10px; /* Espace entre l'icône et le texte */
-  background-color: #1877f2; /* Couleur de fond bleue Facebook */
-  color: #fff; /* Texte blanc */
+  background-color: #ffffff; /* Couleur de fond bleue Facebook */
+  color: #166fe5; /* Texte blanc */
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
@@ -132,4 +135,16 @@ body {
 /* Style du texte */
 .btn-facebook span {
   font-weight: 500; /* Texte en gras */
+}
+
+.reset-logo2 {
+  display: flex;
+  justify-content: center; /* Centre horizontalement */
+  align-items: center; /* Centre verticalement */
+  margin-top: 5px; /* Espacement depuis le haut */
+  margin-bottom: 0px; /* Espacement depuis le bas */
+}
+.reset-logo2 img {
+  width: 100px;
+  height: auto;
 }

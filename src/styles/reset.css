@@ -1,0 +1,170 @@
+body {
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  background-color: #edf4f7;
+}
+
+.reset-container {
+  display: flex;
+  height: 100vh;
+}
+
+.reset-left {
+  flex: 1;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #125be1;
+  padding: 20px;
+}
+
+.reset-left img {
+  max-width: 100%;
+  height: auto;
+}
+
+.reset-right {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #125be1;
+}
+
+.reset-card {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 6px 10spx rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 500px;
+}
+
+.reset-title {
+  color: #125be1;
+  margin-bottom: 10px;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+}
+.reset-label {
+  color: #125be1;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.reset-card .reset-form-control {
+  border-radius: 60px;
+  border: 1px solid #4c4c4c;
+  padding: 5px;
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+}
+
+.reset-card .reset-btn-custom {
+  background-color: #125be1;
+  border: none;
+  padding: 5px;
+  border-radius: 60px;
+  width: 100%;
+  color: #ffffff;
+  border: 1px solid #4c4c4c;
+  font-size: 0.8rem;
+}
+
+.reset-card .reset-btn-custom:hover {
+  background-color: #193870;
+}
+
+.reset-card .reset-btn-link {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.reset-card .reset-btn-link:hover {
+  text-decoration: underline;
+}
+
+/* Style pour le logo */
+.reset-logo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.reset-logo img {
+  width: 80px; /* Ajustez la taille du logo selon vos besoins */
+  height: auto;
+}
+
+/* Style pour le lien de retour à la page de login */
+.reset-login-link {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.reset-login-link a {
+  color: #125be1;
+  text-decoration: underline;
+  font-size: 0.8rem;
+}
+
+.reset-login-link a:hover {
+  text-decoration: underline;
+}
+
+.reset-logo2 {
+  display: flex;
+  justify-content: center; /* Centre horizontalement */
+  align-items: center; /* Centre verticalement */
+  margin-top: 5px; /* Espacement depuis le haut */
+  margin-bottom: 0px; /* Espacement depuis le bas */
+}
+.reset-logo2 img {
+  width: 100px;
+  height: auto;
+}
+
+/* Style pour les messages d'erreur */
+.reset-message-error {
+  color: #dc3545; /* Couleur rouge pour les erreurs */
+  font-size: 0.875rem; /* Taille de police */
+  margin-top: 10px; /* Espacement depuis l'élément précédent */
+  text-align: center; /* Centrer le texte */
+  padding: 5px; /* Espacement interne */
+  background-color: #f8d7da; /* Fond légèrement rouge */
+  border: 1px solid #f5c6cb; /* Bordure rouge */
+  border-radius: 4px; /* Coins arrondis */
+}
+
+/* Style pour les messages de validation */
+.reset-message-success {
+  color: #28a745; /* Couleur verte pour les succès */
+  font-size: 0.875rem; /* Taille de police */
+  margin-top: 10px; /* Espacement depuis l'élément précédent */
+  text-align: center; /* Centrer le texte */
+  padding: 5px; /* Espacement interne */
+  background-color: #d4edda; /* Fond légèrement vert */
+  border: 1px solid #c3e6cb; /* Bordure verte */
+  border-radius: 4px; /* Coins arrondis */
+}
+
+/* Style pour la séparation avec "ou" */
+.separator {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.separator-line {
+  flex: 1;
+  border: none;
+  border-top: 1px solid #000; /* Ligne noire */
+  margin: 0 10px;
+}
+
+.separator-text {
+  color: #000; /* Couleur du texte */
+  font-size: 0.8rem;
+  padding: 0 10px;
+}

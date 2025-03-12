@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../styles/navbar.css"; // Importez le fichier CSS
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -13,13 +14,17 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-      <div className="container">
-        <Link className="navbar-brand" to="/">
-          MonApp
+    <nav className="navbar navbar-expand-lg navbar-custom shadow-sm">
+      <div className="container navbar-container-custom">
+        {/* Logo avec lien vers la page d'accueil */}
+        <Link className="navbar-brand navbar-brand-custom" to="/">
+          <img src="/images/logo.jpg" alt="Logo" />{" "}
+          {/* Remplacez par le chemin de votre logo */}
         </Link>
+
+        {/* Bouton toggler pour les écrans mobiles */}
         <button
-          className="navbar-toggler"
+          className="navbar-toggler navbar-toggler-custom"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
@@ -27,27 +32,28 @@ const Navbar = () => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon navbar-toggler-icon-custom"></span>
         </button>
+
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             {user ? (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/dashboard">
-                    Dashboard
+                  <Link className="nav-link nav-link-custom" to="/Nous">
+                    Qui Nous
                   </Link>
                 </li>
                 {user.role === "admin" && (
                   <li className="nav-item">
-                    <Link className="nav-link" to="/users">
-                      Utilisateurs
+                    <Link className="nav-link nav-link-custom" to="/profile">
+                      Profile
                     </Link>
                   </li>
                 )}
                 <li className="nav-item">
                   <button
-                    className="btn btn-outline-light ms-2"
+                    className="btn btn-logout-custom ms-2"
                     onClick={handleLogout}
                   >
                     Déconnexion
@@ -56,8 +62,8 @@ const Navbar = () => {
               </>
             ) : (
               <li className="nav-item">
-                <Link className="nav-link" to="/login">
-                  Connexion
+                <Link className="nav-link nav-link-custom" to="/login">
+                  Se connecter
                 </Link>
               </li>
             )}

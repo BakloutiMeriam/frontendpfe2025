@@ -1,0 +1,115 @@
+/* ListUsers.css */
+
+/* Styles pour la carte contenant le tableau */
+.user-list-card {
+  background-color: #fffefe;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  margin-top: 20px;
+}
+
+/* Styles pour le tableau */
+.user-list-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.h3 {
+  color: #125be1;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.user-list-table th,
+.user-list-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #edf4f7;
+}
+
+.user-list-table th {
+  background-color: #2653a4;
+  color: #fffefe;
+  font-weight: bold;
+}
+
+.user-list-table tr:hover {
+  background-color: #edf4f7;
+}
+
+/* Styles pour les boutons d'action */
+.action-buttons .btn {
+  margin-right: 5px;
+  color: #fffefe;
+}
+
+.action-buttons .btn-warning {
+  background-color: #2258b8;
+  border-color: #2258b8;
+}
+
+.action-buttons .btn-danger {
+  background-color: #4c4c4c;
+  border-color: #4c4c4c;
+}
+
+.action-buttons .btn-success {
+  background-color: #125be1;
+  border-color: #125be1;
+}
+
+.action-buttons .btn-secondary {
+  background-color: #193870;
+  border-color: #193870;
+}
+
+/* Styles pour la pagination */
+.pagination {
+  display: flex;
+  justify-content: right;
+  margin-top: 20px;
+}
+
+.pagination .page-item {
+  margin: 0 5px;
+}
+
+.pagination .page-link {
+  color: #2653a4;
+  border: 1px solid #2653a4;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #2653a4;
+  border-color: #2653a4;
+  color: #fffefe;
+}
+
+/* Styles pour la barre de filtrage */
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.filter-bar input {
+  padding: 8px;
+  border: 1px solid #edf4f7;
+  border-radius: 4px;
+  width: 200px;
+}
+
+.filter-bar button {
+  background-color: #2653a4;
+  color: #fffefe;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.filter-bar button:hover {
+  background-color: #193870;
+}
