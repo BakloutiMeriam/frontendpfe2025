@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "../styles/auth.css";
 
 const LoginForm = ({ login, errors, setErrors, handleSubmit }) => {
   const [email, setEmail] = useState("");
@@ -35,24 +34,24 @@ const LoginForm = ({ login, errors, setErrors, handleSubmit }) => {
         <div className="alert alert-danger">{errors.general}</div>
       )}
       <div className="mb-3">
-        <label className="form-label">Email :</label>
         <input
           type="email"
           className={`form-control ${errors.email ? "is-invalid" : ""}`}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          placeholder="exemple@gmail.com"
         />
         {errors.email && <div className="invalid-feedback">{errors.email}</div>}
       </div>
       <div className="mb-3">
-        <label className="form-label">Mot de passe :</label>
         <input
           type="password"
           className={`form-control ${errors.mdp ? "is-invalid" : ""}`}
           value={mdp}
           onChange={(e) => setMdp(e.target.value)}
           required
+          placeholder="**************"
         />
         {errors.mdp && <div className="invalid-feedback">{errors.mdp}</div>}
       </div>

@@ -1,6 +1,8 @@
 import { useContext, useState, useEffect } from "react";
 import { ProfileContext } from "../context/ProfileContext";
 import ProfileForm from "../components/ProfileForm";
+import "../styles/register.css"; // Assurez-vous d'importer le fichier CSS
+import Navbar from "../components/Navbar";
 
 const Register = () => {
   const { register, error } = useContext(ProfileContext);
@@ -71,11 +73,15 @@ const Register = () => {
   };
 
   return (
-    <div className="register-container">
-      <h2>Créer un compte </h2>
-      {formError && <p className="error-message">{formError}</p>}
-      <ProfileForm onSubmit={handleRegister} />
-    </div>
+    <>
+      <Navbar />
+      <div className="register-container">
+        <div className="register-card">
+          <h2 className="register-title">Créez un compte</h2>
+          <ProfileForm onSubmit={handleRegister} formError={formError} />
+        </div>
+      </div>
+    </>
   );
 };
 

@@ -1,0 +1,85 @@
+/* Fond dégradé pour la moitié de la page */
+.complete-profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 120vh;
+  background: linear-gradient(to bottom, #125be1 50%, #edf4f7 50%);
+}
+
+/* Carte pour le formulaire */
+.complete-profile-card {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+/* Titre du formulaire */
+.complete-profile-title {
+  color: #2653a4; /* Bleu foncé */
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+}
+
+/* Image de profil */
+.profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%; /* Forme ronde */
+  border: 2px solid #2653a4; /* Bordure fine bleue */
+  margin-bottom: 20px;
+}
+
+/* Styles pour les champs du formulaire */
+.complete-profile-form input,
+.complete-profile-form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #4c4c4c;
+  border-radius: 60px;
+  font-size: 0.9rem;
+}
+
+/* Styles pour les champs en lecture seule */
+.complete-profile-form input[readonly] {
+  background-color: #edf4f7; /* Fond gris clair */
+  cursor: not-allowed; /* Curseur interdit */
+}
+
+/* Bouton de soumission */
+.complete-profile-form button {
+  background-color: #2653a4; /* Bleu foncé */
+  border: none;
+  padding: 10px;
+  border-radius: 60px;
+  width: 100%;
+  color: #ffffff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.complete-profile-form button:hover {
+  background-color: #125be1; /* Bleu clair au survol */
+}
+
+/* Message d'erreur */
+.error-message {
+  color: #dc3545; /* Rouge */
+  font-size: 0.875rem;
+  margin-top: 15px;
+  text-align: center;
+  padding: 10px;
+  background-color: #f8d7da; /* Fond rouge clair */
+  border: 1px solid #f5c6cb; /* Bordure rouge */
+  border-radius: 4px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 20px;
+}
