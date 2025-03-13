@@ -57,6 +57,34 @@ const UserService = {
       throw new Error(error.response?.data || "Erreur lors de la suppression");
     }
   },
+
+  getUserProfileClient: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/client/profile`, {
+        withCredentials: true,
+        headers: authService.authHeader(),
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data || "Erreur lors de la récupération du profil"
+      );
+    }
+  },
+
+  getUserProfileProp: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/proprietaire/profile`, {
+        withCredentials: true,
+        headers: authService.authHeader(),
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data || "Erreur lors de la récupération du profil"
+      );
+    }
+  },
 };
 
 export default UserService;

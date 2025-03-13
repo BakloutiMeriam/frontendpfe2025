@@ -127,6 +127,7 @@ import FacebookLogin from "react-facebook-login";
 import { GoogleLogin } from "@react-oauth/google";
 import "../styles/auth.css";
 import Navbar from "../components/Navbar";
+import authService from "../services/authService";
 
 const Login = () => {
   const { login, user } = useContext(AuthContext);
@@ -176,7 +177,7 @@ const Login = () => {
             mode: "cors",
           }
         );
-
+        //const data = await authService.loginWithFacebook(response.accessToken);
         const data = await res.json();
         console.log("Données reçues du backend :", data);
         if (data.success) {
@@ -219,7 +220,7 @@ const Login = () => {
       }
       data.isNewUser
         ? navigate("/completer-profileGoogle", { state: { user: data.user } })
-        : navigate("/dashboard");
+        : navigate("/profile");
     } catch (error) {
       console.error("Erreur d'authentification Google", error);
     }
