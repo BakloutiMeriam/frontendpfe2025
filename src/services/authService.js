@@ -49,6 +49,31 @@ export const authHeader = () => {
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
+// Dans authService.js
+/*export const loginWithFacebook = async (accessToken) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/user/facebook-login",
+      { accessToken }
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+};
+
+export const loginWithGoogle = async (token) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/user/googleAuth",
+      { token }
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+};*/
+
 export default {
   authHeader,
   getToken,
@@ -56,4 +81,6 @@ export default {
   resetPassword,
   forgotPassword,
   login,
+  //loginWithFacebook,
+  //loginWithGoogle,
 };

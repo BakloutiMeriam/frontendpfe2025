@@ -238,7 +238,7 @@ const CompleteProfile = () => {
       );
       const data = await res.json();
       if (data.message) {
-        navigate("/dashboard");
+        navigate("/profile");
       }
     } catch (error) {
       setError("Une erreur est survenue lors de la mise à jour du profil.");
