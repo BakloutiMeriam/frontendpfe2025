@@ -3,7 +3,6 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import AppRoutes from "./routes/AppRoutes";
 import { ProfileProvider } from "./context/ProfileContext";
-
 const App = () => {
   return (
     /*<Router>

@@ -8,6 +8,7 @@ import Register from "../pages/Register";
 import CompleteProfile from "../pages/CompleteProfile";
 import CompleteProfileGoogle from "../pages/CompleteProfileGoogle";
 import UserList from "../pages/UserListPage";
+import ProfileAdmin from "../pages/ProfileAdmin";
 
 const AppRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const AppRoutes = () => {
         element={<CompleteProfileGoogle />}
       />
       <Route path="/users" element={<UserList />} />
+      <Route path="/profileAdmin" element={<ProfileAdmin />} />
     </Routes>
   );
 };

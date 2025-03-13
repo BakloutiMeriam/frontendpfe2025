@@ -136,9 +136,9 @@ const Login = () => {
   useEffect(() => {
     if (user) {
       if (user.role === "admin") {
-        navigate("/users");
+        navigate("/profileAdmin");
       } else {
-        navigate("/profile");
+        navigate("/userprofile");
       }
     }
   }, [user, navigate]);
