@@ -49,15 +49,29 @@ export const authHeader = () => {
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
-// Dans authService.js
 /*export const loginWithFacebook = async (accessToken) => {
   try {
     const response = await axios.post(
       "http://localhost:3000/api/user/facebook-login",
       { accessToken }
     );
-    return response.data;
+
+    // Si la réponse est un objet contenant success et user
+    if (response.data && response.data.success && response.data.user) {
+      return {
+        user: response.data.user,
+        token: response.data.token,
+      };
+    }
+    // Si la réponse est directement l'utilisateur avec _id
+    else if (response.data && response.data._id) {
+      return response.data;
+    }
+
+    console.error("Format de réponse inattendu:", response.data);
+    throw new Error("Format de réponse incorrect du serveur");
   } catch (error) {
+    console.error("Erreur complète:", error);
     throw error.response?.data || error;
   }
 };
@@ -73,6 +87,41 @@ export const loginWithGoogle = async (token) => {
     throw error.response?.data || error;
   }
 };*/
+export const loginWithFacebook = async (accessToken) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/user/facebook-login",
+      { accessToken }
+    );
+
+    if (response.data && response.data.success && response.data.user) {
+      return {
+        user: response.data.user,
+        token: response.data.token,
+      };
+    } else if (response.data && response.data._id) {
+      return response.data;
+    }
+
+    console.error("Format de réponse inattendu:", response.data);
+    throw new Error("Format de réponse incorrect du serveur");
+  } catch (error) {
+    console.error("Erreur complète:", error);
+    throw error.response?.data || error;
+  }
+};
+
+export const loginWithGoogle = async (token) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/user/googleAuth",
+      { token }
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+};
 
 export default {
   authHeader,
@@ -81,6 +130,6 @@ export default {
   resetPassword,
   forgotPassword,
   login,
-  //loginWithFacebook,
-  //loginWithGoogle,
+  loginWithFacebook,
+  loginWithGoogle,
 };
