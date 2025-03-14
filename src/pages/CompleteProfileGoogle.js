@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import "../styles/complete-profile.css"; // Importez le fichier CSS
+import "../styles/complete-profile.css";
 import Navbar from "../components/Navbar";
 
 const CompleteProfileGoogle = () => {
