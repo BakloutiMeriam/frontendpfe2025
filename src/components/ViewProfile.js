@@ -2,12 +2,14 @@ import React, { useEffect, useState, useContext } from "react";
 import UserService from "../services/UserService";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/Profile.css";
+import { useNavigate } from "react-router-dom";
 
 const ViewProfile = () => {
   const { user } = useContext(AuthContext); // Récupérer l'utilisateur connecté
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log("Utilisateur dans le contexte (ViewProfile):", user);
@@ -18,13 +20,14 @@ const ViewProfile = () => {
           console.log("Pas d'utilisateur dans le contexte");
           setLoading(false);
           setError("Aucun utilisateur connecté");
+          navigate("/login", { replace: true });
           return;
         }
 
         if (!user.role) {
           console.log("Pas de rôle défini pour l'utilisateur");
-          setLoading(false);
-          setError("L'utilisateur n'a pas de rôle défini");
+          // Au lieu de juste afficher une erreur, redirigez vers la page de complétion
+          navigate(`/completer-profil/${user._id}`, { replace: true });
           return;
         }
 
@@ -48,7 +51,7 @@ const ViewProfile = () => {
     };
 
     fetchUserProfile();
-  }, [user]);
+  }, [navigate, user]);
 
   if (loading) return <p>Chargement...</p>;
   if (error) return <p className="error">{error}</p>;

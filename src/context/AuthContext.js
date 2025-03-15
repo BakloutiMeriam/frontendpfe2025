@@ -6,6 +6,37 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fonction pour récupérer les données utilisateur du stockage local
+  const loadUserFromStorage = () => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      const storedToken = localStorage.getItem("token");
+
+      if (storedUser && storedToken) {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setToken(storedToken);
+      }
+    } catch (error) {
+      console.error(
+        "Erreur lors du chargement des données utilisateur:",
+        error
+      );
+      // En cas d'erreur, effacer les données potentiellement corrompues
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fonction pour enregistrer les données utilisateur dans le stockage local
+  const saveUserToStorage = (userData, userToken) => {
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", userToken);
+  };
 
   const login = async (email, mdp) => {
     try {
@@ -21,60 +52,7 @@ export const AuthProvider = ({ children }) => {
       throw error;
     }
   };
-
-  /*const loginWithFacebook = async (accessToken) => {
-    try {
-      console.log("Tentative de connexion avec Facebook...");
-      const response = await authService.loginWithFacebook(accessToken);
-      console.log("Réponse du serveur:", response);
-
-      if (response && response.user && response.token) {
-        const userData = {
-          ...response.user,
-          token: response.token,
-        };
-
-        setUser(userData);
-        setToken(response.token);
-        localStorage.setItem("user", JSON.stringify(userData));
-        localStorage.setItem("token", response.token);
-        console.log("Utilisateur stocké dans le contexte:", userData);
-        return userData;
-      } else {
-        throw new Error("Données d'utilisateur incomplètes");
-      }
-    } catch (error) {
-      console.error("Erreur de connexion Facebook:", error);
-      throw error;
-    }
-  };
-
-
-  const loginWithGoogle = async (credential) => {
-    try {
-      const response = await authService.loginWithGoogle(credential);
-      console.log("Réponse Google Auth:", response);
-
-      if (response && response.user && response.token) {
-        const userData = {
-          ...response.user,
-          token: response.token,
-        };
-
-        setUser(userData);
-        setToken(response.token);
-        localStorage.setItem("user", JSON.stringify(userData));
-        localStorage.setItem("token", response.token);
-        console.log("Utilisateur Google stocké dans le contexte:", userData);
-        return userData;
-      } else {
-        throw new Error("Données d'utilisateur Google incomplètes");
-      }
-    } catch (error) {
-      console.error("Erreur de connexion Google:", error);
-      throw error;
-    }
-  };*/
+  // Fonction de connexion avec Facebook
   const loginWithFacebook = async (accessToken) => {
     try {
       console.log("Tentative de connexion avec Facebook...");
@@ -82,19 +60,16 @@ export const AuthProvider = ({ children }) => {
       console.log("Réponse du serveur:", response);
 
       if (response && response.user && response.token) {
-        const userData = {
-          ...response.user,
-          token: response.token,
-        };
-
-        setUser(userData);
+        setUser(response.user);
         setToken(response.token);
-        localStorage.setItem("user", JSON.stringify(userData));
-        localStorage.setItem("token", response.token);
-        console.log("Utilisateur stocké dans le contexte:", userData);
-        return userData;
+        saveUserToStorage(response.user, response.token);
+        console.log(
+          "Utilisateur Facebook stocké dans le contexte:",
+          response.user
+        );
+        return response;
       } else {
-        throw new Error("Données d'utilisateur incomplètes");
+        throw new Error("Données d'utilisateur Facebook incomplètes");
       }
     } catch (error) {
       console.error("Erreur de connexion Facebook:", error);
@@ -102,23 +77,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Fonction de connexion avec Google
   const loginWithGoogle = async (credential) => {
     try {
       const response = await authService.loginWithGoogle(credential);
       console.log("Réponse Google Auth:", response);
 
       if (response && response.user && response.token) {
-        const userData = {
-          ...response.user,
-          token: response.token,
-        };
-
-        setUser(userData);
+        setUser(response.user);
         setToken(response.token);
-        localStorage.setItem("user", JSON.stringify(userData));
-        localStorage.setItem("token", response.token);
-        console.log("Utilisateur Google stocké dans le contexte:", userData);
-        return userData;
+        saveUserToStorage(response.user, response.token);
+        console.log(
+          "Utilisateur Google stocké dans le contexte:",
+          response.user
+        );
+        return response;
       } else {
         throw new Error("Données d'utilisateur Google incomplètes");
       }
@@ -126,6 +99,32 @@ export const AuthProvider = ({ children }) => {
       console.error("Erreur de connexion Google:", error);
       throw error;
     }
+  };
+
+  // Fonction pour mettre à jour les informations utilisateur après la complétion du profil
+  const updateUserAfterProfileCompletion = (updatedUserData, newToken) => {
+    console.log("Mise à jour du profil utilisateur:", updatedUserData);
+
+    if (updatedUserData) {
+      const updatedUser = {
+        ...updatedUserData,
+        needsProfileCompletion: false,
+      };
+
+      setUser(updatedUser);
+
+      // Mise à jour du token si fourni
+      if (newToken) {
+        setToken(newToken);
+        saveUserToStorage(updatedUser, newToken);
+      } else {
+        // Sinon, conserver le token actuel
+        saveUserToStorage(updatedUser, token);
+      }
+
+      return updatedUser;
+    }
+    return null;
   };
 
   const logout = () => {
@@ -152,7 +151,16 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, login, logout, loginWithGoogle, loginWithFacebook }}
+      value={{
+        user,
+        token,
+        loading,
+        login,
+        loginWithFacebook,
+        loginWithGoogle,
+        updateUserAfterProfileCompletion,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>
