@@ -1,5 +1,5 @@
-import { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useContext, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -14,16 +14,83 @@ const Login = () => {
     useContext(AuthContext);
   const [errors, setErrors] = useState({ email: "", mdp: "" });
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectionInProgress = useRef(false);
+
+  // Fonction pour vérifier si un profil est incomplet
+  /*const isProfileIncomplete = (userData) => {
+    return (
+      !userData.tel ||
+      userData.tel === 0 ||
+      !userData.adresse ||
+      userData.adresse === "adresse" ||
+      !userData.role ||
+      (userData.role === "client" && userData.needsProfileCompletion === true)
+    );
+  };
+  const isFirstLogin = (userData) => {
+    return userData.isNewUser === true || isProfileIncomplete(userData);
+  };*/
+  // Fonction pour vérifier si un profil nécessite d'être complété
+  const needsProfileCompletion = (userData) => {
+    // Vérifier si le flag needsProfileCompletion est explicitement défini
+    if (userData.needsProfileCompletion === true) {
+      return true;
+    }
+
+    // Pour les utilisateurs qui se sont inscrits via réseaux sociaux
+    // et qui n'ont pas rempli leurs informations
+    if (userData.loginType === "facebook" || userData.loginType === "google") {
+      return (
+        !userData.tel ||
+        userData.tel === 0 ||
+        !userData.adresse ||
+        userData.adresse === "adresse"
+      );
+    }
+
+    // Pour les utilisateurs qui se sont inscrits normalement (email/mot de passe),
+    // on considère que leur profil est déjà complet
+    return false;
+  };
 
   useEffect(() => {
-    if (user) {
-      if (user.role === "admin") {
-        navigate("/users");
-      } else {
-        navigate("/profile");
-      }
+    // Ignorer si une redirection est déjà en cours ou si nous sommes sur la page de complétion
+    if (
+      redirectionInProgress.current ||
+      !user ||
+      location.pathname.includes("/completer-profil")
+    ) {
+      return;
     }
-  }, [user, navigate]);
+
+    // Pour éviter les redirections multiples
+    redirectionInProgress.current = true;
+    console.log("Évaluation de la redirection pour:", user);
+
+    try {
+      if (user.role === "admin") {
+        navigate("/users", { replace: true });
+      } else if (needsProfileCompletion(user)) {
+        console.log(
+          "Profil incomplet détecté, redirection vers la page de complétion"
+        );
+        navigate(`/completer-profil/${user._id}`, { replace: true });
+      } else {
+        console.log("Profil complet, redirection vers /profile");
+        navigate("/profile", { replace: true });
+      }
+    } catch (error) {
+      console.error("Erreur lors de la redirection:", error);
+      // En cas d'erreur, aller sur une page sûre
+      navigate("/login", { replace: true });
+    }
+
+    // Réinitialiser le drapeau après un délai pour permettre d'autres redirections à l'avenir
+    setTimeout(() => {
+      redirectionInProgress.current = false;
+    }, 1000);
+  }, [user, navigate, location.pathname]);
 
   const handleSubmit = async (email, mdp) => {
     const newErrors = { email: "", mdp: "" };
@@ -41,88 +108,17 @@ const Login = () => {
       setErrors(newErrors);
     }
   };
-
-  /*const handleFacebookLoginSuccess = async (response) => {
-    console.log("Facebook login success:", response);
-
-    if (response.accessToken) {
-      try {
-        const data = await loginWithFacebook(response.accessToken);
-        console.log("Données reçues du backend :", data);
-        const user = data.user || data;
-        //const isProfileComplete = user.tel === 0 && user.adresse === "adresse";
-
-        if (
-          user.tel === 0 &&
-          user.adresse === "adresse" &&
-          user.role === "client"
-        ) {
-          const userId = user._id;
-          navigate(`/completer-profil/${userId}`);
-        } else {
-          navigate("/profile");
-        }
-      } catch (error) {
-        console.error("Erreur lors de la connexion Facebook :", error);
-        alert("Erreur lors de la connexion avec Facebook.");
-      }
-    } else {
-      console.error("Pas de token d'accès reçu");
-    }
-  };*/
-
   const handleFacebookLoginFailure = (error) => {
     console.error("Facebook login error:", error);
     alert("Échec de la connexion avec Facebook. Veuillez réessayer.");
   };
-
-  /*const handleGoogleLoginSuccess = async (response) => {
-    try {
-      const userData = await loginWithGoogle(response.credential);
-      console.log("Données utilisateur après connexion Google:", userData);
-
-      // Vérifiez si le profil est complet (indépendamment de isNewUser)
-      const user = userData.user || userData;
-      const isProfileComplete =
-        user.tel === 0 && user.adresse === "adresse" && user.role === "client";
-
-      if (!isProfileComplete) {
-        console.log(
-          "Utilisateur Google avec profil incomplet, redirection vers compléter profil"
-        );
-        navigate("/completer-profileGoogle", { state: { user } });
-      } else {
-        console.log(
-          "Utilisateur Google avec profil complet, redirection vers profile"
-        );
-        navigate("/profile");
-      }
-    } catch (error) {
-      console.error("Erreur d'authentification Google", error);
-      alert("Erreur lors de la connexion avec Google.");
-    }
-  };*/
   const handleFacebookLoginSuccess = async (response) => {
     console.log("Facebook login success:", response);
 
     if (response.accessToken) {
       try {
-        const data = await loginWithFacebook(response.accessToken);
-        console.log("Données reçues du backend :", data);
-
-        // Vérifiez si les champs ont des valeurs par défaut
-        const isProfileIncomplete =
-          data.tel === 0 ||
-          data.adresse === "adresse" ||
-          data.role === "client";
-
-        if (isProfileIncomplete) {
-          console.log("Profil incomplet, redirection vers /completer-profil");
-          navigate(`/completer-profil/${data._id}`, { replace: true }); // Utilisez { replace: true } pour éviter les conflits de redirection
-        } else {
-          console.log("Profil complet, redirection vers /profile");
-          navigate("/profile", { replace: true }); // Utilisez { replace: true } pour éviter les conflits de redirection
-        }
+        // Ne pas faire de redirection ici, laisser le useEffect s'en charger
+        await loginWithFacebook(response.accessToken);
       } catch (error) {
         console.error("Erreur lors de la connexion Facebook :", error);
         alert("Erreur lors de la connexion avec Facebook.");
@@ -131,22 +127,10 @@ const Login = () => {
       console.error("Pas de token d'accès reçu");
     }
   };
-
   const handleGoogleLoginSuccess = async (response) => {
     try {
-      const userData = await loginWithGoogle(response.credential);
-      console.log("Données utilisateur après connexion Google:", userData); // <-- Vérifiez ici
-
-      const user = userData.user || userData;
-      const isProfileComplete = user.tel && user.adresse && user.role;
-
-      if (!isProfileComplete) {
-        console.log("Profil incomplet, redirection vers /completer-profil");
-        navigate(`/completer-profil/${user._id}`);
-      } else {
-        console.log("Profil complet, redirection vers /profile");
-        navigate("/profile");
-      }
+      // Ne pas faire de redirection ici, laisser le useEffect s'en charger
+      await loginWithGoogle(response.credential);
     } catch (error) {
       console.error("Erreur d'authentification Google", error);
       alert("Erreur lors de la connexion avec Google.");

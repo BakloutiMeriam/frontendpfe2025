@@ -48,46 +48,7 @@ export const authHeader = () => {
   const token = getToken();
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
-
 /*export const loginWithFacebook = async (accessToken) => {
-  try {
-    const response = await axios.post(
-      "http://localhost:3000/api/user/facebook-login",
-      { accessToken }
-    );
-
-    // Si la réponse est un objet contenant success et user
-    if (response.data && response.data.success && response.data.user) {
-      return {
-        user: response.data.user,
-        token: response.data.token,
-      };
-    }
-    // Si la réponse est directement l'utilisateur avec _id
-    else if (response.data && response.data._id) {
-      return response.data;
-    }
-
-    console.error("Format de réponse inattendu:", response.data);
-    throw new Error("Format de réponse incorrect du serveur");
-  } catch (error) {
-    console.error("Erreur complète:", error);
-    throw error.response?.data || error;
-  }
-};
-
-export const loginWithGoogle = async (token) => {
-  try {
-    const response = await axios.post(
-      "http://localhost:3000/api/user/googleAuth",
-      { token }
-    );
-    return response.data;
-  } catch (error) {
-    throw error.response?.data || error;
-  }
-};*/
-export const loginWithFacebook = async (accessToken) => {
   try {
     const response = await axios.post(
       "http://localhost:3000/api/user/facebook-login",
@@ -118,6 +79,70 @@ export const loginWithGoogle = async (token) => {
       { token }
     );
     return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+};*/
+
+// Dans authService.js
+
+export const loginWithFacebook = async (accessToken) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/user/facebook-login",
+      { accessToken }
+    );
+
+    // Vérifier si c'est un nouvel utilisateur
+    const isNew = !localStorage.getItem(
+      `fb_user_${response.data.user?._id || response.data._id}`
+    );
+
+    // Si c'est un utilisateur existant, marquer qu'il a déjà été connecté
+    if (!isNew && response.data.user) {
+      localStorage.setItem(`fb_user_${response.data.user._id}`, "true");
+    } else if (!isNew && response.data._id) {
+      localStorage.setItem(`fb_user_${response.data._id}`, "true");
+    }
+
+    // Ajouter le flag isNewUser à la réponse
+    const userData = response.data.user || response.data;
+    return {
+      user: { ...userData, isNewUser: isNew },
+      token: response.data.token,
+    };
+  } catch (error) {
+    console.error("Erreur complète:", error);
+    throw error.response?.data || error;
+  }
+};
+
+// Faire de même pour Google
+export const loginWithGoogle = async (token) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/user/googleAuth",
+      { token }
+    );
+
+    // Vérifier si c'est un nouvel utilisateur
+    const isNew = !localStorage.getItem(
+      `google_user_${response.data.user?._id || response.data._id}`
+    );
+
+    // Si c'est un utilisateur existant, marquer qu'il a déjà été connecté
+    if (!isNew && response.data.user) {
+      localStorage.setItem(`google_user_${response.data.user._id}`, "true");
+    } else if (!isNew && response.data._id) {
+      localStorage.setItem(`google_user_${response.data._id}`, "true");
+    }
+
+    // Ajouter le flag isNewUser à la réponse
+    const userData = response.data.user || response.data;
+    return {
+      user: { ...userData, isNewUser: isNew },
+      token: response.data.token,
+    };
   } catch (error) {
     throw error.response?.data || error;
   }
