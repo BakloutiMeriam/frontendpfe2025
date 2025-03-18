@@ -17,20 +17,6 @@ const Login = () => {
   const location = useLocation();
   const redirectionInProgress = useRef(false);
 
-  // Fonction pour vérifier si un profil est incomplet
-  /*const isProfileIncomplete = (userData) => {
-    return (
-      !userData.tel ||
-      userData.tel === 0 ||
-      !userData.adresse ||
-      userData.adresse === "adresse" ||
-      !userData.role ||
-      (userData.role === "client" && userData.needsProfileCompletion === true)
-    );
-  };
-  const isFirstLogin = (userData) => {
-    return userData.isNewUser === true || isProfileIncomplete(userData);
-  };*/
   // Fonction pour vérifier si un profil nécessite d'être complété
   const needsProfileCompletion = (userData) => {
     // Vérifier si le flag needsProfileCompletion est explicitement défini
@@ -70,7 +56,7 @@ const Login = () => {
 
     try {
       if (user.role === "admin") {
-        navigate("/users", { replace: true });
+        navigate("/profileAdmin", { replace: true });
       } else if (needsProfileCompletion(user)) {
         console.log(
           "Profil incomplet détecté, redirection vers la page de complétion"

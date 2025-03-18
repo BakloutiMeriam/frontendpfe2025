@@ -6,11 +6,6 @@ import { ProfileProvider } from "./context/ProfileContext";
 
 const App = () => {
   return (
-    /*<Router>
-      <div>
-        <AppRoutes />
-      </div>
-    </Router>*/
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <Router>
         <ProfileProvider>

@@ -2,8 +2,7 @@ import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../styles/navbar.css"; // Importez le fichier CSS
-
+import "../styles/navbar.css";
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -45,6 +44,26 @@ const Navbar = () => {
                   </Link>
                 </li>
                 {user.role === "admin" && (
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link nav-link-custom"
+                      to="/profileAdmin"
+                    >
+                      Profile
+                    </Link>
+                    <Link className="nav-link nav-link-custom" to="/users">
+                      UserList
+                    </Link>
+                  </li>
+                )}
+                {user.role === "client" && (
+                  <li className="nav-item">
+                    <Link className="nav-link nav-link-custom" to="/profile">
+                      Profile
+                    </Link>
+                  </li>
+                )}
+                {user.role === "proprietaire" && (
                   <li className="nav-item">
                     <Link className="nav-link nav-link-custom" to="/profile">
                       Profile

@@ -10,6 +10,7 @@ const UserService = {
       const response = await axios.post(`${API_URL}/register`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      console.log("Réponse du serveur:", response.data);
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data || "Erreur lors de l'inscription");
@@ -82,6 +83,38 @@ const UserService = {
     } catch (error) {
       throw new Error(
         error.response?.data || "Erreur lors de la récupération du profil"
+      );
+    }
+  },
+  updateUserProfile: async (formData) => {
+    try {
+      const response = await axios.put(`${API_URL}/Updateprofile`, formData, {
+        withCredentials: true,
+        headers: {
+          ...authService.authHeader(),
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message ||
+          "Erreur lors de la mise à jour du profil"
+      );
+    }
+  },
+
+  deleteUserProfile: async () => {
+    try {
+      const response = await axios.delete(`${API_URL}/DeleteProfile`, {
+        withCredentials: true,
+        headers: authService.authHeader(),
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message ||
+          "Erreur lors de la désactivation du profil"
       );
     }
   },

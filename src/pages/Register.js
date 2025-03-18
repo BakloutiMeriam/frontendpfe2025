@@ -1,12 +1,16 @@
 import { useContext, useState, useEffect } from "react";
 import { ProfileContext } from "../context/ProfileContext";
 import ProfileForm from "../components/ProfileForm";
-import "../styles/register.css"; // Assurez-vous d'importer le fichier CSS
+import "../styles/register.css";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Register = () => {
   const { register, error } = useContext(ProfileContext);
   const [formError, setFormError] = useState("");
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   useEffect(() => {
     if (error) {
@@ -17,6 +21,8 @@ const Register = () => {
   const handleRegister = async (formData) => {
     setFormError("");
     console.log("🔹 FormData reçu :", formData);
+
+    // Validation des champs
     if (
       !formData.nom ||
       !formData.prenom ||
@@ -29,6 +35,7 @@ const Register = () => {
       setFormError("Tous les champs sont requis");
       return;
     }
+
     if (
       !/^[a-zA-Z]+$/.test(formData.nom) ||
       !/^[a-zA-Z]+$/.test(formData.prenom)
@@ -57,21 +64,41 @@ const Register = () => {
     }
 
     try {
-      const formDataObject = new FormData();
+      // Dans ViewProfile.js, fonction handleSubmit
+      const submitData = new FormData();
+
+      // Ne pas ajouter les champs vides pour éviter d'écraser les données existantes
       Object.keys(formData).forEach((key) => {
-        formDataObject.append(key, formData[key]);
+        if (key === "url_img" && formData[key]) {
+          submitData.append(key, formData[key]);
+        } else if (
+          key !== "url_img" &&
+          key !== "confirmMdp" &&
+          formData[key] !== "" &&
+          formData[key] !== null
+        ) {
+          submitData.append(key, formData[key]);
+        }
       });
-      console.log("📤 Données envoyées :", formDataObject);
-      await register(formDataObject, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      // Il manque cette ligne pour envoyer les données au serveur
+      const userData = await register(submitData);
       console.log("✅ Inscription réussie !");
+
+      // IMPORTANT: Mettre à jour l'AuthContext avec les informations utilisateur
+      if (userData && userData.token) {
+        // Option 1: Utiliser le résultat de register directement
+        /*localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("token", userData.token);*/
+
+        // Option 2: Utiliser la fonction login du AuthContext
+        await login(userData.email, formData.mdp);
+        navigate("/profile");
+      }
     } catch (err) {
       setFormError(err.message);
       console.log("❌ Erreur lors de l'inscription :", err);
     }
   };
-
   return (
     <>
       <Navbar />
