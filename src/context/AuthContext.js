@@ -6,31 +6,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Fonction pour récupérer les données utilisateur du stockage local
-  const loadUserFromStorage = () => {
-    try {
-      const storedUser = localStorage.getItem("user");
-      const storedToken = localStorage.getItem("token");
-
-      if (storedUser && storedToken) {
-        const parsedUser = JSON.parse(storedUser);
-        setUser(parsedUser);
-        setToken(storedToken);
-      }
-    } catch (error) {
-      console.error(
-        "Erreur lors du chargement des données utilisateur:",
-        error
-      );
-      // En cas d'erreur, effacer les données potentiellement corrompues
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [loading] = useState(true);
 
   // Fonction pour enregistrer les données utilisateur dans le stockage local
   const saveUserToStorage = (userData, userToken) => {

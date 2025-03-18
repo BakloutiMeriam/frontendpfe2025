@@ -4,15 +4,16 @@ import UserService from "../services/UserService";
 export const ProfileContext = createContext();
 
 export const ProfileProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user] = useState(null);
   const [error, setError] = useState("");
 
   const register = async (formData) => {
     try {
-      const data = await UserService.register(formData);
-      setUser(data);
+      const userData = await UserService.register(formData);
+      return userData;
     } catch (error) {
       setError(error.message);
+      throw error;
     }
   };
 

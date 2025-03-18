@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const LoginForm = ({ login, errors, setErrors, handleSubmit }) => {
+const LoginForm = ({ errors, setErrors, handleSubmit }) => {
   const [email, setEmail] = useState("");
   const [mdp, setMdp] = useState("");
 
