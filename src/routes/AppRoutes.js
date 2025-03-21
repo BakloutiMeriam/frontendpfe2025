@@ -9,6 +9,10 @@ import CompleteProfile from "../pages/CompleteProfile";
 import UserList from "../pages/UserListPage";
 import ViewProfilePage from "../pages/ViewProfilePage";
 import ProfileAdmin from "../pages/ProfileAdmin";
+import Dashboard from "../components/DashboardAdmin";
+import PropsList from "../components/PropsList";
+import GestionProps from "../pages/GestionProps";
+import ConfirmationPage from "../pages/ConfirmationPage";
 
 const AppRoutes = () => {
   return (
@@ -18,10 +22,13 @@ const AppRoutes = () => {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/register" element={<Register />} />
       <Route path="/completer-profil/:userId" element={<CompleteProfile />} />
-
       <Route path="/users" element={<UserList />} />
       <Route path="/profile" element={<ViewProfilePage />} />
       <Route path="/profileAdmin" element={<ProfileAdmin />} />
+      <Route path="/dashbordAdmin" element={<Dashboard />} />
+      <Route path="/props" element={<PropsList />} />
+      <Route path="/confirmation" element={<ConfirmationPage />} />
+      <Route path="/gestProps" element={<GestionProps />} />
     </Routes>
   );
 };

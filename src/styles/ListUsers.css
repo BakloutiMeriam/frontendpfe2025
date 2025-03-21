@@ -113,3 +113,54 @@
 .filter-bar button:hover {
   background-color: #193870;
 }
+
+/* Style pour le conteneur de la table */
+.table-container {
+  margin: 20px auto;
+  overflow-x: auto;
+}
+
+/* Style de la table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+/* Style des en-têtes de la table */
+th {
+  background-color: #007bff;
+  color: #fff;
+  padding: 12px;
+  text-align: left;
+}
+
+/* Style des cellules de la table */
+td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Style des lignes de la table */
+tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Style pour les écrans plus petits (responsive) */
+@media (max-width: 768px) {
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  table {
+    font-size: 0.9rem;
+  }
+
+  th,
+  td {
+    padding: 8px;
+  }
+}

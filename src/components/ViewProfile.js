@@ -3,9 +3,6 @@ import UserService from "../services/UserService";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/Profile.css";
 import { useNavigate } from "react-router-dom";
-// Import FontAwesome icons (you'll need to install @fortawesome/react-fontawesome package)
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faUser, faEnvelope, faPhone, faMapMarkerAlt, faCalendarAlt, faEdit, faTrashAlt, faSave, faTimes, faUpload } from '@fortawesome/free-solid-svg-icons';
 
 const ViewProfile = () => {
   const { user, logout } = useContext(AuthContext);
@@ -55,6 +52,15 @@ const ViewProfile = () => {
         if (!user.role) {
           console.log("Pas de rôle défini pour l'utilisateur");
           navigate(`/completer-profil/${user._id}`, { replace: true });
+          return;
+        }
+
+        // Vérifier la propriété approvalStatus pour les propriétaires
+        if (
+          user.role.toLowerCase() === "proprietaire" &&
+          user.approvalStatus === "pending"
+        ) {
+          navigate("/confirmation", { replace: true });
           return;
         }
 

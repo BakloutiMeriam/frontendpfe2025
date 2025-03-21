@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3000/api/auth";
 
-export const login = async (email, mdp) => {
+/*export const login = async (email, mdp) => {
   try {
     const response = await axios.post(`${API_URL}/login`, { email, mdp });
 
@@ -18,6 +18,27 @@ export const login = async (email, mdp) => {
     } else {
       throw new Error("Une erreur est survenue. Veuillez réessayer.");
     }
+  }
+};*/
+export const login = async (email, mdp) => {
+  try {
+    const response = await axios.post(`${API_URL}/login`, { email, mdp });
+    if (response.data.token) {
+      localStorage.setItem("user", JSON.stringify(response.data));
+    }
+    return response.data;
+  } catch (error) {
+    // Capture spécifiquement l'erreur 403 des propriétaires en attente d'approbation
+    if (error.response && error.response.status === 403) {
+      // Retourner les données d'erreur plutôt que de lancer une exception
+      return {
+        approvalStatus: "pending",
+        role: "proprietaire",
+        message: error.response.data.message,
+        isApproved: false,
+      };
+    }
+    throw new Error(error.response?.data?.message || "Erreur de connexion");
   }
 };
 
