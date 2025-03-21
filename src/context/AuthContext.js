@@ -6,15 +6,38 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [loading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
+  // Fonction pour récupérer les données utilisateur du stockage local
+  const loadUserFromStorage = () => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      const storedToken = localStorage.getItem("token");
+
+      if (storedUser && storedToken) {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setToken(storedToken);
+      }
+    } catch (error) {
+      console.error(
+        "Erreur lors du chargement des données utilisateur:",
+        error
+      );
+      // En cas d'erreur, effacer les données potentiellement corrompues
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+    } finally {
+      setLoading(false);
+    }
+  };
   // Fonction pour enregistrer les données utilisateur dans le stockage local
   const saveUserToStorage = (userData, userToken) => {
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", userToken);
   };
 
-  const login = async (email, mdp) => {
+  /*const login = async (email, mdp) => {
     try {
       const userData = await authService.login(email, mdp);
       if (userData) {
@@ -25,6 +48,33 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Erreur de connexion :", error);
+      throw error;
+    }
+  };*/
+  // Dans AuthContext.js - modifier la fonction login
+  const login = async (email, mdp) => {
+    try {
+      const userData = await authService.login(email, mdp);
+      if (userData) {
+        setUser(userData);
+        setToken(userData.token);
+        localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("token", userData.token);
+      }
+      // Si l'utilisateur est un propriétaire en attente d'approbation
+      if (
+        userData.role === "proprietaire" &&
+        userData.approvalStatus === "pending"
+      ) {
+        setUser(userData); // Définir l'utilisateur même s'il est en attente
+        // La redirection sera gérée par le useEffect dans Login.js
+        return userData;
+      }
+
+      setUser(userData);
+      return userData;
+    } catch (error) {
+      console.log("Erreur de connexion :", error);
       throw error;
     }
   };
@@ -60,6 +110,12 @@ export const AuthProvider = ({ children }) => {
       console.log("Réponse Google Auth:", response);
 
       if (response && response.user && response.token) {
+        if (
+          response.user.role === "proprietaire" &&
+          response.user.approvalStatus === "pending"
+        ) {
+          console.log("Propriétaire Google en attente d'approbation");
+        }
         setUser(response.user);
         setToken(response.token);
         saveUserToStorage(response.user, response.token);
@@ -136,6 +192,7 @@ export const AuthProvider = ({ children }) => {
         loginWithGoogle,
         updateUserAfterProfileCompletion,
         logout,
+        loadUserFromStorage,
       }}
     >
       {children}

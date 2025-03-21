@@ -5,12 +5,20 @@ const API_URL = "http://localhost:3000/api/user";
 const API = "http://localhost:3000/api/admin";
 
 const UserService = {
-  register: async (formData) => {
+  /*register: async (formData) => {
     try {
       const response = await axios.post(`${API_URL}/register`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       console.log("Réponse du serveur:", response.data);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data || "Erreur lors de l'inscription");
+    }
+  },*/
+  register: async (formData) => {
+    try {
+      const response = await axios.post(`${API_URL}/register`, formData);
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data || "Erreur lors de l'inscription");
@@ -116,6 +124,59 @@ const UserService = {
         error.response?.data?.message ||
           "Erreur lors de la désactivation du profil"
       );
+    }
+  },
+
+  // Récupérer les propriétaires en attente
+  getPendingProprietaires: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/proprietaires/pending`, {
+        withCredentials: true,
+        headers: authService.authHeader(),
+      });
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Erreur lors de la récupération des propriétaires en attente:",
+        error
+      );
+      throw error;
+    }
+  },
+
+  // Approuver un propriétaire - CORRECTION ICI
+  approveProprietaire: async (userId) => {
+    try {
+      const response = await axios.put(
+        `${API_URL}/approve/${userId}`,
+        {},
+        {
+          withCredentials: true,
+          headers: authService.authHeader(),
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Erreur lors de l'approbation du propriétaire:", error);
+      throw error;
+    }
+  },
+
+  // Rejeter un propriétaire - CORRECTION ICI
+  rejectProprietaire: async (userId, reason) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/reject/${userId}`,
+        { reason },
+        {
+          withCredentials: true,
+          headers: authService.authHeader(),
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Erreur lors du rejet du propriétaire:", error);
+      throw error;
     }
   },
 };

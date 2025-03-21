@@ -46,7 +46,7 @@ const ProfileAdmin = () => {
           nom: data.nom,
           prenom: data.prenom,
           email: data.email,
-          url_img: data.url_img,
+
           fileUrl: data.url_img,
         });
       } catch (error) {
@@ -145,18 +145,9 @@ const ProfileAdmin = () => {
       <Navbar />
       <div className="admin-profile-container">
         <div className="admin-profile-header">
-          <h1>Profil Administrateur</h1>
+          <h1>Bienvenue {formData.nom} a votre espace </h1>
           <span className="admin-badge">Espace Administrateur</span>
         </div>
-
-        <div className="admin-image-container">
-          <img
-            src={editMode ? formData.fileUrl : adminData.url_img}
-            alt="Admin"
-            className="admin-image"
-          />
-        </div>
-
         <div className="admin-profile-content">
           {editMode ? (
             <form onSubmit={handleSubmit}>
@@ -194,32 +185,7 @@ const ProfileAdmin = () => {
                   />
                 </div>
 
-                <div className="admin-form-group">
-                  <label className="admin-form-label">Photo de profil</label>
-                  <div className="admin-file-input-container">
-                    <div className="admin-file-input-btn">
-                      <i className="bi bi-cloud-upload me-2"></i>
-                      Sélectionner une image
-                    </div>
-                    <input
-                      type="file"
-                      name="url_img"
-                      onChange={handleInputChange}
-                      className="admin-file-input"
-                      accept="image/*"
-                    />
-                  </div>
-
-                  {formData.fileUrl && (
-                    <div className="admin-file-preview mt-3">
-                      <img
-                        src={formData.fileUrl}
-                        alt="Prévisualisation"
-                        className="admin-image preview"
-                      />
-                    </div>
-                  )}
-                </div>
+                <div className="admin-form-group"></div>
               </div>
 
               <div className="admin-actions">

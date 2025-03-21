@@ -1,15 +1,65 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/navbar.css";
+
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [notifications, setNotifications] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const notificationsRef = useRef(null);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+  // Simuler le chargement des notifications (à remplacer par votre API réelle)
+  useEffect(() => {
+    if (user && user.role === "admin") {
+      // Exemple de données de notification - à remplacer par votre appel API réel
+      const fakeNotifications = [
+        { id: 1, message: "Nouvel utilisateur inscrit", date: "2025-03-19" },
+        { id: 2, message: "Nouvelle demande de location", date: "2025-03-18" },
+        // Vous pouvez ajouter d'autres notifications ici
+      ];
+      setNotifications(fakeNotifications);
+    }
+  }, [user]);
+
+  // Fermer les notifications quand on clique ailleurs
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        notificationsRef.current &&
+        !notificationsRef.current.contains(event.target)
+      ) {
+        setShowNotifications(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Fonction de déconnexion modifiée
+  const handleLogout = async () => {
+    try {
+      await logout(); // Attendez que la déconnexion soit terminée
+
+      // Force la redirection vers la page de login pour tous les utilisateurs
+      setTimeout(() => {
+        navigate("/login", { replace: true });
+      }, 100);
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion:", error);
+      // En cas d'erreur, essayez quand même de rediriger
+      navigate("/login", { replace: true });
+    }
+  };
+
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
   };
 
   return (
@@ -17,8 +67,7 @@ const Navbar = () => {
       <div className="container navbar-container-custom">
         {/* Logo avec lien vers la page d'accueil */}
         <Link className="navbar-brand navbar-brand-custom" to="/">
-          <img src="/images/logo.jpg" alt="Logo" />{" "}
-          {/* Remplacez par le chemin de votre logo */}
+          <img src="/images/logo.jpg" alt="Logo" />
         </Link>
 
         {/* Bouton toggler pour les écrans mobiles */}
@@ -35,6 +84,25 @@ const Navbar = () => {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarNav">
+          {/* Barre de recherche pour admin */}
+          {user && user.role === "admin" && (
+            <div className="search-container me-auto">
+              <form className="d-flex" onSubmit={(e) => e.preventDefault()}>
+                <input
+                  className="form-control me-2"
+                  type="search"
+                  placeholder="Rechercher..."
+                  aria-label="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button className="btn btn-outline-success" type="submit">
+                  <i className="fas fa-search"></i>
+                </button>
+              </form>
+            </div>
+          )}
+
           <ul className="navbar-nav ms-auto">
             {user ? (
               <>
@@ -43,47 +111,176 @@ const Navbar = () => {
                     Qui Nous
                   </Link>
                 </li>
+
+                {/* Notifications pour admin avec dropdown */}
                 {user.role === "admin" && (
-                  <li className="nav-item">
-                    <Link
-                      className="nav-link nav-link-custom"
-                      to="/profileAdmin"
+                  <li className="nav-item dropdown" ref={notificationsRef}>
+                    <a
+                      className="nav-link nav-link-custom position-relative"
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toggleNotifications();
+                      }}
                     >
-                      Profile
-                    </Link>
-                    <Link className="nav-link nav-link-custom" to="/users">
-                      UserList
-                    </Link>
+                      <i className="fas fa-bell"></i>
+                      {notifications.length > 0 && (
+                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                          {notifications.length}
+                          <span className="visually-hidden">
+                            notifications non lues
+                          </span>
+                        </span>
+                      )}
+                      {notifications.length === 0 && (
+                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                          0
+                          <span className="visually-hidden">notifications</span>
+                        </span>
+                      )}
+                    </a>
+                    {showNotifications && (
+                      <div
+                        className="dropdown-menu dropdown-menu-end notification-dropdown show"
+                        style={{ minWidth: "300px", padding: "10px" }}
+                      >
+                        <h6 className="dropdown-header">Notifications</h6>
+                        {notifications.length > 0 ? (
+                          <>
+                            {notifications.map((notification) => (
+                              <div
+                                key={notification.id}
+                                className="notification-item p-2 border-bottom"
+                              >
+                                <div className="d-flex justify-content-between">
+                                  <span className="notification-message">
+                                    {notification.message}
+                                  </span>
+                                  <small className="text-muted">
+                                    {notification.date}
+                                  </small>
+                                </div>
+                              </div>
+                            ))}
+                            <div className="text-center mt-2">
+                              <Link
+                                to="/notifications"
+                                className="btn btn-sm btn-primary"
+                              >
+                                Voir toutes les notifications
+                              </Link>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="p-3 text-center">
+                            <p className="mb-0">Aucune notification</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </li>
                 )}
-                {user.role === "client" && (
-                  <li className="nav-item">
-                    <Link className="nav-link nav-link-custom" to="/profile">
-                      Profile
-                    </Link>
-                  </li>
-                )}
-                {user.role === "proprietaire" && (
-                  <li className="nav-item">
-                    <Link className="nav-link nav-link-custom" to="/profile">
-                      Profile
-                    </Link>
-                  </li>
-                )}
-                <li className="nav-item">
-                  <button
-                    className="btn btn-logout-custom ms-2"
-                    onClick={handleLogout}
+
+                {/* Menu déroulant pour tous les utilisateurs connectés */}
+                <li className="nav-item dropdown">
+                  <a
+                    className="nav-link dropdown-toggle d-flex align-items-center"
+                    href="#"
+                    id="navbarDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
                   >
-                    Déconnexion
-                  </button>
+                    {user.role !== "admin" && (
+                      <img
+                        src={user.url_img || "/images/avatar.png"}
+                        alt="Profile"
+                        className="rounded-circle me-2"
+                        style={{ width: "30px", height: "30px" }}
+                      />
+                    )}
+                    Profile
+                  </a>
+                  <ul
+                    className="dropdown-menu dropdown-menu-end"
+                    aria-labelledby="navbarDropdown"
+                  >
+                    {user.role === "admin" && (
+                      <>
+                        <li>
+                          <Link className="dropdown-item" to="/profileAdmin">
+                            Mon Profile
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="dropdown-item" to="/users">
+                            Liste des Utilisateurs
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="dropdown-item" to="/dashbordAdmin">
+                            Tableau de bord
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="dropdown-item" to="/props">
+                            List des proprétaires
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="dropdown-item" to="/gestProps">
+                            List des proprétaires non approuver
+                          </Link>
+                        </li>
+                      </>
+                    )}
+                    {(user.role === "client" ||
+                      user.role === "proprietaire") && (
+                      <li>
+                        <Link className="dropdown-item" to="/profile">
+                          Mon Profile
+                        </Link>
+                      </li>
+                    )}
+                    <li>
+                      <hr className="dropdown-divider" />
+                    </li>
+                    <li>
+                      <button className="dropdown-item" onClick={handleLogout}>
+                        Déconnexion
+                      </button>
+                    </li>
+                  </ul>
                 </li>
               </>
             ) : (
-              <li className="nav-item">
-                <Link className="nav-link nav-link-custom" to="/login">
-                  Se connecter
-                </Link>
+              <li className="nav-item dropdown">
+                <a
+                  className="nav-link dropdown-toggle"
+                  href="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i className="fas fa-user me-2"></i>
+                  Compte
+                </a>
+                <ul
+                  className="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="navbarDropdown"
+                >
+                  <li>
+                    <Link className="dropdown-item" to="/login">
+                      Se connecter
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/register">
+                      S'inscrire
+                    </Link>
+                  </li>
+                </ul>
               </li>
             )}
           </ul>
