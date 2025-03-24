@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
+import "../styles/PropsList.css";
 import UserService from "../services/UserService";
+import Layout from "../components/Layout";
 
-const PropsList = () => {
+const GestionProps = () => {
   const [proprietaires, setProprietaires] = useState([]);
   const [filteredProprietaires, setFilteredProprietaires] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -80,7 +81,11 @@ const PropsList = () => {
     if (!selectedUser) return;
 
     try {
-      await UserService.rejectProprietaire(selectedUser._id, rejectReason);
+      const response = await UserService.rejectProprietaire(
+        selectedUser._id,
+        rejectReason
+      );
+      console.log("Réponse du serveur:", response);
       setMessage({
         type: "success",
         text: "Propriétaire rejeté avec succès!",
@@ -88,6 +93,9 @@ const PropsList = () => {
       closeModal();
       fetchPendingProprietaires();
     } catch (error) {
+      console.error("Erreur détaillée:", error);
+      console.error("Statut:", error.response?.status);
+      console.error("Message d'erreur:", error.response?.data);
       console.error("Erreur lors du rejet:", error);
       setMessage({
         type: "danger",
@@ -98,16 +106,8 @@ const PropsList = () => {
     }
   };
 
-  const checkApiRoutes = async () => {
-    try {
-      const routes = await UserService.getApiRoutes();
-      console.log("Routes API disponibles:", routes);
-    } catch (error) {
-      console.log("Impossible de vérifier les routes API");
-    }
-  };
-
   const openRejectModal = (user) => {
+    console.log("openRejectModal appelé avec:", user);
     setSelectedUser(user);
     setRejectReason("");
     setShowModal(true);
@@ -132,124 +132,134 @@ const PropsList = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="user-list-card">
-        <h3 className="h3">Liste des Propriétaires en Attente</h3>
+      <Layout>
+        <div className="proprietaire-list-card">
+          <h3 className="proprietaire-title">
+            Liste des Propriétaires en Attente
+          </h3>
 
-        {message.text && (
-          <div className={`alert alert-${message.type}`}>
-            {message.text}
-            <button
-              className="close-btn"
-              onClick={() => setMessage({ type: "", text: "" })}
+          {message.text && (
+            <div
+              className={`proprietaire-alert proprietaire-alert-${message.type}`}
             >
-              &times;
-            </button>
+              {message.text}
+              <button
+                className="proprietaire-close-btn"
+                onClick={() => setMessage({ type: "", text: "" })}
+              >
+                &times;
+              </button>
+            </div>
+          )}
+
+          <div className="proprietaire-filter-bar">
+            <input
+              type="text"
+              placeholder="Rechercher un propriétaire..."
+              value={searchTerm}
+              onChange={handleSearch}
+            />
           </div>
-        )}
 
-        <div className="filter-bar">
-          <input
-            type="text"
-            placeholder="Rechercher un propriétaire..."
-            value={searchTerm}
-            onChange={handleSearch}
-          />
-          <button onClick={checkApiRoutes} className="debug-btn">
-            Vérifier API
-          </button>
-        </div>
-
-        {loading ? (
-          <div className="loading">Chargement en cours...</div>
-        ) : filteredProprietaires.length === 0 ? (
-          <div className="no-results">Aucun propriétaire en attente trouvé</div>
-        ) : (
-          <>
-            <table className="user-list-table">
-              <thead>
-                <tr>
-                  <th>Nom</th>
-                  <th>Prénom</th>
-                  <th>Email</th>
-                  <th>Téléphone</th>
-                  <th>Adresse</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentItems.map((proprietaire) => (
-                  <tr key={proprietaire._id}>
-                    <td>{proprietaire.nom}</td>
-                    <td>{proprietaire.prenom}</td>
-                    <td>{proprietaire.email}</td>
-                    <td>{proprietaire.tel}</td>
-                    <td>{proprietaire.adresse}</td>
-                    <td className="actions">
-                      <button
-                        className="approve-btn"
-                        onClick={() => handleApprove(proprietaire._id)}
-                      >
-                        Approuver
-                      </button>
-                      <button
-                        className="reject-btn"
-                        onClick={() => openRejectModal(proprietaire)}
-                      >
-                        Rejeter
-                      </button>
-                    </td>
+          {loading ? (
+            <div className="proprietaire-loading">Chargement en cours...</div>
+          ) : filteredProprietaires.length === 0 ? (
+            <div className="proprietaire-no-results">
+              Aucun propriétaire en attente trouvé
+            </div>
+          ) : (
+            <>
+              <div className="proprietaire-table">
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Adresse</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {totalPages > 1 && (
-              <div className="pagination">
-                {[...Array(totalPages).keys()].map((number) => (
-                  <button
-                    key={number + 1}
-                    className={`page-link ${
-                      currentPage === number + 1 ? "active" : ""
-                    }`}
-                    onClick={() => paginate(number + 1)}
-                  >
-                    {number + 1}
-                  </button>
-                ))}
+                </thead>
+                <tbody>
+                  {currentItems.map((proprietaire) => (
+                    <tr key={proprietaire._id}>
+                      <td data-label="Nom">{proprietaire.nom}</td>
+                      <td data-label="Prénom">{proprietaire.prenom}</td>
+                      <td data-label="Email">{proprietaire.email}</td>
+                      <td data-label="Téléphone">{proprietaire.tel}</td>
+                      <td data-label="Adresse">{proprietaire.adresse}</td>
+                      <td className="proprietaire-actions">
+                        <button
+                          className="proprietaire-approve-btn"
+                          onClick={() => handleApprove(proprietaire._id)}
+                        >
+                          Approuver
+                        </button>
+                        <button
+                          className="proprietaire-reject-btn"
+                          onClick={() => openRejectModal(proprietaire)}
+                        >
+                          Rejeter
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
               </div>
-            )}
-          </>
-        )}
 
-        {showModal && (
-          <div className="modal">
-            <div className="modal-content">
-              <h4>Rejeter le propriétaire</h4>
-              <p>
-                Êtes-vous sûr de vouloir rejeter {selectedUser.prenom}{" "}
-                {selectedUser.nom}?
-              </p>
-              <textarea
-                placeholder="Raison du rejet (optionnel)"
-                value={rejectReason}
-                onChange={(e) => setRejectReason(e.target.value)}
-                rows="4"
-              />
-              <div className="modal-buttons">
-                <button className="cancel-btn" onClick={closeModal}>
-                  Annuler
-                </button>
-                <button className="confirm-btn" onClick={handleReject}>
-                  Confirmer
-                </button>
+              {totalPages > 1 && (
+                <div className="proprietaire-pagination">
+                  {[...Array(totalPages).keys()].map((number) => (
+                    <button
+                      key={number + 1}
+                      className={`proprietaire-page-link ${
+                        currentPage === number + 1 ? "active" : ""
+                      }`}
+                      onClick={() => paginate(number + 1)}
+                    >
+                      {number + 1}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+
+          {showModal && (
+            <div className="proprietaire-modal">
+              <div className="proprietaire-modal-content">
+                <h4>Rejeter le propriétaire</h4>
+                <p>
+                  Êtes-vous sûr de vouloir rejeter {selectedUser.prenom}{" "}
+                  {selectedUser.nom}?
+                </p>
+                <textarea
+                  placeholder="Raison du rejet (optionnel)"
+                  value={rejectReason}
+                  onChange={(e) => setRejectReason(e.target.value)}
+                  rows="4"
+                />
+                <div className="proprietaire-modal-buttons">
+                  <button
+                    className="proprietaire-cancel-btn"
+                    onClick={closeModal}
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    className="proprietaire-confirm-btn"
+                    onClick={handleReject}
+                  >
+                    Confirmer
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      </Layout>
     </>
   );
 };
 
-export default PropsList;
+export default GestionProps;

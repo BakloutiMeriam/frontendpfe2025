@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/dashboard.css";
-import Navbar from "../components/Navbar";
+import Layout from "../components/Layout";
 
 const Dashboard = () => {
   const [userCount, setUserCount] = useState(0);
@@ -34,28 +34,29 @@ const Dashboard = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="dashboard">
-        <h1>Tableau de Bord Admin</h1>
-        <div className="cards-container">
-          <div className="card">
-            <h2>Nombre d'utilisateurs</h2>
-            <p>{userCount}</p>
-          </div>
-          <div className="card">
-            <h2>Nombre de propriétaires</h2>
-            <p>{proprietaireCount}</p>
-          </div>
-          <div className="card">
-            <h2>Nombre de clients</h2>
-            <p>{clientCount}</p>
-          </div>
-          <div className="card">
-            <h2>Nombre de logements</h2>
-            <p>?</p>
+      <Layout>
+        <div className="dashboard">
+          <h1>Tableau de Bord Admin</h1>
+          <div className="cards-container">
+            <div className="card">
+              <h2>Nombre d'utilisateurs</h2>
+              <p>{userCount}</p>
+            </div>
+            <div className="card">
+              <h2>Nombre de propriétaires</h2>
+              <p>{proprietaireCount}</p>
+            </div>
+            <div className="card">
+              <h2>Nombre de clients</h2>
+              <p>{clientCount}</p>
+            </div>
+            <div className="card">
+              <h2>Nombre de logements</h2>
+              <p>?</p>
+            </div>
           </div>
         </div>
-      </div>
+      </Layout>
     </>
   );
 };

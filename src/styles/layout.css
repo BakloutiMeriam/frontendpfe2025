@@ -1,0 +1,74 @@
+/* Style de base pour le layout */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Conteneur de la sidebar */
+.sidebar-container {
+  flex-shrink: 0;
+  width: 250px;
+  transition: width 0.3s ease;
+}
+
+.sidebar-container.closed {
+  width: 70px;
+}
+
+/* Overlay pour fermer la sidebar sur mobile */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Conteneur du contenu */
+.content-container {
+  flex-grow: 1;
+  transition: margin-left 0.3s ease;
+  width: 100%;
+}
+
+.content-container.with-sidebar {
+  margin-left: -250px; /* La taille de la sidebar */
+}
+
+.content-container.with-sidebar.sidebar-open {
+  margin-left: 0;
+}
+
+.content-container.with-sidebar.sidebar-closed {
+  margin-left: -180px; /* La différence entre sidebar ouverte et fermée */
+}
+
+/* Contenu principal */
+.main-content {
+  padding: 80px 20px 20px; /* Espace pour la navbar en haut */
+  min-height: calc(100vh - 60px); /* Hauteur du viewport moins la navbar */
+}
+
+/* Adaptations responsive */
+@media (max-width: 991.98px) {
+  .sidebar-container {
+    position: fixed;
+    z-index: 1000;
+    left: -250px;
+  }
+
+  .sidebar-container.open {
+    left: 0;
+  }
+
+  .content-container.with-sidebar {
+    margin-left: 0;
+  }
+
+  .content-container.with-sidebar.sidebar-open,
+  .content-container.with-sidebar.sidebar-closed {
+    margin-left: 0;
+  }
+}

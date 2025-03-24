@@ -1,4 +1,4 @@
-/*import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import { ProfileContext } from "../context/ProfileContext";
 import ProfileForm from "../components/ProfileForm";
 import "../styles/register.css";
@@ -119,9 +119,9 @@ const Register = () => {
   );
 };
 
-export default Register;*/
+export default Register;
 
-import { useContext, useState, useEffect } from "react";
+/*import { useContext, useState, useEffect } from "react";
 import { ProfileContext } from "../context/ProfileContext";
 import ProfileForm from "../components/ProfileForm";
 import "../styles/register.css";
@@ -201,4 +201,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Register;*/

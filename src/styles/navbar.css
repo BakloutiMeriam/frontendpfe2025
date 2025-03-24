@@ -2,7 +2,13 @@
 .navbar-custom {
   background-color: #fffefe; /* Fond blanc */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre légère */
-  padding: 10px 0; /* Espacement interne */
+  padding: 0 20px; /* Espacement interne */
+  height: 70px;
+  position: sticky; /* Changé de fixed à sticky */
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  margin-bottom: 0px;
 }
 
 /* Logo de la navbar */
@@ -15,7 +21,7 @@
 }
 
 .navbar-brand-custom img {
-  height: 60px; /* Taille du logo */
+  height: 40px; /* Taille réduite du logo */
   margin-right: 10px; /* Espacement entre le logo et le texte */
 }
 
@@ -45,24 +51,81 @@
   background-color: #125be1; /* Fond bleu clair au survol */
 }
 
-/* Bouton toggler pour les écrans mobiles */
-.navbar-toggler-custom {
-  border: none; /* Pas de bordure */
-  outline: none; /* Pas de contour */
+.navbar-toggler {
+  padding: 0.25rem 0.5rem;
+  border-color: rgba(38, 83, 164, 0.2);
 }
 
-.navbar-toggler-custom:focus {
+.navbar-toggler:focus {
   box-shadow: none; /* Pas d'ombre au focus */
-}
-
-/* Icône du toggler */
-.navbar-toggler-icon-custom {
-  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(38, 83, 164, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
 /* Conteneur de la navbar */
 .navbar-container-custom {
-  max-width: 1200px; /* Largeur maximale */
-  margin: 0 auto; /* Centrer horizontalement */
-  padding: 0 20px; /* Espacement interne */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+/* Barre de recherche */
+.search-container {
+  max-width: 300px;
+  width: 100%;
+}
+
+/* Bouton toggle sidebar */
+.sidebar-toggle {
+  background: transparent;
+  border: none;
+  color: #2653a4;
+  font-size: 1.1rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.sidebar-toggle:hover {
+  background-color: #f0f0f0;
+}
+
+/* Dropdown notifications */
+.notification-dropdown {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.notification-item:hover {
+  background-color: #f8f9fa;
+}
+
+/* Style pour le menu déroulant dans la navbar */
+.dropdown-menu {
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+}
+
+/* Assurer que la navbar est toujours visible en mode mobile */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    background-color: #ffffff; /* Fond blanc pour le menu hamburger déplié */
+    padding: 10px;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 60px; /* Sous la navbar */
+    left: 0;
+    right: 0;
+    z-index: 999;
+  }
+}
+.hh {
+  /*original*/
 }

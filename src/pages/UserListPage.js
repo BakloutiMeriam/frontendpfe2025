@@ -1,12 +1,13 @@
 import React from "react";
 import UserList from "../components/UserList";
-import Navbar from "../components/Navbar";
+import Layout from "../components/Layout";
 const UserListPage = () => {
   return (
     <>
       <div>
-        <Navbar />
-        <UserList />
+        <Layout>
+          <UserList />
+        </Layout>
       </div>
     </>
   );

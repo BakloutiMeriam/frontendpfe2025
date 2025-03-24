@@ -43,7 +43,7 @@ body {
 
 .auth-card h2 {
   color: #125be1;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
@@ -52,6 +52,7 @@ body {
   border: 1px solid #4c4c4c;
   padding: 5px;
   margin-bottom: 15px;
+  margin-top: 15px;
   font-size: 0.9rem;
 }
 
@@ -97,7 +98,6 @@ body {
   background-color: #fffefe;
   color: #4c4c4c;
 }
-
 
 .social-login .btn:hover {
   background-color: #edf4f7;
