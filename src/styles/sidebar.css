@@ -1,0 +1,187 @@
+/* Style de base pour la sidebar */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: linear-gradient(135deg, #242d41 0%, #2653a4 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  padding-top: 15px;
+  overflow-y: auto;
+}
+
+/* Style pour la sidebar rétractée */
+.sidebar.collapsed {
+  width: 70px;
+}
+
+/* En-tête de la sidebar */
+.sidebar-header {
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  background-color: rgba(255, 254, 254, 0.1);
+  margin: 0 15px 20px 15px;
+  border-radius: 8px;
+}
+
+.sidebar-logo {
+  height: 50px;
+  width: auto;
+  max-width: 180px;
+  filter: brightness(1.2) contrast(1.1);
+}
+
+/* Bloc utilisateur */
+.sidebar-user {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  background: linear-gradient(
+    90deg,
+    rgba(18, 91, 225, 0.3) 0%,
+    rgba(34, 88, 184, 0.2) 100%
+  );
+  border-radius: 8px;
+  margin: 0 15px 20px 15px;
+  border-left: 3px solid #fffefe;
+}
+
+.sidebar-user img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+  border: 2px solid #fffefe;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-user-info {
+  overflow: hidden;
+}
+
+.sidebar-user-name {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fffefe;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-user-role {
+  font-size: 0.8rem;
+  color: #edf4f7;
+  text-transform: capitalize;
+}
+
+/* Séparateur */
+.sidebar-divider {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(237, 244, 247, 0.05) 0%,
+    rgba(255, 254, 254, 0.3) 50%,
+    rgba(237, 244, 247, 0.05) 100%
+  );
+  margin: 15px;
+}
+
+/* Navigation */
+.sidebar-nav {
+  list-style: none;
+  padding: 0 10px;
+  margin: 0;
+}
+
+.sidebar-item {
+  margin: 6px 0;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  color: #edf4f7;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-link:hover {
+  background-color: rgba(255, 254, 254, 0.15);
+  color: #fffefe;
+  transform: translateX(3px);
+}
+
+.sidebar-link.active {
+  background: linear-gradient(90deg, #125be1 0%, rgba(34, 88, 184, 0.7) 100%);
+  color: #fffefe;
+  border-left-color: #fffefe;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-icon {
+  width: 20px;
+  margin-right: 12px;
+  text-align: center;
+  font-size: 1rem;
+  color: #fffefe;
+}
+
+.sidebar-link:not(.active) .sidebar-icon {
+  color: #edf4f7;
+}
+
+.sidebar-link span {
+  transition: color 0.2s ease;
+}
+
+/* Badge de notification */
+.sidebar-badge {
+  background: #125be1;
+  color: #fffefe;
+  font-size: 0.7rem;
+  border-radius: 12px;
+  padding: 3px 8px;
+  margin-left: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 254, 254, 0.3);
+}
+
+/* Style pour les écrans de moins de 992px */
+@media (max-width: 991.98px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.show {
+    transform: translateX(0);
+  }
+
+  /* Overlay quand la sidebar est ouverte sur mobile */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+  }
+
+  .sidebar-overlay.show {
+    display: block;
+  }
+}

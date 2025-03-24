@@ -67,7 +67,12 @@ const ViewProfile = () => {
         let data;
         if (user.role === "client") {
           data = await UserService.getUserProfileClient();
-        } else if (user.role === "proprietaire") {
+        } /*else if (
+          user.role.toLowerCase() === "proprietaire" &&
+          user.approvalStatus === "pending"
+        ) {
+          navigate("/confirmation", { replace: true });
+        }*/ else if (user.role === "proprietaire") {
           data = await UserService.getUserProfileProp();
         } else {
           throw new Error(`Rôle inconnu: ${user.role}`);

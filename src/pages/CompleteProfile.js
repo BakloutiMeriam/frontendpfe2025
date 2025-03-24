@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import "../styles/complete-profile.css";
-import Navbar from "../components/Navbar";
 
 const CompleteProfile = () => {
   const { userId } = useParams();
@@ -203,7 +202,6 @@ const CompleteProfile = () => {
 
   return (
     <>
-      <Navbar />
       <div className="complete-profile-container">
         <div className="complete-profile-card">
           <h2>Compléter votre profil</h2>

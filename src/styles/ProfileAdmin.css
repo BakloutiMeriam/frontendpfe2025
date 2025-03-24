@@ -22,7 +22,8 @@ body {
 
 .admin-profile-container {
   max-width: 900px;
-  margin: 40px auto;
+  margin: auto;
+  margin-top: 0px;
   padding: 0;
   background-color: var(--white);
   border-radius: var(--border-radius);
