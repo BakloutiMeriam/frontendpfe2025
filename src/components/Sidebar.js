@@ -83,6 +83,25 @@ const Sidebar = () => {
                 <span>Approbations</span>
               </Link>
             </li>
+            {/* Nouveaux éléments ajoutés pour l'admin */}
+            <li className="sidebar-item">
+              <Link
+                to="/categories"
+                className={`sidebar-link ${isActive("/categories")}`}
+              >
+                <i className="fas fa-tags sidebar-icon"></i>
+                <span>Catégories</span>
+              </Link>
+            </li>
+            <li className="sidebar-item">
+              <Link
+                to="/logements"
+                className={`sidebar-link ${isActive("/logements")}`}
+              >
+                <i className="fas fa-home sidebar-icon"></i>
+                <span>Logements</span>
+              </Link>
+            </li>
             <li className="sidebar-item">
               <Link
                 to="/notifications"
@@ -102,8 +121,8 @@ const Sidebar = () => {
           <>
             <li className="sidebar-item">
               <Link
-                to="/mes-proprietes"
-                className={`sidebar-link ${isActive("/mes-proprietes")}`}
+                to="/MesLogements"
+                className={`sidebar-link ${isActive("/MesLogements")}`}
               >
                 <i className="fas fa-building sidebar-icon"></i>
                 <span>Mes propriétés</span>
@@ -111,8 +130,8 @@ const Sidebar = () => {
             </li>
             <li className="sidebar-item">
               <Link
-                to="/ajouter-propriete"
-                className={`sidebar-link ${isActive("/ajouter-propriete")}`}
+                to="/AddLogement"
+                className={`sidebar-link ${isActive("/AddLogement")}`}
               >
                 <i className="fas fa-plus-circle sidebar-icon"></i>
                 <span>Ajouter propriété</span>

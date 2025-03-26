@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+/*import React, { useEffect, useState, useContext } from "react";
 import UserService from "../services/UserService";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/Profile.css";
@@ -67,12 +67,7 @@ const ViewProfile = () => {
         let data;
         if (user.role === "client") {
           data = await UserService.getUserProfileClient();
-        } /*else if (
-          user.role.toLowerCase() === "proprietaire" &&
-          user.approvalStatus === "pending"
-        ) {
-          navigate("/confirmation", { replace: true });
-        }*/ else if (user.role === "proprietaire") {
+        } else if (user.role === "proprietaire") {
           data = await UserService.getUserProfileProp();
         } else {
           throw new Error(`Rôle inconnu: ${user.role}`);
@@ -715,4 +710,4 @@ const ViewProfile = () => {
   );
 };
 
-export default ViewProfile;
+export default ViewProfile;*/

@@ -498,7 +498,7 @@ const Navbar = () => {
                   >
                     {user.role !== "admin" && (
                       <img
-                        src={user.url_img || "/images/avatar.png"}
+                        src={user.url_img || "../images/avatar.png"}
                         alt="Profile"
                         className="rounded-circle me-2"
                         style={{ width: "30px", height: "30px" }}
@@ -520,6 +520,18 @@ const Navbar = () => {
                         }
                       >
                         Mon Profil
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="dropdown-item"
+                        to={
+                          user.role === "proprietaire"
+                            ? "/AddLogement"
+                            : "/profile"
+                        }
+                      >
+                        Gestion Logement
                       </Link>
                     </li>
                     <li>
