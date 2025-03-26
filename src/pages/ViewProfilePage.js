@@ -363,15 +363,12 @@ const ViewProfile = () => {
 
             <div className="profile-image-container">
               <img
-                src={
-                  profile.url_img ||
-                  "https://via.placeholder.com/150?text=Photo"
-                }
+                src={profile.url_img || profile.url_img !== "user.png"}
                 alt="Profil"
                 className="profile-image"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "https://via.placeholder.com/150?text=Photo";
+                  e.target.src = "../images/avatar.png";
                 }}
               />
             </div>
@@ -643,8 +640,7 @@ const ViewProfile = () => {
                       className="profile-image preview"
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src =
-                          "https://via.placeholder.com/100?text=Photo";
+                        e.target.src = "../images/avatar.png";
                       }}
                     />
                   </div>

@@ -13,6 +13,10 @@ import Dashboard from "../pages/DashboardAdmin";
 import GestionProps from "../pages/GestionProps";
 import ConfirmationPage from "../pages/ConfirmationPage";
 import ListProprietaire from "../pages/ListeProprietaire";
+import GestionCategories from "../pages/GestionCategories";
+import AddLogementForm from "../pages/AddLogementForm";
+import MesLogements from "../pages/MesLogements";
+import LogementDetails from "../pages/LogementDetails";
 
 const AppRoutes = () => {
   return (
@@ -30,6 +34,11 @@ const AppRoutes = () => {
       <Route path="/confirmation" element={<ConfirmationPage />} />
       <Route path="/gestProps" element={<GestionProps />} />
       <Route path="/dashboardAdmin" element={<Dashboard />} />
+      <Route path="/categories" element={<GestionCategories />} />
+      <Route path="/AddLogement" element={<AddLogementForm />} />
+      <Route path="/MesLogements" element={<MesLogements />} />
+      <Route path="/logement-details/:id" element={<LogementDetails />} />
+
       <Route path="*" />
     </Routes>
   );
