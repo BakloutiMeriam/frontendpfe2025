@@ -1,0 +1,94 @@
+/* CategoryMenu.css */
+.category-menu-container {
+  width: 100%;
+  border-bottom: 1px solid #ebebeb;
+  padding: 16px 0;
+  margin-bottom: 24px;
+  background-color: white;
+  position: sticky;
+  top: 70px; /* Ajustez selon la hauteur de votre Navbar */
+  z-index: 10;
+}
+
+.category-menu {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 32px;
+  padding: 0 24px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.category-menu::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  min-width: 64px;
+  opacity: 0.7;
+  transition: all 0.3s;
+  padding-bottom: 8px;
+  border-bottom: 2px solid transparent;
+}
+
+.category-item:hover {
+  opacity: 1;
+}
+
+.category-item.active {
+  opacity: 1;
+  border-bottom: 2px solid #ff385c; /* Couleur Airbnb */
+}
+
+.category-icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 8px;
+  color: #222222;
+}
+
+.category-custom-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.category-icon {
+  font-size: 28px;
+}
+
+.category-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #222222;
+  white-space: nowrap;
+}
+
+.category-menu-loading,
+.category-menu-error {
+  text-align: center;
+  padding: 16px;
+  color: #666;
+}
+
+/* Animation de transition quand le filtre change */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.logements-grid {
+  animation: fadeIn 0.3s ease-in-out;
+}

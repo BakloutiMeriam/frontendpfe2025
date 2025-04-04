@@ -402,7 +402,7 @@ const Navbar = () => {
           id="navbarNav"
         >
           {/* Barre de recherche pour tous les utilisateurs connectés */}
-          {user && (
+          {/*{user && (
             <div className="search-container me-auto">
               <form className="d-flex" onSubmit={(e) => e.preventDefault()}>
                 <input
@@ -418,7 +418,7 @@ const Navbar = () => {
                 </button>
               </form>
             </div>
-          )}
+          )}*/}
 
           <ul className="navbar-nav ms-auto">
             {user ? (

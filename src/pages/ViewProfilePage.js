@@ -40,6 +40,7 @@ const ViewProfile = () => {
 
   useEffect(() => {
     console.log("Utilisateur dans le contexte (ViewProfile):", user);
+
     const fetchUserProfile = async () => {
       try {
         if (!user) {
@@ -68,16 +69,24 @@ const ViewProfile = () => {
         let data;
         if (user.role === "client") {
           data = await UserService.getUserProfileClient();
-        } /*else if (
+        } else if (
           user.role.toLowerCase() === "proprietaire" &&
           user.approvalStatus === "pending"
         ) {
           navigate("/confirmation", { replace: true });
-        }*/ else if (user.role === "proprietaire") {
+        } else if (user.role === "proprietaire") {
           data = await UserService.getUserProfileProp();
         } else {
           throw new Error(`Rôle inconnu: ${user.role}`);
-        }
+        } /* else if (
+          user &&
+          user.role?.toLowerCase() === "proprietaire" &&
+          user.approvalStatus === "pending"
+        ) {
+          // Redirection directe vers la page de confirmation
+          navigate("/confirmation", { replace: true });
+          return;
+        }*/
 
         console.log("Données du profil reçues:", data);
         setProfile(data);
@@ -260,10 +269,10 @@ const ViewProfile = () => {
 
       // Rafraîchir les données du profil
       let updatedProfile;
-      if (user.role === "client") {
-        updatedProfile = await UserService.getUserProfileClient();
-      } else {
+      if (user.role === "proprietaire") {
         updatedProfile = await UserService.getUserProfileProp();
+      } else {
+        updatedProfile = await UserService.getUserProfileClient();
       }
 
       setProfile(updatedProfile);

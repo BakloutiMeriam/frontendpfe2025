@@ -212,4 +212,68 @@ export const logementService = {
       throw error;
     }
   },
+  getLogementsService: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/listeLog`);
+      return response.data.logements;
+    } catch (err) {
+      console.error("Erreur lors du chargement des logements", err);
+      throw err;
+    }
+  },
+
+  // Dans LogementService.js - Ces méthodes semblent déjà être présentes dans votre code partagé
+  // mais assurez-vous qu'elles sont correctement configurées avec les headers d'authentification
+
+  ajouterAuxFavoris: async (logementId) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/favoris/${logementId}`,
+        {},
+        {
+          headers: {
+            ...authHeader(),
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Erreur lors de l'ajout aux favoris:", error);
+      throw error;
+    }
+  },
+
+  getMesFavoris: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/mes-favoris`, {
+        headers: {
+          ...authHeader(),
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erreur lors de la récupération des favoris:", error);
+      throw error;
+    }
+  },
+
+  supprimerDesFavoris: async (logementId) => {
+    try {
+      const response = await axios.delete(`${API_URL}/favoris/${logementId}`, {
+        headers: {
+          ...authHeader(),
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erreur lors de la suppression des favoris:", error);
+      throw error;
+    }
+  },
 };

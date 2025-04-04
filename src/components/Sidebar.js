@@ -153,8 +153,8 @@ const Sidebar = () => {
           <>
             <li className="sidebar-item">
               <Link
-                to="/favoris"
-                className={`sidebar-link ${isActive("/favoris")}`}
+                to="/FavorisPage"
+                className={`sidebar-link ${isActive("/FavorisPage")}`}
               >
                 <i className="fas fa-heart sidebar-icon"></i>
                 <span>Favoris</span>
