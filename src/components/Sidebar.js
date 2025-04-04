@@ -1,9 +1,10 @@
 import { useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/sidebar.css";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const location = useLocation();
 
@@ -18,7 +19,9 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <img src="/images/logo2.png" alt="Logo" className="sidebar-logo" />
+        <Link to="/" onClick={() => navigate("/")}>
+          <img src="/images/logo2.png" alt="Logo" className="sidebar-logo" />
+        </Link>
       </div>
       <div className="sidebar-divider"></div>
 
