@@ -5,17 +5,6 @@ const API_URL = "http://localhost:3000/api/user";
 const API = "http://localhost:3000/api/admin";
 
 const UserService = {
-  /*register: async (formData) => {
-    try {
-      const response = await axios.post(`${API_URL}/register`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      console.log("Réponse du serveur:", response.data);
-      return response.data;
-    } catch (error) {
-      throw new Error(error.response?.data || "Erreur lors de l'inscription");
-    }
-  },*/
   register: async (formData) => {
     try {
       const response = await axios.post(`${API_URL}/register`, formData);

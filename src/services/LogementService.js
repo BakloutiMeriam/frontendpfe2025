@@ -91,7 +91,38 @@ export const logementService = {
           withCredentials: true,
         }
       );
-      return response.data;
+
+      // Préfixer les chemins d'images pour chaque logement
+      const logements = response.data;
+      const baseUrl = "http://localhost:3000/uploads/";
+
+      return logements.map((logement) => {
+        // Traiter l'image principale
+        if (
+          logement.photoprincipale &&
+          !logement.photoprincipale.startsWith("http") &&
+          !logement.photoprincipale.startsWith("data:") &&
+          !logement.photoprincipale.startsWith("/api/")
+        ) {
+          logement.photoprincipale = baseUrl + logement.photoprincipale;
+        }
+
+        // Traiter les autres photos si nécessaire
+        if (logement.photos && Array.isArray(logement.photos)) {
+          logement.photos = logement.photos.map((photo) => {
+            if (
+              !photo.startsWith("http") &&
+              !photo.startsWith("data:") &&
+              !photo.startsWith("/api/")
+            ) {
+              return baseUrl + photo;
+            }
+            return photo;
+          });
+        }
+
+        return logement;
+      });
     } catch (error) {
       console.error("Erreur lors de la récupération de mes logements:", error);
       throw error;
@@ -101,36 +132,76 @@ export const logementService = {
     try {
       const formData = new FormData();
 
-      // Ajouter les champs de base
+      // Ajouter les champs de base (inchangé)
       formData.append("titre", logementData.titre);
       formData.append("description", logementData.description);
       formData.append("prix", logementData.prix);
       formData.append("superficie", logementData.superficie);
       formData.append("nombreChambres", logementData.nombreChambres);
       formData.append("nombreSallesDeBain", logementData.nombreSallesDeBain);
-      formData.append("categorie", logementData.categorie);
+
+      // Gestion de la catégorie (inchangé)
+      let categorieId = logementData.categorie;
+      if (categorieId && typeof categorieId === "object") {
+        categorieId = categorieId.id || categorieId._id || categorieId;
+      }
+      if (categorieId) {
+        categorieId = categorieId.toString();
+        formData.append("categorie", categorieId);
+      }
+
       formData.append("disponible", logementData.disponible);
 
-      // Gestion de l'adresse
+      // Gestion de l'adresse (inchangé)
       formData.append("adresse[rue]", logementData.adresse.rue);
       formData.append("adresse[ville]", logementData.adresse.ville);
       formData.append("adresse[codePostal]", logementData.adresse.codePostal);
       formData.append("adresse[pays]", logementData.adresse.pays);
 
-      // Gestion des amenités
+      // Gestion des amenités (inchangé)
       logementData.amenites.forEach((amenite, index) => {
         formData.append(`amenites[${index}]`, amenite);
       });
 
-      // Gestion des fichiers
-      if (logementData.photoprincipale && logementData.photoprincipale[0]) {
-        formData.append("photoprincipale", logementData.photoprincipale[0]);
-      }
+      // CHANGÉ: Gestion des photos
+      // Séparer les nouvelles photos (base64) des URLs existantes
+      const existingPhotos = [];
+      const newPhotos = [];
 
       if (logementData.photos && logementData.photos.length) {
-        logementData.photos.forEach((photo, index) => {
-          formData.append("photos", photo);
+        logementData.photos.forEach((photo) => {
+          if (photo.startsWith("data:image")) {
+            // C'est une nouvelle photo en base64
+            newPhotos.push(photo);
+          } else {
+            // C'est une URL existante
+            existingPhotos.push(photo);
+          }
         });
+      }
+
+      // Envoyer les photos existantes dans un champ séparé
+      if (existingPhotos.length > 0) {
+        formData.append("existingPhotos", JSON.stringify(existingPhotos));
+      }
+
+      // Envoyer les nouvelles photos
+      if (newPhotos.length > 0) {
+        formData.append("newPhotos", JSON.stringify(newPhotos));
+      }
+
+      // CHANGÉ: Gestion de la photo principale
+      if (logementData.photoprincipale) {
+        if (logementData.photoprincipale.startsWith("data:image")) {
+          // C'est une nouvelle photo principale en base64
+          formData.append("newPhotoPrincipale", logementData.photoprincipale);
+        } else {
+          // C'est une URL existante
+          formData.append(
+            "existingPhotoPrincipale",
+            logementData.photoprincipale
+          );
+        }
       }
 
       const response = await axios.put(`${API_URL}/updateLog/${id}`, formData, {
@@ -144,13 +215,12 @@ export const logementService = {
       return response.data;
     } catch (error) {
       console.error(
-        "Erreur détaillée lors de la mise à jour du logement:",
+        "Erreur détaillée:",
         error.response ? error.response.data : error.message
       );
       throw error;
     }
   },
-
   deleteLogement: async (id) => {
     try {
       const response = await axios.delete(`${API_URL}/deleteLog/${id}`, {
@@ -174,7 +244,7 @@ export const logementService = {
   toggleDisponibilite: async (id) => {
     try {
       const response = await axios.patch(
-        `${API_URL}/updateDispo/${id}/disponible`,
+        `${API_URL}/updateDispo/${id}`,
         {},
         {
           headers: {
@@ -203,7 +273,40 @@ export const logementService = {
         },
         withCredentials: true,
       });
-      return response.data;
+
+      const logement = response.data;
+      const baseUrl = "http://localhost:3000/uploads/";
+
+      // Ne préfixer que si le chemin n'a pas déjà un préfixe
+      if (
+        logement.photoprincipale &&
+        !logement.photoprincipale.startsWith("http") &&
+        !logement.photoprincipale.startsWith("data:") &&
+        !logement.photoprincipale.startsWith("/api/")
+      ) {
+        logement.photoprincipale = baseUrl + logement.photoprincipale;
+      }
+
+      // Transformer les photos avec la même logique
+      if (logement.photos && Array.isArray(logement.photos)) {
+        logement.photos = logement.photos.map((photo) => {
+          if (
+            !photo.startsWith("http") &&
+            !photo.startsWith("data:") &&
+            !photo.startsWith("/api/")
+          ) {
+            return baseUrl + photo;
+          }
+          return photo;
+        });
+      }
+
+      if (logement.categorie && !logement.categorie.id) {
+        logement.categorie = {
+          id: logement.categorie,
+        };
+      }
+      return logement;
     } catch (error) {
       console.error(
         "Erreur lors de la récupération des détails du logement:",
