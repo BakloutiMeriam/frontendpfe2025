@@ -1,5 +1,5 @@
 // contexts/AuthContext.js
-import React, { createContext, useContext, useState, useEffect } from "react";
+/*import React, { createContext, useContext, useState, useEffect } from "react";
 import authService from "../services/authService";
 
 const AuthContext = createContext();
@@ -63,3 +63,4 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+*/

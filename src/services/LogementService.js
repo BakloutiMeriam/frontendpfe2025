@@ -215,10 +215,10 @@ export const logementService = {
   getLogementsService: async () => {
     try {
       const response = await axios.get(`${API_URL}/listeLog`);
-      return response.data.logements;
-    } catch (err) {
-      console.error("Erreur lors du chargement des logements", err);
-      throw err;
+      return response.data;
+    } catch (error) {
+      console.error("Erreur dans getLogementsService:", error);
+      throw error;
     }
   },
 
