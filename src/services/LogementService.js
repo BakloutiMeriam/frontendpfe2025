@@ -318,15 +318,46 @@ export const logementService = {
   getLogementsService: async () => {
     try {
       const response = await axios.get(`${API_URL}/listeLog`);
-      return response.data;
+      const data = response.data;
+      const baseUrl = "http://localhost:3000/uploads/";
+
+      // Préfixer les chemins d'images pour chaque logement
+      if (data.logements && Array.isArray(data.logements)) {
+        data.logements = data.logements.map((logement) => {
+          // Traiter l'image principale
+          if (
+            logement.photoprincipale &&
+            !logement.photoprincipale.startsWith("http") &&
+            !logement.photoprincipale.startsWith("data:") &&
+            !logement.photoprincipale.startsWith("/api/")
+          ) {
+            logement.photoprincipale = baseUrl + logement.photoprincipale;
+          }
+
+          // Traiter les autres photos si nécessaire
+          if (logement.photos && Array.isArray(logement.photos)) {
+            logement.photos = logement.photos.map((photo) => {
+              if (
+                !photo.startsWith("http") &&
+                !photo.startsWith("data:") &&
+                !photo.startsWith("/api/")
+              ) {
+                return baseUrl + photo;
+              }
+              return photo;
+            });
+          }
+
+          return logement;
+        });
+      }
+
+      return data;
     } catch (error) {
       console.error("Erreur dans getLogementsService:", error);
       throw error;
     }
   },
-
-  // Dans LogementService.js - Ces méthodes semblent déjà être présentes dans votre code partagé
-  // mais assurez-vous qu'elles sont correctement configurées avec les headers d'authentification
 
   ajouterAuxFavoris: async (logementId) => {
     try {
