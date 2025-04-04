@@ -28,9 +28,14 @@ const HomePage = () => {
   // Appliquer le filtre de catégorie quand les logements ou la catégorie sélectionnée changent
   useEffect(() => {
     if (selectedCategory) {
-      setFilteredLogements(
-        logements.filter((logement) => logement.categorie === selectedCategory)
-      );
+      const filtered = logements.filter((logement) => {
+        // Vérifier si categorie est un objet ou un ID
+        const categorieId = logement.categorie._id
+          ? logement.categorie._id
+          : logement.categorie;
+        return categorieId === selectedCategory;
+      });
+      setFilteredLogements(filtered);
     } else {
       setFilteredLogements(logements);
     }
@@ -40,9 +45,9 @@ const HomePage = () => {
     try {
       setLoading(true);
       const data = await logementService.getLogementsService();
-      if (Array.isArray(data)) {
-        setLogements(data);
-        setFilteredLogements(data); // Initialiser les logements filtrés
+      if (Array.isArray(data.logements)) {
+        setLogements(data.logements);
+        setFilteredLogements(data.logements); // Initialiser les logements filtrés
         setError("");
       } else {
         setError("Format de données incorrect");
@@ -87,41 +92,21 @@ const HomePage = () => {
       const isFavori = favoris.includes(logementId);
 
       if (isFavori) {
-        setAlertType("confirm");
-        setAlertMessage(
-          "Êtes-vous sûr de vouloir retirer ce logement de vos favoris?"
-        );
+        // Retirer directement des favoris sans confirmation
+        await logementService.supprimerDesFavoris(logementId);
+        setFavoris(favoris.filter((id) => id !== logementId));
+        setAlertType("success");
+        setAlertMessage("💔 Logement retiré de vos favoris avec succès");
         setShowAlert(true);
-
-        document.getElementById("confirmButton").onclick = async () => {
-          try {
-            await logementService.supprimerDesFavoris(logementId);
-            setFavoris(favoris.filter((id) => id !== logementId));
-            setAlertType("success");
-            setAlertMessage("💔 Logement retiré de vos favoris avec succès");
-            setTimeout(() => setShowAlert(false), 10000);
-          } catch (err) {
-            setAlertType("error");
-            setAlertMessage(
-              `❌ Erreur | ${
-                err.response?.data?.message ||
-                "Impossible de mettre à jour vos favoris."
-              }`
-            );
-            setTimeout(() => setShowAlert(false), 10000);
-          }
-        };
-
-        document.getElementById("cancelButton").onclick = () => {
-          setShowAlert(false);
-        };
+        setTimeout(() => setShowAlert(false), 3000);
       } else {
+        // Ajouter aux favoris
         await logementService.ajouterAuxFavoris(logementId);
         setFavoris([...favoris, logementId]);
         setAlertType("success");
         setAlertMessage("❤️ Logement ajouté à vos favoris avec succès");
         setShowAlert(true);
-        setTimeout(() => setShowAlert(false), 10000);
+        setTimeout(() => setShowAlert(false), 3000);
       }
     } catch (err) {
       setAlertType("error");
@@ -132,7 +117,7 @@ const HomePage = () => {
         }`
       );
       setShowAlert(true);
-      setTimeout(() => setShowAlert(false), 10000);
+      setTimeout(() => setShowAlert(false), 3000);
       console.error(err);
     }
   };
@@ -145,23 +130,9 @@ const HomePage = () => {
         <div className="alert-content">
           <p>{alertMessage}</p>
         </div>
-        {alertType === "confirm" ? (
-          <div className="alert-actions">
-            <button id="cancelButton" className="alert-btn alert-btn-secondary">
-              Non
-            </button>
-            <button id="confirmButton" className="alert-btn alert-btn-primary">
-              Oui
-            </button>
-          </div>
-        ) : (
-          <button
-            className="alert-close-btn"
-            onClick={() => setShowAlert(false)}
-          >
-            ×
-          </button>
-        )}
+        <button className="alert-close-btn" onClick={() => setShowAlert(false)}>
+          ×
+        </button>
       </div>
     );
   };
@@ -229,9 +200,6 @@ const HomePage = () => {
     <>
       <Navbar />
       <div className="home-container">
-        <h1>Nos Logements</h1>
-
-        {/* Assurez-vous de passer la fonction handleCategorySelect ici */}
         <CategoryMenu onCategorySelect={handleCategorySelect} />
 
         {renderAlert()}
