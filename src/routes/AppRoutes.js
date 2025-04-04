@@ -17,7 +17,8 @@ import GestionCategories from "../pages/GestionCategories";
 import AddLogementForm from "../pages/AddLogementForm";
 import MesLogements from "../pages/MesLogements";
 import LogementDetails from "../pages/LogementDetails";
-
+import HomePage from "../pages/homepage";
+import FavorisPage from "../pages/FavorisPage";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -38,8 +39,9 @@ const AppRoutes = () => {
       <Route path="/AddLogement" element={<AddLogementForm />} />
       <Route path="/MesLogements" element={<MesLogements />} />
       <Route path="/logement-details/:id" element={<LogementDetails />} />
+      <Route path="/FavorisPage" element={<FavorisPage />} />
 
-      <Route path="*" />
+      <Route path="*" element={<HomePage />} />
     </Routes>
   );
 };
