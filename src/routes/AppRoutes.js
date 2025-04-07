@@ -19,6 +19,8 @@ import MesLogements from "../pages/MesLogements";
 import LogementDetails from "../pages/LogementDetails";
 import HomePage from "../pages/homepage";
 import FavorisPage from "../pages/FavorisPage";
+import DevenirHote from "../pages/devenirconnecter";
+import UpgradeToOwner from "../pages/devenirproprietaire";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -40,7 +42,8 @@ const AppRoutes = () => {
       <Route path="/MesLogements" element={<MesLogements />} />
       <Route path="/logement-details/:id" element={<LogementDetails />} />
       <Route path="/FavorisPage" element={<FavorisPage />} />
-
+      <Route path="/devenir-hote" element={<DevenirHote />} />
+      <Route path="/devenir-proprietaire" element={<UpgradeToOwner />} />
       <Route path="*" element={<HomePage />} />
     </Routes>
   );

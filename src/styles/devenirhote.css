@@ -1,0 +1,376 @@
+/* devenirhote.css */
+
+/* Réinitialisation et styles généraux */
+* {
+  box-sizing: border-box;
+}
+
+.devenir-hote-page {
+  font-family: "Poppins", sans-serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 700;
+  margin-top: 0;
+}
+
+/* Conteneur pour les sections du haut côte à côte */
+.top-sections-container {
+  display: flex;
+  flex-direction: row;
+  min-height: 70vh;
+}
+
+/* Style de la section hero avec dégradé utilisant les nouvelles couleurs */
+.hero-section {
+  background: linear-gradient(135deg, #125be1, #2653a4);
+  flex: 1;
+  display: flex;
+  align-items: center;
+  color: white;
+  position: relative;
+}
+
+.hero-content {
+  text-align: center;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.hero-content h1 {
+  font-size: 2.8rem;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-content p {
+  font-size: 1.4rem;
+  margin-bottom: 30px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Style de la section CTA transformée en carte */
+.cta-card {
+  flex: 1;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.cta-card-content {
+  background: white;
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  text-align: center;
+}
+
+.cta-card-content h2 {
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  color: #2653a4;
+}
+
+.cta-card-content p {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  color: #555;
+}
+
+/* Style de la section avantages */
+.benefits-section {
+  padding: 100px 0;
+  background-color: #f5c6cb;
+}
+
+.benefits-section h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 60px;
+  color: #333;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.benefit-card {
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.benefit-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.benefit-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #125be1, #2653a4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.benefit-icon i {
+  font-size: 30px;
+  color: white;
+}
+
+.benefit-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.benefit-card p {
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Style de la section comment ça marche */
+.how-it-works {
+  padding: 100px 0;
+  background-color: #ffffff;
+}
+
+.how-it-works h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 60px;
+}
+
+.steps-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.step {
+  display: flex;
+  margin-bottom: 40px;
+  align-items: flex-start;
+}
+
+.step-number {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #125be1, #2653a4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.step-content h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.step-content p {
+  color: #666;
+}
+
+/* Style de la section témoignages */
+.testimonials-section {
+  padding: 100px 0;
+  background-color: #f5c6cb;
+}
+
+.testimonials-section h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 60px;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 30px;
+}
+
+.testimonial-card {
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.testimonial-text {
+  font-style: italic;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  color: #555;
+  line-height: 1.7;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+}
+
+.author-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #125be1, #2653a4);
+  margin-right: 15px;
+}
+
+.author-info h4 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.author-info p {
+  font-size: 0.9rem;
+  color: #777;
+  margin: 0;
+}
+
+/* Styles des boutons */
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #c82333;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #2653a4;
+  border: 2px solid #2653a4;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(38, 83, 164, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Media queries pour la responsivité */
+@media (max-width: 992px) {
+  .top-sections-container {
+    flex-direction: column;
+  }
+
+  .hero-section,
+  .cta-card {
+    width: 100%;
+  }
+
+  .hero-section {
+    min-height: 50vh;
+  }
+
+  .cta-card {
+    padding: 60px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-content p {
+    font-size: 1.2rem;
+  }
+
+  .benefits-section,
+  .how-it-works,
+  .testimonials-section {
+    padding: 60px 0;
+  }
+
+  .benefits-section h2,
+  .how-it-works h2,
+  .testimonials-section h2,
+  .cta-card-content h2 {
+    font-size: 2rem;
+    margin-bottom: 40px;
+  }
+
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .step {
+    flex-direction: column;
+  }
+
+  .step-number {
+    margin-bottom: 15px;
+  }
+
+  .cta-card-content {
+    padding: 30px 20px;
+  }
+}

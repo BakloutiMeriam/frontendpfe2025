@@ -5,6 +5,8 @@ import "../styles/Home.css";
 import Navbar from "../components/Navbar";
 import CategoryMenu from "../components/CategoryMenu";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import Footer from "../components/footer";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const [logements, setLogements] = useState([]);
@@ -17,6 +19,7 @@ const HomePage = () => {
   const [alertType, setAlertType] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchLogements();
@@ -121,6 +124,9 @@ const HomePage = () => {
       console.error(err);
     }
   };
+  const navigateToDetails = (logementId) => {
+    navigate(`/logement-details/${logementId}`);
+  };
 
   const renderAlert = () => {
     if (!showAlert) return null;
@@ -158,6 +164,8 @@ const HomePage = () => {
               <img
                 src={`/uploads/${logement.photoprincipale}`}
                 alt={logement.titre}
+                onClick={() => navigateToDetails(logement._id)}
+                style={{ cursor: "pointer" }}
                 onError={(e) => {
                   e.target.src = "/uploads/default-logement.png";
                 }}
@@ -205,6 +213,7 @@ const HomePage = () => {
         {renderAlert()}
         <div className="logements-list-container">{renderLogementsList()}</div>
       </div>
+      <footer />
     </>
   );
 };
