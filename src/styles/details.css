@@ -1,0 +1,392 @@
+/* details.css */
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #34495e;
+  --background-color: #ecf0f1;
+  --text-color: #2c3e50;
+  --card-bg: #ffffff;
+  --border-color: #bdc3c7;
+  --accent-color: #0d6efd;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --success-color: #198754;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+}
+
+.logement-details-container {
+  max-width: 800px;
+  margin: 1.5rem auto;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.property-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.property-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 0.25rem;
+}
+
+.property-subtitle {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: var(--secondary-color);
+  opacity: 0.7;
+}
+
+.property-subtitle svg {
+  margin-right: 0.5rem;
+  color: var(--secondary-color);
+}
+
+.property-image-section {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 1.5rem;
+}
+
+.main-image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1rem;
+}
+
+/* Mode édition */
+.image-edit-section {
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.thumbnail-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+.thumbnail-item {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.thumbnail-selected {
+  box-shadow: 0 0 0 3px var(--accent-color);
+}
+
+.thumbnail-image-container {
+  position: relative;
+  padding-bottom: 75%; /* Rapport 4:3 pour les miniatures */
+  height: 0;
+  overflow: hidden;
+}
+
+.thumbnail-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.thumbnail-image:hover {
+  transform: scale(1.05);
+}
+
+.thumbnail-badge {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background-color: var(--accent-color);
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  z-index: 2;
+}
+
+.thumbnail-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px;
+  background-color: rgba(240, 240, 240, 0.9);
+}
+
+.btn-thumbnail {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-thumbnail:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.btn-thumbnail-active {
+  color: var(--warning-color);
+}
+
+.btn-thumbnail-danger {
+  color: var(--danger-color);
+}
+
+.btn-thumbnail-danger:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* Mode affichage */
+.thumbnail-gallery-view {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 1rem;
+  justify-content: flex-start;
+}
+
+.thumbnail-item-view {
+  position: relative;
+  width: 100px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.thumbnail-item-view:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.thumbnail-item-view.thumbnail-selected {
+  border-color: var(--accent-color);
+}
+
+.thumbnail-item-view.thumbnail-main {
+  border-color: var(--warning-color);
+}
+
+.thumbnail-image-view {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.thumbnail-badge-view {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  color: var(--warning-color);
+  font-size: 0.8rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Anciennes classes pour compatibilité */
+.secondary-images {
+  display: none; /* Masquer l'ancien affichage */
+}
+
+.secondary-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.secondary-image:hover {
+  border-color: var(--accent-color);
+}
+
+.main-photo-indicator {
+  border-color: var(--warning-color);
+}
+
+.image-thumbnail {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.image-thumbnail.border-primary {
+  border: 3px solid var(--accent-color) !important;
+}
+
+.property-details {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.property-characteristics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.characteristic {
+  background-color: #f1f2f3;
+  padding: 0.875rem;
+  border-radius: 8px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.characteristic:hover {
+  background-color: #e6e8ea;
+}
+
+.characteristic-icon {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+  opacity: 0.8;
+}
+
+.amenities-section {
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.amenity-item {
+  display: flex;
+  align-items: center;
+  background-color: #f1f2f3;
+  padding: 0.625rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.amenity-item:hover {
+  background-color: #e6e8ea;
+}
+
+.amenity-item svg {
+  margin-right: 0.5rem;
+  color: var(--secondary-color);
+  opacity: 0.7;
+}
+
+.price-section {
+  background-color: #f8f9fa;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.price-highlight {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .logement-details-container {
+    margin: 0.75rem;
+    border-radius: 10px;
+  }
+
+  .property-image-section {
+    padding: 0.75rem;
+  }
+
+  .main-image {
+    height: 250px;
+  }
+
+  .thumbnail-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+  }
+
+  .thumbnail-gallery-view {
+    justify-content: center;
+  }
+
+  .thumbnail-item-view {
+    width: 70px;
+    height: 70px;
+  }
+
+  .property-details {
+    grid-template-columns: 1fr;
+  }
+
+  .property-characteristics {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .amenities-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .property-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .property-header > div:last-child {
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .property-header button {
+    flex: 1;
+    min-width: 120px;
+  }
+}

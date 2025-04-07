@@ -2,13 +2,32 @@ import React, { useState, useEffect } from "react";
 import { logementService } from "../services/LogementService";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
+import "../styles/MesLogements.css";
+
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Badge,
+  Alert,
+  Spinner,
+  Modal,
+} from "react-bootstrap";
 
 const MesLogements = () => {
   const [logements, setLogements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editingLogement, setEditingLogement] = useState(null);
   const navigate = useNavigate();
+
+  // État pour suivre les descriptions étendues
+  const [expandedDescriptions, setExpandedDescriptions] = useState({});
+
+  // États pour le modal de confirmation
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [logementToDelete, setLogementToDelete] = useState(null);
 
   useEffect(() => {
     const fetchMesLogements = async () => {
@@ -25,22 +44,46 @@ const MesLogements = () => {
     fetchMesLogements();
   }, []);
 
-  const handleDeleteLogement = async (id) => {
-    if (window.confirm("Êtes-vous sûr de vouloir supprimer ce logement ?")) {
-      try {
-        await logementService.deleteLogement(id);
-        setLogements(logements.filter((log) => log._id !== id));
-      } catch (err) {
-        console.error("Erreur lors de la suppression du logement", err);
-        alert("Impossible de supprimer le logement");
-      }
+  // Fonction pour basculer l'état d'expansion d'une description
+  const toggleDescription = (logementId) => {
+    setExpandedDescriptions((prev) => ({
+      ...prev,
+      [logementId]: !prev[logementId],
+    }));
+  };
+
+  // Ouvre le modal de confirmation et stocke l'ID du logement à supprimer
+  const openDeleteConfirmation = (logement) => {
+    setLogementToDelete(logement);
+    setShowConfirmModal(true);
+  };
+
+  // Ferme le modal de confirmation
+  const closeDeleteConfirmation = () => {
+    setShowConfirmModal(false);
+    setLogementToDelete(null);
+  };
+
+  // Effectue la suppression après confirmation
+  const confirmDeleteLogement = async () => {
+    if (!logementToDelete) return;
+
+    try {
+      await logementService.deleteLogement(logementToDelete._id);
+      setLogements(logements.filter((log) => log._id !== logementToDelete._id));
+      closeDeleteConfirmation();
+    } catch (err) {
+      console.error("Erreur lors de la suppression du logement", err);
+      alert("Impossible de supprimer le logement");
+      closeDeleteConfirmation();
     }
   };
 
   const toggleDisponibilite = async (logement) => {
     try {
       const updatedLogement = await logementService.toggleDisponibilite(
-        logement._id
+        logement._id,
+        logement.disponible
       );
       setLogements(
         logements.map((log) =>
@@ -51,279 +94,193 @@ const MesLogements = () => {
       );
     } catch (err) {
       console.error("Erreur lors du changement de disponibilité", err);
-      alert("Impossible de modifier la disponibilité");
+      alert(
+        err.response?.data?.message ||
+          "Impossible de modifier la disponibilité. Veuillez réessayer."
+      );
     }
   };
 
-  const handleEditChange = (e, field) => {
-    const { value } = e.target;
-    setEditingLogement((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  const startEditing = (logement) => {
-    setEditingLogement({ ...logement });
-  };
-
-  const cancelEditing = () => {
-    setEditingLogement(null);
-  };
-
-  const saveLogement = async () => {
-    try {
-      // Préparer les données pour la mise à jour
-      const dataToUpdate = {
-        titre: editingLogement.titre,
-        description: editingLogement.description,
-        prix: editingLogement.prix,
-        superficie: editingLogement.superficie,
-        nombreChambres: editingLogement.nombreChambres,
-        nombreSallesDeBain: editingLogement.nombreSallesDeBain,
-        categorie: editingLogement.categorie,
-        disponible: editingLogement.disponible,
-        adresse: editingLogement.adresse,
-        amenites: editingLogement.amenites,
-      };
-
-      const updatedLogement = await logementService.updateLogement(
-        editingLogement._id,
-        dataToUpdate
-      );
-
-      // Mettre à jour la liste des logements
-      setLogements(
-        logements.map((log) =>
-          log._id === updatedLogement._id ? updatedLogement : log
-        )
-      );
-
-      // Sortir du mode édition
-      setEditingLogement(null);
-    } catch (err) {
-      console.error("Erreur lors de la mise à jour du logement", err);
-      alert("Impossible de mettre à jour le logement");
-    }
-  };
-
-  // New function to handle navigating to logement details
   const handleViewDetails = (id) => {
     navigate(`/logement-details/${id}`);
   };
 
-  if (loading) return <div>Chargement de vos logements...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading)
+    return (
+      <Container className="text-center my-5">
+        <Spinner animation="border" role="status" className="loading-spinner">
+          <span className="visually-hidden">Chargement...</span>
+        </Spinner>
+      </Container>
+    );
+
+  if (error)
+    return (
+      <Container>
+        <Alert variant="danger">{error}</Alert>
+      </Container>
+    );
 
   return (
     <Layout>
-      <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "20px",
-          }}
-        >
-          <h1 style={{ fontSize: "24px", fontWeight: "bold" }}>
-            Mes Logements
-          </h1>
-          <Link to="/ajouter-logement">
-            <button
-              style={{
-                padding: "10px 15px",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-              }}
-            >
-              + Ajouter un logement
-            </button>
-          </Link>
-        </div>
+      <div className="logements-container">
+        <Container>
+          <div className="d-flex justify-content-between align-items-center logements-header">
+            <h1 className="logements-title">Mes Logements</h1>
+            <Link to="/AddLogement">
+              <Button className="add-logement-btn">
+                <i className="bi bi-plus-lg"></i>
+                Ajouter un logement
+              </Button>
+            </Link>
+          </div>
 
-        {logements.length === 0 ? (
-          <div style={{ textAlign: "center", color: "#888" }}>
-            Vous n'avez pas encore de logements. Commencez par en ajouter un !
-          </div>
-        ) : (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-              gap: "20px",
-            }}
-          >
-            {logements.map((logement) => (
-              <div
-                key={logement._id}
-                style={{
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                  padding: "15px",
-                  boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                }}
-              >
-                {editingLogement && editingLogement._id === logement._id ? (
-                  // Formulaire de modification
-                  <div>
-                    <input
-                      type="text"
-                      value={editingLogement.titre}
-                      onChange={(e) => handleEditChange(e, "titre")}
-                      style={{ width: "100%", marginBottom: "10px" }}
-                    />
-                    <textarea
-                      value={editingLogement.description}
-                      onChange={(e) => handleEditChange(e, "description")}
-                      style={{ width: "100%", marginBottom: "10px" }}
-                    />
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "10px",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <input
-                        type="number"
-                        value={editingLogement.prix}
-                        onChange={(e) => handleEditChange(e, "prix")}
-                        placeholder="Prix"
-                        style={{ flex: 1 }}
+          {logements.length === 0 ? (
+            <div className="empty-state">
+              <Alert variant="info" className="empty-state-message border-0">
+                <i className="bi bi-house-add me-2"></i>
+                Vous n'avez pas encore de logements. Commencez par en ajouter un
+                !
+              </Alert>
+            </div>
+          ) : (
+            <Row xs={1} md={2} lg={3} className="g-4">
+              {logements.map((logement) => (
+                <Col key={logement._id}>
+                  <Card className="logement-card">
+                    <div className="logement-image-container">
+                      <img
+                        src={
+                          logement.photoprincipale ||
+                          "/images/placeholder-logement.jpg"
+                        }
+                        alt={logement.titre}
+                        className="logement-image"
                       />
-                      <input
-                        type="number"
-                        value={editingLogement.superficie}
-                        onChange={(e) => handleEditChange(e, "superficie")}
-                        placeholder="Superficie"
-                        style={{ flex: 1 }}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <button
-                        onClick={saveLogement}
-                        style={{
-                          padding: "5px 10px",
-                          backgroundColor: "green",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "4px",
-                        }}
+                      <Badge
+                        className={`logement-badge ${
+                          logement.disponible
+                            ? "badge-disponible"
+                            : "badge-indisponible"
+                        }`}
                       >
-                        Enregistrer
-                      </button>
-                      <button
-                        onClick={cancelEditing}
-                        style={{
-                          padding: "5px 10px",
-                          backgroundColor: "red",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "4px",
-                        }}
-                      >
-                        Annuler
-                      </button>
+                        {logement.disponible ? "DISPONIBLE" : "NON DISPONIBLE"}
+                      </Badge>
                     </div>
-                  </div>
-                ) : (
-                  // Vue normale du logement
-                  <>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <h2 style={{ fontWeight: "bold" }}>{logement.titre}</h2>
-                      <span
-                        style={{
-                          padding: "5px 10px",
-                          borderRadius: "4px",
-                          fontSize: "12px",
-                          backgroundColor: logement.disponible
-                            ? "#e6f3e6"
-                            : "#f3e6e6",
-                          color: logement.disponible ? "green" : "red",
-                        }}
+
+                    <Card.Body className="logement-card-body">
+                      <h5 className="logement-title">{logement.titre}</h5>
+
+                      {/* Description avec toggle pour afficher plus/moins */}
+                      <div
+                        className={`logement-description ${
+                          expandedDescriptions[logement._id] ? "expanded" : ""
+                        }`}
                       >
-                        {logement.disponible ? "Disponible" : "Non disponible"}
-                      </span>
-                    </div>
-                    <p style={{ marginBottom: "10px" }}>
-                      {logement.description}
-                    </p>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <div>
-                        <p>Prix: {logement.prix} €</p>
-                        <p>Superficie: {logement.superficie} m²</p>
+                        {logement.description}
                       </div>
-                      <div style={{ display: "flex", gap: "10px" }}>
-                        <button
+
+                      {/* Bouton pour afficher plus/moins */}
+                      <button
+                        className="description-toggle-btn"
+                        onClick={() => toggleDescription(logement._id)}
+                      >
+                        {expandedDescriptions[logement._id] ? (
+                          <>
+                            Voir moins <i className="bi bi-chevron-up"></i>
+                          </>
+                        ) : (
+                          <>
+                            Voir plus <i className="bi bi-chevron-down"></i>
+                          </>
+                        )}
+                      </button>
+
+                      <div className="logement-info">
+                        <div className="logement-price">{logement.prix} €</div>
+                        <div className="logement-size">
+                          <i className="bi bi-rulers me-1"></i>
+                          {logement.superficie} m²
+                        </div>
+                      </div>
+
+                      <div className="logement-actions">
+                        <Button
+                          variant={logement.disponible ? "success" : "danger"}
+                          className={`action-btn ${
+                            logement.disponible
+                              ? "btn-disponible"
+                              : "btn-indisponible"
+                          }`}
                           onClick={() => toggleDisponibilite(logement)}
-                          style={{
-                            padding: "5px 10px",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                            fontSize: "12px",
-                          }}
                         >
-                          {logement.disponible ? "Indisponible" : "Disponible"}
-                        </button>
-                        <button
-                          onClick={() => startEditing(logement)}
-                          style={{
-                            padding: "5px 10px",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                          }}
-                        >
-                          Modifier
-                        </button>
-                        <button
-                          onClick={() => handleDeleteLogement(logement._id)}
-                          style={{
-                            padding: "5px 10px",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                            backgroundColor: "#ffdddd",
-                          }}
-                        >
-                          Supprimer
-                        </button>
-                        <button
+                          <i
+                            className={`bi ${
+                              logement.disponible
+                                ? "bi-toggle-on"
+                                : "bi-toggle-off"
+                            }`}
+                          ></i>
+                          {logement.disponible ? "Dispo" : "Indispo"}
+                        </Button>
+
+                        <Button
+                          className="action-btn btn-details"
                           onClick={() => handleViewDetails(logement._id)}
-                          style={{
-                            padding: "5px 10px",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                            backgroundColor: "#e6f3ff",
-                          }}
                         >
+                          <i className="bi bi-eye"></i>
                           Détails
-                        </button>
+                        </Button>
+
+                        <Button
+                          className="action-btn btn-supprimer"
+                          onClick={() => openDeleteConfirmation(logement)}
+                        >
+                          <i className="bi bi-trash"></i>
+                          Supprimer
+                        </Button>
                       </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          )}
+
+          {/* Modal de confirmation de suppression */}
+          <Modal
+            show={showConfirmModal}
+            onHide={closeDeleteConfirmation}
+            centered
+            className="delete-confirmation-modal"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Confirmation de suppression</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {logementToDelete && (
+                <div className="text-center">
+                  <div className="mb-3">
+                    <i className="bi bi-exclamation-triangle text-danger delete-icon"></i>
+                  </div>
+                  <h5>Êtes-vous sûr de vouloir supprimer ce logement ?</h5>
+                  <p className="text-muted">{logementToDelete.titre}</p>
+                  <p className="small text-danger">
+                    Cette action est irréversible.
+                  </p>
+                </div>
+              )}
+            </Modal.Body>
+            <Modal.Footer className="justify-content-center">
+              <Button variant="secondary" onClick={closeDeleteConfirmation}>
+                Annuler
+              </Button>
+              <Button variant="danger" onClick={confirmDeleteLogement}>
+                Supprimer
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </Container>
       </div>
     </Layout>
   );

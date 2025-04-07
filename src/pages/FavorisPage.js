@@ -112,10 +112,10 @@ const FavorisPage = () => {
           <div key={logement._id} className="logement-card">
             <div className="logement-image">
               <img
-                src={`/uploads/${logement.photoprincipale}`}
+                src={logement.photoprincipale}
                 alt={logement.titre}
                 onError={(e) => {
-                  e.target.src = "/uploads/default-logement.png";
+                  e.target.src = "../images/image.png";
                 }}
               />
               <button

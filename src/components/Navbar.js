@@ -10,7 +10,7 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  //const [sidebarOpen, setSidebarOpen] = useState(true);
   const [navbarCollapsed, setNavbarCollapsed] = useState(true);
   const notificationsRef = useRef(null);
 
@@ -60,13 +60,13 @@ const Navbar = () => {
     setShowNotifications(!showNotifications);
   };
 
-  const toggleSidebar = () => {
+  /*const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
     // Utiliser un événement personnalisé pour communiquer avec le layout parent
     document.dispatchEvent(
       new CustomEvent("toggleSidebar", { detail: !sidebarOpen })
     );
-  };
+  };*/
   // Toggle du menu hamburger
   const toggleNavbar = () => {
     setNavbarCollapsed(!navbarCollapsed);
@@ -101,7 +101,12 @@ const Navbar = () => {
         )}*/}
         {/* Logo visible uniquement quand l'utilisateur n'est pas connecté (sinon il est dans la sidebar) */}
         {!user && (
-          <Link className="navbar-brand navbar-brand-custom" to="/">
+          <Link
+            className="navbar-brand navbar-brand-custom"
+            to="/"
+            onClick={() => navigate("/")}
+          >
+            {" "}
             <img src="/images/logo2.png" alt="Logo" />
           </Link>
         )}

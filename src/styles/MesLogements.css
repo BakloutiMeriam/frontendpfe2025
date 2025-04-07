@@ -1,0 +1,328 @@
+.logements-container {
+  background-color: #edf4f7;
+  min-height: 100vh;
+  padding: 40px 0;
+}
+
+.logements-header {
+  margin-bottom: 32px;
+}
+
+.logements-title {
+  color: #193870;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.add-logement-btn {
+  background-color: #2653a4;
+  color: #fffefe;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(38, 83, 164, 0.3);
+}
+
+.add-logement-btn:hover {
+  background-color: #193870;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(38, 83, 164, 0.4);
+}
+
+.add-logement-btn i {
+  margin-right: 8px;
+}
+
+.logement-card {
+  border-radius: 16px;
+  border: none;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 20px;
+  background-color: #fffefe;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+}
+
+.logement-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.logement-image-container {
+  height: 180px;
+  overflow: hidden;
+  position: relative;
+}
+
+.logement-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.logement-card:hover .logement-image {
+  transform: scale(1.05);
+}
+
+.logement-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 0.7rem;
+  padding: 6px 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 50px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.logement-badge.badge-disponible {
+  background-color: #28a745 !important;
+  color: white !important;
+}
+
+.logement-badge.badge-indisponible {
+  background-color: #dc3545 !important;
+  color: white !important;
+}
+
+.logement-card-body {
+  padding: 18px;
+}
+
+.logement-title {
+  color: #1a365d; /* Bleu plus foncé et profond */
+  font-weight: 700; /* Plus bold */
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.3px; /* Espacement négatif pour un look plus moderne */
+  font-family: "Segoe UI", Roboto, -apple-system, BlinkMacSystemFont, sans-serif; /* Police plus moderne */
+}
+
+.logement-description {
+  color: #4a5568;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 5px;
+  transition: max-height 0.3s ease;
+  max-height: 60px; /* Hauteur par défaut */
+}
+.logement-description.expanded {
+  max-height: 500px; /* Une valeur suffisamment grande pour montrer tout le texte */
+}
+.description-toggle-btn {
+  background: none;
+  border: none;
+  color: #2653a4;
+  font-size: 0.75rem;
+  padding: 0;
+  margin-bottom: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.description-toggle-btn:hover {
+  color: #193870;
+  text-decoration: underline;
+}
+
+.description-toggle-btn i {
+  font-size: 0.7rem;
+  margin-left: 4px;
+}
+
+/* Ajouter un effet de dégradé quand la description est tronquée */
+.logement-description:not(.expanded)::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1)
+  );
+}
+
+.logement-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+/* Style amélioré pour le prix */
+.logement-price {
+  font-weight: 800; /* Extra-bold */
+  color: #2c5282; /* Bleu plus profond */
+  font-size: 1.4rem;
+  letter-spacing: -0.5px;
+  font-family: "Segoe UI", Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Style amélioré pour la superficie */
+.logement-size {
+  color: #718096; /* Gris bleuté */
+  font-size: 0.9rem;
+  align-self: flex-end;
+  font-weight: 500;
+}
+
+/* Nouveaux styles de boutons */
+.logement-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.action-btn {
+  width: 100%;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn i {
+  margin-right: 6px;
+  font-size: 0.95rem;
+}
+
+.action-btn.btn-disponible {
+  background-color: #28a745 !important;
+  color: white !important;
+}
+
+.btn-disponible:hover {
+  background-color: #218838; /* Vert plus foncé au survol */
+}
+
+.action-btn.btn-indisponible {
+  background-color: #dc3545 !important; /* Rouge */
+  color: white !important;
+}
+
+.btn-indisponible:hover {
+  background-color: #c82333; /* Rouge plus foncé au survol */
+}
+
+.btn-details {
+  background-color: #125be1;
+  color: white;
+}
+
+.btn-details:hover {
+  background-color: #0e4ec2;
+}
+
+.btn-supprimer {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-supprimer:hover {
+  background-color: #c82333;
+}
+
+.empty-state {
+  background-color: #fffefe;
+  padding: 40px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+}
+
+.empty-state-message {
+  color: #193870;
+  font-weight: 500;
+}
+
+.loading-spinner {
+  color: #2653a4;
+  width: 3rem;
+  height: 3rem;
+}
+
+.delete-confirmation-modal .modal-content {
+  border-radius: 15px;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.delete-confirmation-modal .modal-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 15px 20px;
+}
+
+.delete-confirmation-modal .modal-title {
+  color: #193870;
+  font-weight: 600;
+}
+
+.delete-confirmation-modal .modal-body {
+  padding: 30px 20px;
+}
+
+.delete-confirmation-modal .delete-icon {
+  font-size: 3rem;
+  color: #dc3545;
+}
+
+.delete-confirmation-modal .modal-footer {
+  border-top: 1px solid #f0f0f0;
+  padding: 15px 20px;
+}
+
+.delete-confirmation-modal .btn-secondary {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  color: #333;
+  font-weight: 500;
+  transition: all 0.2s;
+  padding: 8px 20px;
+  border-radius: 8px;
+}
+
+.delete-confirmation-modal .btn-secondary:hover {
+  background-color: #e9ecef;
+  border-color: #ccc;
+}
+
+.delete-confirmation-modal .btn-danger {
+  background-color: #dc3545;
+  border: none;
+  font-weight: 500;
+  transition: all 0.2s;
+  padding: 8px 20px;
+  border-radius: 8px;
+}
+
+.delete-confirmation-modal .btn-danger:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(220, 53, 69, 0.3);
+}
