@@ -167,13 +167,12 @@ const ProfileForm = ({ onSubmit, formError }) => {
     console.log("📝 Données soumises :", formData);
     console.log("Bouton S'inscrire cliqué");
     //kif zedt hethy wele yajouti
-    onSubmit(formData);
 
     if (!isVerified) {
       alert("Veuillez vérifier que vous n'êtes pas un robot.");
       return;
     }
-
+    onSubmit(formData);
     if (validateForm()) {
       onSubmit(formData);
     }

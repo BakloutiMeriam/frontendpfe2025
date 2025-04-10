@@ -7,7 +7,6 @@ import "../styles/navbar.css";
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState("");
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   //const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -85,6 +84,7 @@ const Navbar = () => {
             <i className="fas fa-bars"></i>
           </button>
         )}*/}
+
         {/* Logo visible uniquement quand l'utilisateur n'est pas connecté (sinon il est dans la sidebar) */}
         {!user && (
           <Link
@@ -142,7 +142,7 @@ const Navbar = () => {
                   <li className="nav-item dropdown" ref={notificationsRef}>
                     <a
                       className="nav-link nav-link-custom position-relative"
-                      href="#"
+                      href="/"
                       onClick={(e) => {
                         e.preventDefault();
                         toggleNotifications();
@@ -204,7 +204,7 @@ const Navbar = () => {
                 <li className="nav-item dropdown">
                   <a
                     className="nav-link dropdown-toggle d-flex align-items-center"
-                    href="#"
+                    href="/"
                     id="navbarDropdown"
                     role="button"
                     data-bs-toggle="dropdown"
@@ -219,7 +219,7 @@ const Navbar = () => {
                       />
                     )}
                     <span className="d-none d-md-inline">
-                      {user.name || "Profil"}
+                      {user.prenom || "Profil"}
                     </span>
                   </a>
                   <ul
@@ -234,18 +234,6 @@ const Navbar = () => {
                         }
                       >
                         Mon Profil
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item"
-                        to={
-                          user.role === "proprietaire"
-                            ? "/AddLogement"
-                            : "/profile"
-                        }
-                      >
-                        Gestion Logement
                       </Link>
                     </li>
                     <li>

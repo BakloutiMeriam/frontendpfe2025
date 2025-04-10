@@ -58,16 +58,28 @@ const ViewProfile = () => {
         }
 
         // Vérifier la propriété approvalStatus pour les propriétaires
-        if (
+        /*if (
           user.role.toLowerCase() === "proprietaire" &&
           user.approvalStatus === "pending"
         ) {
           navigate("/confirmation", { replace: true });
           return;
-        }
+        }*/
 
         let data;
         if (user.role === "client") {
+          data = await UserService.getUserProfileClient();
+        }
+        if (
+          user.role.toLowerCase() === "proprietaire" &&
+          user.approvalStatus === "pending"
+        ) {
+          navigate("/confirmation", { replace: true });
+        }
+        if (user.role === "proprietaire") {
+          data = await UserService.getUserProfileProp();
+        }
+        /*if (user.role === "client") {
           data = await UserService.getUserProfileClient();
         } else if (
           user.role.toLowerCase() === "proprietaire" &&
@@ -78,7 +90,7 @@ const ViewProfile = () => {
           data = await UserService.getUserProfileProp();
         } else {
           throw new Error(`Rôle inconnu: ${user.role}`);
-        } /* else if (
+        } */ /* else if (
           user &&
           user.role?.toLowerCase() === "proprietaire" &&
           user.approvalStatus === "pending"

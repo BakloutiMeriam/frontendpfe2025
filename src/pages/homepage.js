@@ -2,9 +2,10 @@ import React, { useState, useEffect, useContext } from "react";
 import { logementService } from "../services/LogementService";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/Home.css";
-import Navbar from "../components/Navbar";
+import NavbarHome from "../components/NavbarHome.js";
 import CategoryMenu from "../components/CategoryMenu";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom"; // Importation du hook de navigation
 
 const HomePage = () => {
   const [logements, setLogements] = useState([]);
@@ -17,6 +18,7 @@ const HomePage = () => {
   const [alertType, setAlertType] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const navigate = useNavigate(); // Hook pour la navigation
 
   useEffect(() => {
     fetchLogements();
@@ -77,7 +79,15 @@ const HomePage = () => {
     setSelectedCategory(categoryId);
   };
 
-  const toggleFavori = async (logementId) => {
+  // Fonction pour naviguer vers la page de détails du logement
+  const navigateToLogementDetails = (logementId) => {
+    navigate(`/Public-logement-details/${logementId}`);
+  };
+
+  const toggleFavori = async (logementId, event) => {
+    // Empêcher la propagation de l'événement pour éviter la navigation
+    event.stopPropagation();
+
     if (!user || user.role !== "client") {
       setAlertType("warning");
       setAlertMessage(
@@ -113,6 +123,7 @@ const HomePage = () => {
       setAlertMessage(
         `❌ Erreur | ${
           err.response?.data?.message ||
+          error ||
           "Impossible de mettre à jour vos favoris."
         }`
       );
@@ -153,7 +164,12 @@ const HomePage = () => {
     return (
       <div className="logements-grid">
         {filteredLogements.map((logement) => (
-          <div key={logement._id} className="logement-card">
+          <div
+            key={logement._id}
+            className="logement-card"
+            onClick={() => navigateToLogementDetails(logement._id)}
+            style={{ cursor: "pointer" }}
+          >
             <div className="logement-image">
               <img
                 src={logement.photoprincipale}
@@ -164,7 +180,7 @@ const HomePage = () => {
               />
               <button
                 className="favoris-button"
-                onClick={() => toggleFavori(logement._id)}
+                onClick={(e) => toggleFavori(logement._id, e)}
               >
                 {user &&
                 user.role === "client" &&
@@ -198,7 +214,7 @@ const HomePage = () => {
 
   return (
     <>
-      <Navbar />
+      <NavbarHome />
       <div className="home-container">
         <CategoryMenu onCategorySelect={handleCategorySelect} />
 
