@@ -55,6 +55,7 @@ const LogementDetails = () => {
       try {
         const data = await logementService.getLogementById(id);
         console.log("Données du logement :", data);
+        console.log("Catégorie du logement :", data.categorie);
 
         if (!data || typeof data !== "object") {
           throw new Error("Données de logement invalides");
@@ -78,6 +79,7 @@ const LogementDetails = () => {
     const fetchCategories = async () => {
       try {
         const categoriesData = await logementService.getCategories();
+        console.log("Catégories disponibles:", categoriesData);
         setCategories(categoriesData);
       } catch (err) {
         console.error("Erreur de chargement des catégories :", err);
@@ -118,7 +120,14 @@ const LogementDetails = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
+    if (name === "categorie") {
+      // Gérer spécifiquement le changement de catégorie
+      setEditedLogement((prev) => ({
+        ...prev,
+        categorie: value, // Stocker directement l'ID comme une chaîne
+      }));
+      return;
+    }
     if (name.includes(".")) {
       const [parent, child] = name.split(".");
       setEditedLogement((prev) => ({
@@ -513,8 +522,10 @@ const LogementDetails = () => {
                       <select
                         name="categorie"
                         value={
-                          editedLogement.categorie.id ||
-                          editedLogement.categorie
+                          typeof editedLogement.categorie === "object"
+                            ? editedLogement.categorie.id ||
+                              editedLogement.categorie._id
+                            : editedLogement.categorie
                         }
                         onChange={handleInputChange}
                         className="form-control"
@@ -538,7 +549,25 @@ const LogementDetails = () => {
                     <p>
                       {renderSafely(
                         characteristic.type === "select"
-                          ? logement.categorie.nom
+                          ? typeof logement.categorie === "object"
+                            ? logement.categorie.nom || "Nom manquant"
+                            : (() => {
+                                console.log(
+                                  "Recherche catégorie:",
+                                  logement.categorie,
+                                  "dans",
+                                  categories
+                                );
+                                // Essayer avec id et _id pour couvrir les deux cas
+                                const foundCat = categories.find(
+                                  (cat) =>
+                                    String(cat.id) ===
+                                      String(logement.categorie) ||
+                                    String(cat._id) ===
+                                      String(logement.categorie)
+                                );
+                                return foundCat?.nom || "Catégorie inconnue";
+                              })()
                           : logement[characteristic.field],
                         "0"
                       )}

@@ -165,8 +165,8 @@ const Sidebar = () => {
             </li>
             <li className="sidebar-item">
               <Link
-                to="/mes-reservations"
-                className={`sidebar-link ${isActive("/mes-reservations")}`}
+                to="/MesReservations"
+                className={`sidebar-link ${isActive("/MesReservations")}`}
               >
                 <i className="fas fa-calendar-alt sidebar-icon"></i>
                 <span>Mes réservations</span>

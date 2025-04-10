@@ -19,6 +19,10 @@ import MesLogements from "../pages/MesLogements";
 import LogementDetails from "../pages/LogementDetails";
 import HomePage from "../pages/homepage";
 import FavorisPage from "../pages/FavorisPage";
+import PublicLogementDetails from "../pages/PublicLogementDetails";
+import ReservationForm from "../pages/ReservationForm";
+import MesReservations from "../pages/MesResevations";
+import ReservationDetail from "../pages/ReservationDetail";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -40,8 +44,14 @@ const AppRoutes = () => {
       <Route path="/MesLogements" element={<MesLogements />} />
       <Route path="/logement-details/:id" element={<LogementDetails />} />
       <Route path="/FavorisPage" element={<FavorisPage />} />
-
-      <Route path="*" element={<HomePage />} />
+      <Route
+        path="/Public-logement-details/:id"
+        element={<PublicLogementDetails />}
+      />
+      <Route path="/reservationForm/:id" element={<ReservationForm />} />
+      <Route path="/MesReservations" element={<MesReservations />} />
+      <Route path="/DetailReservation/:id" element={<ReservationDetail />} />
+      <Route path="/" element={<HomePage />} />
     </Routes>
   );
 };

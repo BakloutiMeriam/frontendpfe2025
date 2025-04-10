@@ -141,14 +141,26 @@ export const logementService = {
       formData.append("nombreSallesDeBain", logementData.nombreSallesDeBain);
 
       // Gestion de la catégorie (inchangé)
-      let categorieId = logementData.categorie;
+      /*let categorieId = logementData.categorie;
       if (categorieId && typeof categorieId === "object") {
         categorieId = categorieId.id || categorieId._id || categorieId;
       }
       if (categorieId) {
         categorieId = categorieId.toString();
         formData.append("categorie", categorieId);
+      }*/
+      // Gestion de la catégorie
+      let categorieId = logementData.categorie;
+      if (categorieId && typeof categorieId === "object") {
+        // Si c'est un objet, extraire correctement l'ID
+        categorieId = categorieId.id || categorieId._id;
+
+        // Ne pas convertir en string si c'est déjà une chaîne
+        if (categorieId && typeof categorieId !== "string") {
+          categorieId = String(categorieId);
+        }
       }
+      formData.append("categorie", categorieId);
 
       formData.append("disponible", logementData.disponible);
 
@@ -264,7 +276,7 @@ export const logementService = {
       throw error;
     }
   },
-  getLogementById: async (id) => {
+  /*getLogementById: async (id) => {
     try {
       const response = await axios.get(`${API_URL}/details/${id}`, {
         headers: {
@@ -306,6 +318,103 @@ export const logementService = {
           id: logement.categorie,
         };
       }
+      return logement;
+    } catch (error) {
+      console.error(
+        "Erreur lors de la récupération des détails du logement:",
+        error
+      );
+      throw error;
+    }
+  },*/
+  getLogementById: async (id) => {
+    try {
+      const response = await axios.get(`${API_URL}/details/${id}`, {
+        headers: {
+          ...authHeader(),
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+      const logement = response.data;
+      const baseUrl = "http://localhost:3000/uploads/";
+
+      // Préfixer les chemins d'images...
+      if (
+        logement.photoprincipale &&
+        !logement.photoprincipale.startsWith("http") &&
+        !logement.photoprincipale.startsWith("data:") &&
+        !logement.photoprincipale.startsWith("/api/")
+      ) {
+        logement.photoprincipale = baseUrl + logement.photoprincipale;
+      }
+
+      // Traitement des photos...
+      if (logement.photos && Array.isArray(logement.photos)) {
+        logement.photos = logement.photos.map((photo) => {
+          if (
+            !photo.startsWith("http") &&
+            !photo.startsWith("data:") &&
+            !photo.startsWith("/api/")
+          ) {
+            return baseUrl + photo;
+          }
+          return photo;
+        });
+      }
+
+      // Si la catégorie est juste un ID, récupérer les détails complets de la catégorie
+      if (
+        logement.categorie &&
+        (typeof logement.categorie === "string" || !logement.categorie.nom)
+      ) {
+        try {
+          // Récupérer toutes les catégories
+          const categoriesResponse = await axios.get(
+            `http://localhost:3000/api/categories/listeCat`
+          );
+          const categories = categoriesResponse.data;
+
+          // Trouver la catégorie correspondante
+          const categorieId =
+            typeof logement.categorie === "object"
+              ? logement.categorie.id || logement.categorie._id
+              : logement.categorie;
+
+          const foundCategorie = categories.find(
+            (cat) =>
+              String(cat.id) === String(categorieId) ||
+              String(cat._id) === String(categorieId)
+          );
+
+          if (foundCategorie) {
+            logement.categorie = foundCategorie; // Assigner l'objet catégorie complet
+          } else {
+            // Si la catégorie n'est pas trouvée, créer un objet minimal
+            logement.categorie = {
+              id: categorieId,
+              nom: "Catégorie non trouvée",
+            };
+          }
+        } catch (catError) {
+          console.error(
+            "Erreur lors de la récupération des catégories:",
+            catError
+          );
+          // En cas d'erreur, créer un objet minimal
+          const categorieId =
+            typeof logement.categorie === "object"
+              ? logement.categorie.id || logement.categorie._id
+              : logement.categorie;
+
+          logement.categorie = {
+            id: categorieId,
+            nom: "Erreur de chargement",
+          };
+        }
+      }
+
       return logement;
     } catch (error) {
       console.error(
