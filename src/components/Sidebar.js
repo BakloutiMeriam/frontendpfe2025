@@ -174,6 +174,15 @@ const Sidebar = () => {
             </li>
             <li className="sidebar-item">
               <Link
+                to="/mes-commandes"
+                className={`sidebar-link ${isActive("/mes-commande")}`}
+              >
+                <i className="fas fa-calendar-alt sidebar-icon"></i>
+                <span>Mes commandes</span>
+              </Link>
+            </li>
+            <li className="sidebar-item">
+              <Link
                 to="/historique"
                 className={`sidebar-link ${isActive("/historique")}`}
               >

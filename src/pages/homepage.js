@@ -47,7 +47,7 @@ const HomePage = () => {
   const fetchLogements = async () => {
     try {
       setLoading(true);
-      const data = await logementService.getLogementsService();
+      const data = await logementService.getLogementsDisponibles();
       if (Array.isArray(data.logements)) {
         setLogements(data.logements);
         setFilteredLogements(data.logements); // Initialiser les logements filtrés

@@ -21,6 +21,8 @@ import HomePage from "../pages/homepage";
 import FavorisPage from "../pages/FavorisPage";
 import DevenirHote from "../pages/devenirconnecter";
 import UpgradeToOwner from "../pages/devenirproprietaire";
+import MesReservations from "../pages/reservationPourProp";
+import CommandesClient from "../pages/CommandesClient";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -44,6 +46,9 @@ const AppRoutes = () => {
       <Route path="/FavorisPage" element={<FavorisPage />} />
       <Route path="/devenir-hote" element={<DevenirHote />} />
       <Route path="/devenir-proprietaire" element={<UpgradeToOwner />} />
+      <Route path="/mes-reservations" element={<MesReservations />} />
+      <Route path="/mes-commandes" element={<CommandesClient />} />
+
       <Route path="*" element={<HomePage />} />
     </Routes>
   );

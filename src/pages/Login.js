@@ -136,74 +136,66 @@ const Login = () => {
     <>
       <Navbar />
       <div className="auth-container">
-        <div className="auth-left">
-          <div>
-            <h1>Bienvenue sur Stayzy</h1>
-            <p>Connectez-vous pour accéder à votre espace personnel.</p>
-            <img src="/images/5.jpg" alt="Illustration" />
+        <div className="color-blob"></div>
+        <div className="auth-card-centered">
+          <h2>Identifiez-vous !</h2>
+          <div className="reset-logo2">
+            <img src="/images/logo2.png" alt="Logo" />
           </div>
-        </div>
-        <div className="auth-right">
-          <div className="auth-card">
-            <h2>Identifiez-vous !</h2>
-            <div className="reset-logo2">
-              <img src="/images/logo2.png" alt="Logo" />
-            </div>
-            <LoginForm
-              login={login}
-              errors={errors}
-              setErrors={setErrors}
-              handleSubmit={handleSubmit}
+          <LoginForm
+            login={login}
+            errors={errors}
+            setErrors={setErrors}
+            handleSubmit={handleSubmit}
+          />
+          <div className="text-center mt-3">
+            <button
+              className="btn btn-link"
+              onClick={() => navigate("/forgot-password")}
+            >
+              Mot de passe oublié ?
+            </button>
+          </div>
+          <div className="separator">
+            <hr className="separator-line" />
+            <span className="separator-text">ou</span>
+            <hr className="separator-line" />
+          </div>
+          <div className="social-login">
+            <GoogleLogin
+              onSuccess={handleGoogleLoginSuccess}
+              onError={(error) => console.error("Google login error:", error)}
             />
-            <div className="text-center mt-3">
-              <button
-                className="btn btn-link"
-                onClick={() => navigate("/forgot-password")}
-              >
-                Mot de passe oublié ?
-              </button>
-            </div>
-            <div className="separator">
-              <hr className="separator-line" />
-              <span className="separator-text">ou</span>
-              <hr className="separator-line" />
-            </div>
-            <div className="social-login">
-              <GoogleLogin
-                onSuccess={handleGoogleLoginSuccess}
-                onError={(error) => console.error("Google login error:", error)}
-              />
-            </div>
-            <div className="social-login">
-              <FacebookLogin
-                appId="646369371125852"
-                autoLoad={false}
-                fields="name,email,picture"
-                callback={handleFacebookLoginSuccess}
-                onFailure={handleFacebookLoginFailure}
-                icon="bi-facebook"
-                textButton=" Continuer avec Facebook"
-                cssClass="btn-primary"
-              />
-            </div>
-            <div className="text-center mt-3">
-              <p
-                style={{
-                  display: "inline",
-                  marginRight: "5px",
-                  fontSize: "12px",
-                }}
-              >
-                Vous n'avez pas de compte ?
-              </p>
-              <button
-                className="btn btn-link"
-                onClick={() => navigate("/register")}
-                style={{ padding: 0, margin: 0, verticalAlign: "baseline" }}
-              >
-                Inscrivez-vous
-              </button>
-            </div>
+          </div>
+          <div className="social-login">
+            <FacebookLogin
+              appId="646369371125852"
+              autoLoad={false}
+              fields="name,email,picture"
+              callback={handleFacebookLoginSuccess}
+              onFailure={handleFacebookLoginFailure}
+              icon="bi-facebook"
+              textButton=" Continuer avec Facebook"
+              cssClass="btn-primary"
+            />
+          </div>
+          <div className="text-center mt-3">
+            <p
+              style={{
+                display: "inline",
+                marginRight: "5px",
+                fontSize: "12px",
+              }}
+            >
+              Vous n'avez pas de compte ?
+            </p>
+            <button
+              className="btn btn-link"
+              onClick={() => navigate("/register")}
+              style={{ padding: 0, margin: 0, verticalAlign: "baseline" }}
+            >
+              Inscrivez-vous
+            </button>
           </div>
         </div>
       </div>

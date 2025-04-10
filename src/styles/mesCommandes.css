@@ -1,0 +1,342 @@
+.commandes-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.commandes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.commandes-header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.commandes-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.filter-btn.active {
+  background-color: #4a6fa5;
+  color: white;
+  border-color: #4a6fa5;
+}
+
+.commandes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.commande-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.commande-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.commande-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+.commande-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.commande-id {
+  font-weight: 600;
+  color: #333;
+}
+
+.commande-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-confirmed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-completed {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.status-canceled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.commande-date {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.commande-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.commande-property {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.property-img {
+  width: 120px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.property-details {
+  flex: 1;
+}
+
+.property-details h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.property-address {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.reservation-dates {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.date-label {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+}
+
+.date-value {
+  font-weight: 500;
+  color: #333;
+}
+
+.commande-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.commande-price {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-label {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.price-value {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn {
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  background-color: #4a6fa5;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #3d5d8a;
+}
+
+.btn-outline-primary {
+  background-color: transparent;
+  color: #4a6fa5;
+  border: 1px solid #4a6fa5;
+}
+
+.btn-outline-primary:hover {
+  background-color: #4a6fa5;
+  color: white;
+}
+
+.btn-outline-danger {
+  background-color: transparent;
+  color: #dc3545;
+  border: 1px solid #dc3545;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.no-commandes {
+  text-align: center;
+  padding: 3rem 1rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.empty-icon {
+  font-size: 3rem;
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+}
+
+.no-commandes p {
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 1rem;
+}
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #4a6fa5;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error-container {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+/* Styles pour les écrans plus petits */
+@media (max-width: 768px) {
+  .commandes-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .commande-property {
+    flex-direction: column;
+  }
+
+  .property-img {
+    width: 100%;
+    height: 180px;
+  }
+
+  .commande-actions {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .action-buttons {
+    width: 100%;
+  }
+
+  .btn {
+    flex: 1;
+  }
+
+  .reservation-dates {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

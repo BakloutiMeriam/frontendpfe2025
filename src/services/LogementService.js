@@ -410,4 +410,68 @@ export const logementService = {
       throw error;
     }
   },
+  // Ajoutez cette méthode à votre objet logementService
+  getLogementsDisponibles: async (page = 1, limit = 10, filters = {}) => {
+    try {
+      // Construire les paramètres de requête
+      const params = new URLSearchParams({
+        page,
+        limit,
+        ...filters,
+      });
+
+      const response = await axios.get(
+        `${API_URL}/logementDisponible?${params}`,
+        {
+          headers: {
+            ...authHeader(),
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      const data = response.data;
+      const baseUrl = "http://localhost:3000/uploads/";
+
+      // Préfixer les chemins d'images pour chaque logement
+      if (data.logements && Array.isArray(data.logements)) {
+        data.logements = data.logements.map((logement) => {
+          // Traiter l'image principale
+          if (
+            logement.photoprincipale &&
+            !logement.photoprincipale.startsWith("http") &&
+            !logement.photoprincipale.startsWith("data:") &&
+            !logement.photoprincipale.startsWith("/api/")
+          ) {
+            logement.photoprincipale = baseUrl + logement.photoprincipale;
+          }
+
+          // Traiter les autres photos si nécessaire
+          if (logement.photos && Array.isArray(logement.photos)) {
+            logement.photos = logement.photos.map((photo) => {
+              if (
+                !photo.startsWith("http") &&
+                !photo.startsWith("data:") &&
+                !photo.startsWith("/api/")
+              ) {
+                return baseUrl + photo;
+              }
+              return photo;
+            });
+          }
+
+          return logement;
+        });
+      }
+
+      return data;
+    } catch (error) {
+      console.error(
+        "Erreur lors de la récupération des logements disponibles:",
+        error
+      );
+      throw error;
+    }
+  },
 };

@@ -149,10 +149,10 @@ const Navbar = () => {
           )}*/}
 
           <ul className="navbar-nav ms-auto">
-            {/* Bouton "Ajouter mon logement" - visible pour tous */}
+            {/* Bouton "Ajouter mon logement" - maintenant formaté comme un lien nav */}
             <li className="nav-item me-3">
               <button
-                className="nav-link btn btn-outline-primary add-property-btn"
+                className="nav-link add-property-btn"
                 onClick={handleAddProperty}
               >
                 <i className="fas fa-home me-1"></i> Ajouter mon logement
