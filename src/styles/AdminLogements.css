@@ -1,0 +1,570 @@
+/* AdminLogements.css */
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f5f7fa;
+}
+
+.admin-logements-page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.admin-logements-page h1 {
+  font-size: 24px;
+  margin-bottom: 24px;
+  color: #333;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+/* Search and Filter Styles */
+.search-filter-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 15px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  color: #888;
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px 12px 12px 40px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.filter-toggle-button {
+  background-color: #5a67d8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin-left: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.filter-toggle-button:hover {
+  background-color: #4c51bf;
+}
+
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.filter-group label {
+  font-size: 12px;
+  margin-bottom: 5px;
+  color: #666;
+}
+
+.filter-select,
+.filter-input {
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.price-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.price-range input {
+  width: 100px;
+}
+
+.reset-button {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  color: #666;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-left: auto;
+  font-size: 14px;
+}
+
+.reset-button:hover {
+  background-color: #e9ecef;
+}
+
+/* Stats Cards */
+.logements-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.stat-card p {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+/* Table Styles */
+.logements-table-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.logements-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.logements-table th {
+  background-color: #f8f9fa;
+  text-align: left;
+  padding: 12px 15px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+
+.logements-table td {
+  padding: 12px 15px;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+.logements-table tr:hover {
+  background-color: rgba(90, 103, 216, 0.05);
+}
+
+.logement-image-cell {
+  width: 80px;
+}
+
+.logement-image-cell img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.proprietaire-cell {
+  max-width: 250px;
+}
+
+.proprietaire-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.proprietaire-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.proprietaire-name {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.proprietaire-email {
+  font-size: 12px;
+  color: #666;
+}
+
+.price-cell {
+  font-weight: 600;
+  color: #333;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-badge.disponible {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.reserve {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.vendu {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.status-badge.non_disponible {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.actions-cell {
+  white-space: nowrap;
+  width: 120px;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-right: 5px;
+}
+
+.action-button.view {
+  color: #5a67d8;
+}
+
+.action-button.edit {
+  color: #0694a2;
+}
+
+.action-button.delete {
+  color: #e53e3e;
+}
+
+.action-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.no-data {
+  text-align: center;
+  padding: 30px 0;
+  color: #666;
+  font-style: italic;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.pagination-button {
+  min-width: 36px;
+  height: 36px;
+  margin: 0 3px;
+  border: 1px solid #ddd;
+  background-color: white;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination-button:hover {
+  background-color: #f5f7fa;
+  border-color: #ccc;
+}
+
+.pagination-button.active {
+  background-color: #5a67d8;
+  border-color: #5a67d8;
+  color: white;
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Loading and Error states */
+.loading,
+.error-message {
+  padding: 30px;
+  text-align: center;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.error-message {
+  color: #e53e3e;
+}
+.action-button.available {
+  background-color: #4caf50;
+  color: white;
+}
+
+.action-button.unavailable {
+  background-color: #f44336;
+  color: white;
+}
+
+.toggle-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button-available {
+  background-color: #e53e3e; /* Rouge pour désactiver */
+  color: white;
+}
+
+.button-available:hover {
+  background-color: #c53030;
+}
+
+.button-unavailable {
+  background-color: #48bb78; /* Vert pour activer */
+  color: white;
+}
+
+.button-unavailable:hover {
+  background-color: #38a169;
+}
+/* Style pour la barre de filtrage compact */
+.compact-filter-bar {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 12px 20px;
+  margin-bottom: 25px;
+  flex-wrap: nowrap;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  min-width: 200px;
+  flex: 1;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  padding: 8px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.filter-icon {
+  color: #667085;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.filter-divider {
+  width: 1px;
+  height: 24px;
+  background-color: #e0e0e0;
+  margin: 0 15px;
+}
+
+.proprietaire-filter {
+  display: flex;
+  align-items: center;
+  min-width: 180px;
+}
+
+.proprietaire-filter select {
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 8px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  width: 100%;
+}
+
+.disponibilite-filter {
+  display: flex;
+  align-items: center;
+}
+
+.radio-group {
+  display: flex;
+  align-items: center;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.radio-label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.radio-label.active {
+  background-color: #f0f9ff;
+  color: #0369a1;
+  font-weight: 500;
+}
+
+.radio-label:hover:not(.active) {
+  background-color: #f5f5f5;
+}
+
+.dispo-icon {
+  margin-right: 5px;
+  font-size: 12px;
+}
+
+.dispo-icon.available {
+  color: #16a34a;
+}
+
+.dispo-icon.unavailable {
+  color: #dc2626;
+}
+
+.reset-filter-button {
+  background-color: #f5f5f5;
+  border: none;
+  color: #667085;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  margin-left: 15px;
+}
+
+.reset-filter-button:hover {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+/* Mise à jour des stats cards pour match avec le nouveau design */
+.logements-stats {
+  display: flex;
+  margin-bottom: 25px;
+  gap: 15px;
+}
+
+.stat-card {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  flex: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.stat-card h3 {
+  color: #667085;
+  font-size: 14px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.stat-card p {
+  color: #111827;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Adaptation pour les petits écrans */
+@media (max-width: 1200px) {
+  .compact-filter-bar {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .filter-divider {
+    display: none;
+  }
+
+  .search-box,
+  .proprietaire-filter,
+  .prix-filter,
+  .disponibilite-filter {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

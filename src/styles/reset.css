@@ -44,8 +44,9 @@ body {
 .reset-title {
   color: #125be1;
   margin-bottom: 10px;
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  /*font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;*/
 }
+
 .reset-label {
   color: #125be1;
   margin-bottom: 10px;

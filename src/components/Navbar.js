@@ -70,6 +70,20 @@ const Navbar = () => {
   const toggleNavbar = () => {
     setNavbarCollapsed(!navbarCollapsed);
   };
+  // Fonction pour gérer le clic sur "Ajouter mon logement"
+  const handleAddProperty = () => {
+    if (user) {
+      if (user.role === "proprietaire") {
+        navigate("/AddLogement");
+      } else {
+        // Si l'utilisateur est connecté mais n'est pas propriétaire
+        navigate("/devenir-proprietaire");
+      }
+    } else {
+      // Si l'utilisateur n'est pas connecté
+      navigate("/devenir-hote");
+    }
+  };
 
   return (
     <nav
@@ -135,6 +149,15 @@ const Navbar = () => {
           )}*/}
 
           <ul className="navbar-nav ms-auto">
+            {/* Bouton "Ajouter mon logement" - maintenant formaté comme un lien nav */}
+            <li className="nav-item me-3">
+              <button
+                className="nav-link add-property-btn"
+                onClick={handleAddProperty}
+              >
+                <i className="fas fa-home me-1"></i> Ajouter mon logement
+              </button>
+            </li>
             {user ? (
               <>
                 {/* Notifications pour admin avec dropdown */}

@@ -1,0 +1,382 @@
+/* AdminReservations.css */
+
+.res-admin-reservations-page {
+  padding: 20px;
+}
+
+.res-admin-reservations-page h1 {
+  margin-bottom: 30px;
+  color: #333;
+}
+
+/* Nouvelle barre de filtres compacte */
+.res-compact-filter-bar {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.res-search-box {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 200px;
+}
+
+.res-filter-icon {
+  margin-right: 8px;
+  color: #666;
+}
+
+.res-search-box input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  padding: 8px 0;
+}
+
+.res-filter-divider {
+  height: 24px;
+  width: 1px;
+  background-color: #e0e0e0;
+  margin: 0 16px;
+}
+
+.res-client-filter,
+.res-logement-filter,
+.res-statut-filter {
+  display: flex;
+  align-items: center;
+}
+
+.res-client-filter select,
+.res-logement-filter select,
+.res-statut-filter select {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: 14px;
+  padding: 8px 4px;
+  color: #333;
+  min-width: 150px;
+  cursor: pointer;
+}
+
+.res-date-filter {
+  display: flex;
+  align-items: center;
+}
+
+.res-date-input {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: 14px;
+  padding: 8px 4px;
+  color: #333;
+  cursor: pointer;
+}
+
+.res-date-separator {
+  margin: 0 8px;
+  color: #666;
+}
+
+.res-reset-filter-button {
+  background-color: #f3f4f6;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s;
+}
+
+.res-reset-filter-button:hover {
+  background-color: #e5e7eb;
+  color: #333;
+}
+
+/* Stats Cards */
+.res-reservations-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.res-stat-card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.res-stat-card h3 {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.res-stat-card p {
+  font-size: 22px;
+  color: #333;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Table styles */
+.res-reservations-table-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.res-reservations-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.res-reservations-table th {
+  background-color: #f9fafb;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 13px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.res-reservations-table td {
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+  color: #374151;
+}
+
+.res-reservations-table tr:last-child td {
+  border-bottom: none;
+}
+
+.res-reservations-table tr:hover {
+  background-color: #f9fafb;
+}
+
+.res-client-info {
+  min-width: 200px;
+}
+
+.res-client-details {
+  display: flex;
+  align-items: center;
+}
+
+.res-client-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+}
+
+.res-client-name {
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.res-client-email {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.res-logement-info {
+  min-width: 180px;
+}
+
+.res-logement-details {
+  display: flex;
+  align-items: center;
+}
+
+.res-logement-image {
+  width: 40px;
+  height: 28px;
+  border-radius: 4px;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.res-logement-title {
+  font-weight: 500;
+}
+
+.res-period-cell {
+  min-width: 180px;
+}
+
+.res-period-dates {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.res-date {
+  font-weight: 500;
+}
+
+.res-date-separator {
+  margin: 0 6px;
+  color: #9ca3af;
+}
+
+.res-duration {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.res-price-cell {
+  font-weight: 600;
+}
+
+.res-status-cell {
+  white-space: nowrap;
+}
+
+.res-status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.res-badge-warning {
+  background-color: #fff7ed;
+  color: #c2410c;
+}
+
+.res-badge-success {
+  background-color: #ecfdf5;
+  color: #065f46;
+}
+
+.res-badge-danger {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+.res-badge-info {
+  background-color: #eff6ff;
+  color: #1e40af;
+}
+
+.res-badge-secondary {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.res-badge-light {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+.res-no-data {
+  text-align: center;
+  padding: 40px !important;
+  color: #6b7280;
+}
+
+/* Pagination */
+.res-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.res-pagination-button {
+  border: 1px solid #e5e7eb;
+  background-color: #fff;
+  padding: 8px 12px;
+  margin: 0 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #4b5563;
+  transition: all 0.2s;
+}
+
+.res-pagination-button:hover {
+  background-color: #f3f4f6;
+}
+
+.res-pagination-button.active {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.res-pagination-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* État de chargement et erreur */
+.res-loading,
+.res-error-message {
+  text-align: center;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.res-error-message {
+  color: #b91c1c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .res-reservations-table-container {
+    overflow-x: auto;
+  }
+
+  .res-compact-filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .res-filter-divider {
+    display: none;
+  }
+
+  .res-search-box,
+  .res-client-filter,
+  .res-logement-filter,
+  .res-statut-filter,
+  .res-date-filter {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .res-client-filter select,
+  .res-logement-filter select,
+  .res-statut-filter select {
+    width: 100%;
+  }
+
+  .res-reset-filter-button {
+    width: 100%;
+  }
+}

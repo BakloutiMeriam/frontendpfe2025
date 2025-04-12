@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { reservationService } from "../services/ReservationService";
+import { reservationService } from "../services/reservationService";
 import { format, differenceInHours } from "date-fns";
 import { fr } from "date-fns/locale";
 import {

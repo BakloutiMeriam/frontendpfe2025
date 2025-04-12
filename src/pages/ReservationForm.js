@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { logementService } from "../services/LogementService";
 import { AuthContext } from "../context/AuthContext";
-import { reservationService } from "../services/ReservationService";
+import SimpleAvailabilityDisplay from "../components/SimpleAvailabilityDisplay";
+import { reservationService } from "../services/reservationService.js";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {
@@ -100,11 +101,12 @@ const ReservationForm = () => {
 
     reservations.forEach((reservation) => {
       try {
-        const dateDebut = new Date(reservation.dateDebut);
-        dateDebut.setHours(0, 0, 0, 0);
+        // Création des dates avec le fuseau horaire local
+        const dateDebutStr = reservation.dateDebut.split("T")[0]; // Prendre seulement YYYY-MM-DD
+        const dateFinStr = reservation.dateFin.split("T")[0]; // Prendre seulement YYYY-MM-DD
 
-        const dateFin = new Date(reservation.dateFin);
-        dateFin.setHours(0, 0, 0, 0);
+        const dateDebut = new Date(dateDebutStr + "T00:00:00"); // Forcer l'heure locale à minuit
+        const dateFin = new Date(dateFinStr + "T00:00:00"); // Forcer l'heure locale à minuit
 
         if (isNaN(dateDebut.getTime()) || isNaN(dateFin.getTime())) {
           return;
@@ -113,7 +115,12 @@ const ReservationForm = () => {
         const currentDate = new Date(dateDebut);
 
         while (currentDate <= dateFin) {
-          const dateStr = currentDate.toISOString().split("T")[0];
+          // Formatage de la date en YYYY-MM-DD sans convertir en UTC
+          const year = currentDate.getFullYear();
+          const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+          const day = String(currentDate.getDate()).padStart(2, "0");
+          const dateStr = `${year}-${month}-${day}`;
+
           datesBloquees.add(dateStr);
           currentDate.setDate(currentDate.getDate() + 1);
         }
@@ -124,7 +131,6 @@ const ReservationForm = () => {
 
     return Array.from(datesBloquees).sort();
   };
-
   const calculerNombreNuits = (dateDebut, dateFin) => {
     if (!dateDebut || !dateFin) return 0;
 
@@ -338,7 +344,7 @@ const ReservationForm = () => {
   };
 
   // Formatage des dates indisponibles pour affichage
-  const formatterDatesIndisponibles = () => {
+  /*const formatterDatesIndisponibles = () => {
     if (datesIndisponibles.length === 0) return [];
 
     return datesIndisponibles.slice(0, 5).map((date) => {
@@ -349,7 +355,7 @@ const ReservationForm = () => {
         year: "numeric",
       });
     });
-  };
+  };*/
 
   return (
     <>
@@ -396,7 +402,7 @@ const ReservationForm = () => {
               )}
 
               <div className="modern-property-highlights">
-                <div className="modern-highlight">
+                <div className="modern-highlight-item">
                   <FaHome className="modern-highlight-icon" />
                   <div>
                     <div className="modern-highlight-label">Type</div>
@@ -406,7 +412,7 @@ const ReservationForm = () => {
                   </div>
                 </div>
 
-                <div className="modern-highlight">
+                <div className="modern-highlight-item">
                   <FaUsers className="modern-highlight-icon" />
                   <div>
                     <div className="modern-highlight-label">Capacité</div>
@@ -416,36 +422,21 @@ const ReservationForm = () => {
                   </div>
                 </div>
 
-                <div className="modern-highlight">
+                <div className="modern-highlight-item">
                   <FaEuroSign className="modern-highlight-icon" />
                   <div>
                     <div className="modern-highlight-label">Prix</div>
                     <div className="modern-highlight-value">
-                      {logement.prix}€ par nuit
+                      {logement.prix} par nuitée
                     </div>
                   </div>
                 </div>
               </div>
 
               {datesIndisponibles.length > 0 && (
-                <div className="modern-unavailable-dates">
-                  <div className="modern-unavailable-header">
-                    <FaCalendar className="modern-calendar-icon" />
-                    <h3>Dates non disponibles</h3>
-                  </div>
-                  <div className="modern-dates-pills">
-                    {formatterDatesIndisponibles().map((date, index) => (
-                      <span key={index} className="modern-date-pill">
-                        {date}
-                      </span>
-                    ))}
-                    {datesIndisponibles.length > 5 && (
-                      <span className="modern-date-pill modern-more-dates">
-                        +{datesIndisponibles.length - 5}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <SimpleAvailabilityDisplay
+                  datesIndisponibles={datesIndisponibles}
+                />
               )}
             </div>
 
@@ -457,10 +448,18 @@ const ReservationForm = () => {
                 </div>
                 <div className="modern-host-details">
                   <h4 className="modern-host-name">
-                    {logement.proprietaire?.nom || "Propriétaire"}
+                    {logement.proprietaire?.prenom || "Propriétaire"}
                   </h4>
                   <p className="modern-host-since">
-                    Membre depuis Janvier 2023
+                    Membre depuis{" "}
+                    {logement.proprietaire?.createdAt
+                      ? new Date(
+                          logement.proprietaire.createdAt
+                        ).toLocaleDateString("fr-FR", {
+                          month: "long",
+                          year: "numeric",
+                        })
+                      : "Janvier 2023"}
                   </p>
                   <div className="modern-host-stat">
                     <FaStar className="modern-host-icon" />

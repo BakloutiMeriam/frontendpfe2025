@@ -6,48 +6,48 @@ body {
 
 .auth-container {
   display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background-color: #edf4f7;
 }
 
-.auth-left {
-  flex: 1;
-  background-color: #125be1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fffefe;
-  padding: 20px;
+/* Suppression des styles auth-left qui contenait l'image */
+
+/* Blob de couleur en arrière-plan */
+.color-blob {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  /*background-color: #125be1;*/
+  top: -200px;
+  right: -100px;
+  opacity: 0.7;
+  z-index: 0;
 }
 
-.auth-left img {
-  max-width: 100%;
-  height: auto;
-}
-
-.auth-right {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #125be1;
-}
-
-.auth-card {
+/* Nouvelle classe pour la carte centrée */
+.auth-card-centered {
   background-color: #fffefe;
   padding: 40px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 500px;
+  z-index: 1;
+  position: relative;
 }
 
-.auth-card h2 {
+.auth-card-centered h2 {
   color: #125be1;
   margin-bottom: 10px;
   text-align: center;
 }
 
-.auth-card .form-control {
+.auth-card-centered .form-control {
   border-radius: 60px;
   border: 1px solid #4c4c4c;
   padding: 5px;
@@ -56,7 +56,7 @@ body {
   font-size: 0.9rem;
 }
 
-.auth-card .btn-primary {
+.auth-card-centered .btn-primary {
   background-color: #125be1;
   border: none;
   padding: 5px;
@@ -66,41 +66,42 @@ body {
   font-size: 0.9rem;
 }
 
-.auth-card .btn-primary:hover {
+.auth-card-centered .btn-primary:hover {
   background-color: #193870;
 }
 
-.auth-card .btn-link {
+.auth-card-centered .btn-link {
   color: #125be1;
   text-decoration: underline;
   font-size: 0.8rem;
 }
 
-.auth-card .btn-link:hover {
+.auth-card-centered .btn-link:hover {
   text-decoration: underline;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.separator-line {
+  flex: 1;
+  height: 1px;
+  background-color: #ddd;
+}
+
+.separator-text {
+  padding: 0 10px;
+  color: #888;
+  font-size: 14px;
 }
 
 .social-login {
   display: flex;
   justify-content: center;
-  gap: 20px;
   margin-top: 20px;
-}
-
-.social-login .btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 1px solid #4c4c4c;
-  background-color: #fffefe;
-  color: #4c4c4c;
-}
-
-.social-login .btn:hover {
-  background-color: #edf4f7;
 }
 
 /* Style pour le bouton Facebook */

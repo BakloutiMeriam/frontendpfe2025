@@ -5,6 +5,30 @@ const API_URL = "http://localhost:3000/api/user";
 const API = "http://localhost:3000/api/admin";
 
 const UserService = {
+  getProprietaires: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/proprietaires`, {
+        withCredentials: true,
+        headers: authService.authHeader(),
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching proprietaires:", error);
+      throw error;
+    }
+  },
+  getClients: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/clients`, {
+        withCredentials: true,
+        headers: authService.authHeader(),
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching clients:", error);
+      throw error;
+    }
+  },
   register: async (formData) => {
     try {
       const response = await axios.post(`${API_URL}/register`, formData);

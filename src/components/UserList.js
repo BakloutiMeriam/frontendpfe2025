@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import userService from "../services/UserService";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -16,10 +16,15 @@ const UserList = () => {
     tel: "",
     adresse: "",
     role: "",
+    photo: "",
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
+  const [viewMode, setViewMode] = useState("table"); // table or card
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -46,21 +51,53 @@ const UserList = () => {
       adresse: user.adresse,
       role: user.role,
     });
+    // Reset file upload fields
+    setUploadedFile(null);
+    setImagePreview(user.url_img || null);
+
+    // Reset file input if it exists
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const handleCancelEdit = () => {
     setEditingUserId(null);
+    setUploadedFile(null);
+    setImagePreview(null);
   };
 
   const handleSaveEdit = async (userId) => {
     try {
-      await userService.updateUser(userId, userData);
+      // Here we would handle the file upload first
+      // For this example, let's assume we have a function that uploads the file
+      // and returns the URL
+      let imageUrl = userData.photo;
+
+      if (uploadedFile) {
+        // In a real scenario, you would upload the file to your server
+        // and get back a URL. Here's a placeholder for that process:
+        // imageUrl = await userService.uploadUserPhoto(uploadedFile);
+
+        // For demo purposes, we'll create a fake URL
+        imageUrl = URL.createObjectURL(uploadedFile);
+        // Note: In production, you should use your actual file upload API
+      }
+
+      const updatedUserData = {
+        ...userData,
+        url_img: imageUrl,
+      };
+
+      await userService.updateUser(userId, updatedUserData);
 
       const updatedUsers = users.map((user) =>
-        user._id === userId ? { ...user, ...userData } : user
+        user._id === userId ? { ...user, ...updatedUserData } : user
       );
       setUsers(updatedUsers);
       setEditingUserId(null);
+      setUploadedFile(null);
+      setImagePreview(null);
     } catch (err) {
       setError("Erreur lors de la mise à jour de l'utilisateur");
     }
@@ -80,172 +117,607 @@ const UserList = () => {
     }
   };
 
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setUploadedFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
   // Pagination logic
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // Filter logic
-  const filteredUsers = currentUsers.filter((user) =>
+  const filteredUsers = users.filter((user) =>
     Object.values(user).some((value) =>
-      value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
 
-  if (loading) return <div className="text-center mt-4">Chargement...</div>;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const getDefaultAvatar = (name) => {
+    return `https://ui-avatars.com/api/?name=${name}&background=2653a4&color=fff&size=50`;
+  };
+
+  const getRoleBadgeClass = (role) => {
+    switch (role.toLowerCase()) {
+      case "proprietaire":
+        return "admin-badge-proprietaire";
+      case "client":
+        return "admin-badge-client";
+      default:
+        return "admin-badge-default";
+    }
+  };
+
+  if (loading)
+    return (
+      <div className="admin-loading">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Chargement...</span>
+        </div>
+        <p>Chargement des données...</p>
+      </div>
+    );
+
   if (error)
-    return <div className="alert alert-danger text-center">{error}</div>;
+    return <div className="admin-error alert alert-danger">{error}</div>;
 
   return (
-    <div className="container mt-5">
-      <div className="user-list-card">
-        <h1 className="h3">Liste des utilisateurs</h1>
-        <div className="filter-bar">
-          <input
-            type="text"
-            placeholder="Rechercher..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button onClick={() => setSearchTerm("")}>Effacer</button>
+    <div className="admin-dashboard">
+      <div className="admin-header">
+        <h1 className="admin-title">Gestion des Utilisateurs</h1>
+        <div className="admin-actions">
+          <div className="admin-search">
+            <div className="input-group">
+              <span className="input-group-text">
+                <i className="bi bi-search"></i>
+              </span>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Rechercher un utilisateur..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm && (
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  onClick={() => setSearchTerm("")}
+                >
+                  <i className="bi bi-x-lg"></i>
+                </button>
+              )}
+            </div>
+          </div>
+          <div className="admin-view-toggle btn-group">
+            <button
+              className={`btn ${
+                viewMode === "table" ? "btn-primary" : "btn-outline-primary"
+              }`}
+              onClick={() => setViewMode("table")}
+            >
+              <i className="bi bi-table"></i>
+            </button>
+            <button
+              className={`btn ${
+                viewMode === "card" ? "btn-primary" : "btn-outline-primary"
+              }`}
+              onClick={() => setViewMode("card")}
+            >
+              <i className="bi bi-grid-3x3-gap"></i>
+            </button>
+          </div>
         </div>
-        <div className="table-responsive">
-          <table className="user-list-table">
-            <thead>
-              <tr>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Email</th>
-                <th>Téléphone</th>
-                <th>Adresse</th>
-                <th>Rôle</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredUsers.map((user) => (
-                <tr key={user._id}>
-                  {editingUserId === user._id ? (
-                    <>
-                      <td>
-                        <input
-                          type="text"
-                          value={userData.nom}
-                          onChange={(e) =>
-                            setUserData({ ...userData, nom: e.target.value })
-                          }
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={userData.prenom}
-                          onChange={(e) =>
-                            setUserData({ ...userData, prenom: e.target.value })
-                          }
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="email"
-                          value={userData.email}
-                          onChange={(e) =>
-                            setUserData({ ...userData, email: e.target.value })
-                          }
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="tel"
-                          value={userData.tel}
-                          onChange={(e) =>
-                            setUserData({ ...userData, tel: e.target.value })
-                          }
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={userData.adresse}
-                          onChange={(e) =>
-                            setUserData({
-                              ...userData,
-                              adresse: e.target.value,
-                            })
-                          }
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={userData.role}
-                          onChange={(e) =>
-                            setUserData({ ...userData, role: e.target.value })
-                          }
-                        />
-                      </td>
-                      <td>
-                        <button
-                          className="btn btn-success"
-                          onClick={() => handleSaveEdit(user._id)}
-                        >
-                          <i className="bi bi-check-circle"></i>
-                        </button>
-                        <button
-                          className="btn btn-secondary ml-2"
-                          onClick={handleCancelEdit}
-                        >
-                          <i className="bi bi-x-circle"></i>
-                        </button>
-                      </td>
-                    </>
-                  ) : (
-                    <>
-                      <td>{user.nom}</td>
-                      <td>{user.prenom}</td>
-                      <td>{user.email}</td>
-                      <td>{user.tel}</td>
-                      <td>{user.adresse}</td>
-                      <td>{user.role}</td>
-                      <td className="action-buttons">
-                        <button
-                          className="btn btn-warning"
-                          onClick={() => handleEdit(user)}
-                          title="Modifier"
-                        >
-                          <i className="bi bi-pencil"></i>
-                        </button>
-                        <button
-                          className="btn btn-danger ml-2"
-                          onClick={() => handleDelete(user._id)}
-                          title="Supprimer"
-                        >
-                          <i className="bi bi-trash"></i>
-                        </button>
-                      </td>
-                    </>
-                  )}
-                </tr>
+      </div>
+
+      <div className="admin-content">
+        {viewMode === "table" ? (
+          <div className="admin-table-view">
+            <div className="table-responsive">
+              <table className="user-list-table table">
+                <thead>
+                  <tr>
+                    <th className="admin-th-photo">Photo</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Adresse</th>
+                    <th>Rôle</th>
+                    <th className="admin-th-actions">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentUsers.map((user) => (
+                    <tr key={user._id} className="admin-table-row">
+                      {editingUserId === user._id ? (
+                        <>
+                          <td className="admin-user-photo">
+                            <div className="admin-photo-edit">
+                              <img
+                                src={
+                                  imagePreview ||
+                                  user.url_img ||
+                                  getDefaultAvatar(
+                                    `${userData.nom} ${userData.prenom}`
+                                  )
+                                }
+                                alt={`${userData.nom} ${userData.prenom}`}
+                                className="admin-user-avatar"
+                              />
+                              <div className="mt-2">
+                                <input
+                                  type="file"
+                                  className="form-control form-control-sm"
+                                  accept="image/*"
+                                  onChange={handlePhotoChange}
+                                  ref={fileInputRef}
+                                />
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={userData.nom}
+                              onChange={(e) =>
+                                setUserData({
+                                  ...userData,
+                                  nom: e.target.value,
+                                })
+                              }
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={userData.prenom}
+                              onChange={(e) =>
+                                setUserData({
+                                  ...userData,
+                                  prenom: e.target.value,
+                                })
+                              }
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="email"
+                              className="form-control"
+                              value={userData.email}
+                              onChange={(e) =>
+                                setUserData({
+                                  ...userData,
+                                  email: e.target.value,
+                                })
+                              }
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="tel"
+                              className="form-control"
+                              value={userData.tel}
+                              onChange={(e) =>
+                                setUserData({
+                                  ...userData,
+                                  tel: e.target.value,
+                                })
+                              }
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={userData.adresse}
+                              onChange={(e) =>
+                                setUserData({
+                                  ...userData,
+                                  adresse: e.target.value,
+                                })
+                              }
+                            />
+                          </td>
+                          <td>
+                            <div className="form-check">
+                              <input
+                                className="form-check-input"
+                                type="radio"
+                                name="role"
+                                id="roleProprietaire"
+                                value="proprietaire"
+                                checked={userData.role === "proprietaire"}
+                                onChange={(e) =>
+                                  setUserData({
+                                    ...userData,
+                                    role: e.target.value,
+                                  })
+                                }
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor="roleProprietaire"
+                              >
+                                Propriétaire
+                              </label>
+                            </div>
+                            <div className="form-check">
+                              <input
+                                className="form-check-input"
+                                type="radio"
+                                name="role"
+                                id="roleClient"
+                                value="client"
+                                checked={userData.role === "client"}
+                                onChange={(e) =>
+                                  setUserData({
+                                    ...userData,
+                                    role: e.target.value,
+                                  })
+                                }
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor="roleClient"
+                              >
+                                Client
+                              </label>
+                            </div>
+                          </td>
+                          <td className="admin-action-buttons">
+                            <button
+                              className="btn btn-success admin-btn"
+                              onClick={() => handleSaveEdit(user._id)}
+                              title="Enregistrer"
+                            >
+                              <i className="bi bi-check-lg"></i>
+                            </button>
+                            <button
+                              className="btn btn-secondary admin-btn"
+                              onClick={handleCancelEdit}
+                              title="Annuler"
+                            >
+                              <i className="bi bi-x-lg"></i>
+                            </button>
+                          </td>
+                        </>
+                      ) : (
+                        <>
+                          <td className="admin-user-photo">
+                            <img
+                              src={
+                                user.url_img ||
+                                getDefaultAvatar(`${user.nom} ${user.prenom}`)
+                              }
+                              alt={`${user.nom} ${user.prenom}`}
+                              className="admin-user-avatar"
+                            />
+                          </td>
+                          <td>{user.nom}</td>
+                          <td>{user.prenom}</td>
+                          <td>{user.email}</td>
+                          <td>{user.tel}</td>
+                          <td>{user.adresse}</td>
+                          <td>
+                            <span
+                              className={`admin-badge ${getRoleBadgeClass(
+                                user.role
+                              )}`}
+                            >
+                              {user.role}
+                            </span>
+                          </td>
+                          <td className="admin-action-buttons">
+                            <button
+                              className="btn btn-warning admin-btn"
+                              onClick={() => handleEdit(user)}
+                              title="Modifier"
+                            >
+                              <i className="bi bi-pencil"></i>
+                            </button>
+                            <button
+                              className="btn btn-danger admin-btn"
+                              onClick={() => handleDelete(user._id)}
+                              title="Supprimer"
+                            >
+                              <i className="bi bi-trash"></i>
+                            </button>
+                          </td>
+                        </>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : (
+          <div className="admin-card-view">
+            <div className="row g-4">
+              {currentUsers.map((user) => (
+                <div key={user._id} className="col-md-6 col-lg-4">
+                  <div className="admin-user-card">
+                    {editingUserId === user._id ? (
+                      <div className="admin-user-card-edit">
+                        <div className="admin-user-card-photo-edit">
+                          <img
+                            src={
+                              imagePreview ||
+                              user.url_img ||
+                              getDefaultAvatar(
+                                `${userData.nom} ${userData.prenom}`
+                              )
+                            }
+                            alt={`${userData.nom} ${userData.prenom}`}
+                            className="admin-user-card-avatar"
+                          />
+                          <div className="mt-2">
+                            <label className="form-label">
+                              Photo de profil
+                            </label>
+                            <input
+                              type="file"
+                              className="form-control"
+                              accept="image/*"
+                              onChange={handlePhotoChange}
+                              ref={fileInputRef}
+                            />
+                          </div>
+                        </div>
+                        <div className="admin-user-card-form mt-3">
+                          <div className="row g-2">
+                            <div className="col-6">
+                              <label className="form-label">Nom</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                value={userData.nom}
+                                onChange={(e) =>
+                                  setUserData({
+                                    ...userData,
+                                    nom: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+                            <div className="col-6">
+                              <label className="form-label">Prénom</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                value={userData.prenom}
+                                onChange={(e) =>
+                                  setUserData({
+                                    ...userData,
+                                    prenom: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+                            <div className="col-12">
+                              <label className="form-label">Email</label>
+                              <input
+                                type="email"
+                                className="form-control"
+                                value={userData.email}
+                                onChange={(e) =>
+                                  setUserData({
+                                    ...userData,
+                                    email: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+                            <div className="col-12">
+                              <label className="form-label">Téléphone</label>
+                              <input
+                                type="tel"
+                                className="form-control"
+                                value={userData.tel}
+                                onChange={(e) =>
+                                  setUserData({
+                                    ...userData,
+                                    tel: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+                            <div className="col-12">
+                              <label className="form-label">Adresse</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                value={userData.adresse}
+                                onChange={(e) =>
+                                  setUserData({
+                                    ...userData,
+                                    adresse: e.target.value,
+                                  })
+                                }
+                              />
+                            </div>
+                            <div className="col-12">
+                              <label className="form-label">Rôle</label>
+                              <div className="d-flex gap-4">
+                                <div className="form-check">
+                                  <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="cardRole"
+                                    id={`cardRoleProprietaire_${user._id}`}
+                                    value="proprietaire"
+                                    checked={userData.role === "proprietaire"}
+                                    onChange={(e) =>
+                                      setUserData({
+                                        ...userData,
+                                        role: e.target.value,
+                                      })
+                                    }
+                                  />
+                                  <label
+                                    className="form-check-label"
+                                    htmlFor={`cardRoleProprietaire_${user._id}`}
+                                  >
+                                    Propriétaire
+                                  </label>
+                                </div>
+                                <div className="form-check">
+                                  <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="cardRole"
+                                    id={`cardRoleClient_${user._id}`}
+                                    value="client"
+                                    checked={userData.role === "client"}
+                                    onChange={(e) =>
+                                      setUserData({
+                                        ...userData,
+                                        role: e.target.value,
+                                      })
+                                    }
+                                  />
+                                  <label
+                                    className="form-check-label"
+                                    htmlFor={`cardRoleClient_${user._id}`}
+                                  >
+                                    Client
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="admin-user-card-actions mt-3">
+                          <button
+                            className="btn btn-success admin-btn"
+                            onClick={() => handleSaveEdit(user._id)}
+                          >
+                            <i className="bi bi-check-lg"></i> Enregistrer
+                          </button>
+                          <button
+                            className="btn btn-secondary admin-btn"
+                            onClick={handleCancelEdit}
+                          >
+                            <i className="bi bi-x-lg"></i> Annuler
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="admin-user-card-header">
+                          <img
+                            src={
+                              user.url_img ||
+                              getDefaultAvatar(`${user.nom} ${user.prenom}`)
+                            }
+                            alt={`${user.nom} ${user.prenom}`}
+                            className="admin-user-card-avatar"
+                          />
+                          <h5 className="admin-user-card-name">
+                            {user.prenom} {user.nom}
+                          </h5>
+                          <span
+                            className={`admin-badge ${getRoleBadgeClass(
+                              user.role
+                            )}`}
+                          >
+                            {user.role}
+                          </span>
+                        </div>
+                        <div className="admin-user-card-body">
+                          <div className="admin-user-card-info">
+                            <p>
+                              <i className="bi bi-envelope"></i> {user.email}
+                            </p>
+                            <p>
+                              <i className="bi bi-telephone"></i> {user.tel}
+                            </p>
+                            <p>
+                              <i className="bi bi-geo-alt"></i> {user.adresse}
+                            </p>
+                          </div>
+                          <div className="admin-user-card-actions">
+                            <button
+                              className="btn btn-warning admin-btn"
+                              onClick={() => handleEdit(user)}
+                              title="Modifier"
+                            >
+                              <i className="bi bi-pencil"></i>
+                            </button>
+                            <button
+                              className="btn btn-danger admin-btn"
+                              onClick={() => handleDelete(user._id)}
+                              title="Supprimer"
+                            >
+                              <i className="bi bi-trash"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="pagination">
-          {Array.from({ length: Math.ceil(users.length / usersPerPage) }).map(
-            (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => paginate(index + 1)}
+            </div>
+          </div>
+        )}
+
+        <div className="admin-pagination">
+          <nav aria-label="Navigation des pages utilisateurs">
+            <ul className="pagination justify-content-center">
+              <li
+                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+              >
+                <button
+                  className="page-link"
+                  onClick={() => paginate(currentPage - 1)}
+                >
+                  <i className="bi bi-chevron-left"></i>
+                </button>
+              </li>
+              {Array.from({
+                length: Math.ceil(filteredUsers.length / usersPerPage),
+              }).map((_, index) => (
+                <li
+                  key={index}
+                  className={`page-item ${
+                    currentPage === index + 1 ? "active" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => paginate(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+              <li
                 className={`page-item ${
-                  currentPage === index + 1 ? "active" : ""
+                  currentPage === Math.ceil(filteredUsers.length / usersPerPage)
+                    ? "disabled"
+                    : ""
                 }`}
               >
-                {index + 1}
-              </button>
-            )
-          )}
+                <button
+                  className="page-link"
+                  onClick={() => paginate(currentPage + 1)}
+                >
+                  <i className="bi bi-chevron-right"></i>
+                </button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
