@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { reservationService } from "../services/ReservationService";
+import { reservationService } from "../services/reservationService";
 import { format, differenceInDays } from "date-fns";
 import { fr } from "date-fns/locale";
 import {

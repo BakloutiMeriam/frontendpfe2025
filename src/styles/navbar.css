@@ -126,6 +126,35 @@
     z-index: 999;
   }
 }
-.hh {
-  /*original*/
+
+/* Style modifié pour le bouton "Ajouter mon logement" - version nav-link*/
+.add-property-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #2653a4 !important;
+  font-size: 1rem !important;
+  padding: 8px 16px !important;
+  margin: 0 10px !important;
+  font-weight: normal !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transition: color 0.3s ease !important;
+}
+
+.add-property-btn:hover {
+  color: #125be1 !important;
+  background-color: transparent !important;
+  transform: none !important;
+  box-shadow: none !important;
+  text-decoration: none;
+}
+
+/* Responsive styles pour liens de navigation */
+@media (max-width: 767px) {
+  .add-property-btn {
+    width: auto;
+    text-align: left;
+    margin-bottom: 0 !important;
+    padding-left: 0 !important;
+  }
 }

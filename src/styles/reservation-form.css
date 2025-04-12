@@ -145,15 +145,6 @@
   margin-bottom: 24px;
 }
 
-.modern-highlight {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  background-color: var(--light-gray);
-  border-radius: 8px;
-}
-
 .modern-highlight-icon {
   font-size: 24px;
   color: var(--primary);
@@ -438,7 +429,7 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  background-color: var(--light-gray);
+  background-color: var(--bg-light);
   border-radius: 8px;
   font-size: 14px;
   color: var(--gray);
@@ -866,4 +857,58 @@
     width: 100%;
     height: 120px;
   }
+}
+.modern-highlight-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background-color: var(--bg-light);
+  border-radius: var(--radius);
+}
+
+/* Si les boutons ont des problèmes de couleur, assurez-vous que ces styles sont corrects */
+.modern-btn-primary {
+  background-color: var(--primary);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: var(--transition);
+  width: 100%;
+}
+
+.modern-btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.modern-btn-outline {
+  background-color: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.modern-btn-outline:hover {
+  background-color: var(--primary-bg);
+}
+
+.modern-modal-btn.secondary {
+  background-color: var(--white);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.modern-modal-btn.primary {
+  background-color: var(--primary);
+  color: var(--white);
+  border: none;
 }

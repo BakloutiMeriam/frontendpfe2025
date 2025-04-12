@@ -5,7 +5,8 @@ import "../styles/Home.css";
 import NavbarHome from "../components/NavbarHome.js";
 import CategoryMenu from "../components/CategoryMenu";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { useNavigate } from "react-router-dom"; // Importation du hook de navigation
+//import Footer from "../components/footer";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const [logements, setLogements] = useState([]);
@@ -18,7 +19,8 @@ const HomePage = () => {
   const [alertType, setAlertType] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const navigate = useNavigate(); // Hook pour la navigation
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchLogements();
@@ -46,7 +48,7 @@ const HomePage = () => {
   const fetchLogements = async () => {
     try {
       setLoading(true);
-      const data = await logementService.getLogementsService();
+      const data = await logementService.getLogementsDisponibles();
       if (Array.isArray(data.logements)) {
         setLogements(data.logements);
         setFilteredLogements(data.logements); // Initialiser les logements filtrés
@@ -132,6 +134,9 @@ const HomePage = () => {
       console.error(err);
     }
   };
+  const navigateToDetails = (logementId) => {
+    navigate(`/logement-details/${logementId}`);
+  };
 
   const renderAlert = () => {
     if (!showAlert) return null;
@@ -174,6 +179,8 @@ const HomePage = () => {
               <img
                 src={logement.photoprincipale}
                 alt={logement.titre}
+                onClick={() => navigateToDetails(logement._id)}
+                style={{ cursor: "pointer" }}
                 onError={(e) => {
                   e.target.src = "../images/image.png";
                 }}
@@ -221,6 +228,7 @@ const HomePage = () => {
         {renderAlert()}
         <div className="logements-list-container">{renderLogementsList()}</div>
       </div>
+      <footer />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/sidebar.css";
@@ -8,9 +8,25 @@ const Sidebar = () => {
   const { user } = useContext(AuthContext);
   const location = useLocation();
 
+  // État pour suivre les menus déroulants ouverts
+  const [openMenus, setOpenMenus] = useState({});
+
   // Vérifier si un lien est actif
   const isActive = (path) => {
     return location.pathname === path ? "active" : "";
+  };
+
+  // Vérifier si un menu déroulant contient le chemin actuel
+  const isMenuActive = (paths) => {
+    return paths.some((path) => location.pathname === path);
+  };
+
+  // Basculer l'état d'un menu déroulant
+  const toggleMenu = (menuId) => {
+    setOpenMenus((prev) => ({
+      ...prev,
+      [menuId]: !prev[menuId],
+    }));
   };
 
   // Si l'utilisateur n'est pas connecté, ne pas afficher la sidebar
@@ -59,52 +75,106 @@ const Sidebar = () => {
                 <span>Tableau de bord</span>
               </Link>
             </li>
+
+            {/* Groupe de gestion des utilisateurs */}
+            <li className="sidebar-item dropdown">
+              <div
+                className={`sidebar-link dropdown-toggle ${
+                  isMenuActive(["/users", "/proprietairelist", "/gestProps"])
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() => toggleMenu("users")}
+              >
+                <i className="fas fa-users-cog sidebar-icon"></i>
+                <span>Gestion Utilisateurs</span>
+                <i className={`${openMenus.users ? "up" : "down"} ms-auto`}></i>
+              </div>
+              <ul
+                className={`sidebar-submenu ${openMenus.users ? "show" : ""}`}
+              >
+                <li>
+                  <Link
+                    to="/users"
+                    className={`sidebar-sublink ${isActive("/users")}`}
+                  >
+                    <i className="fas fa-users sidebar-icon"></i>
+                    <span>Utilisateurs</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/proprietairelist"
+                    className={`sidebar-sublink ${isActive(
+                      "/proprietairelist"
+                    )}`}
+                  >
+                    <i className="fas fa-user-tie sidebar-icon"></i>
+                    <span>Propriétaires</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/gestProps"
+                    className={`sidebar-sublink ${isActive("/gestProps")}`}
+                  >
+                    <i className="fas fa-user-check sidebar-icon"></i>
+                    <span>Approbations</span>
+                  </Link>
+                </li>
+              </ul>
+            </li>
+
+            {/* Groupe de gestion des propriétés */}
+            <li className="sidebar-item dropdown">
+              <div
+                className={`sidebar-link dropdown-toggle ${
+                  isMenuActive(["/categories", "/logements"]) ? "active" : ""
+                }`}
+                onClick={() => toggleMenu("properties")}
+              >
+                <i className="fas fa-building sidebar-icon"></i>
+                <span>Gestion Propriétés</span>
+                <i className={`${openMenus.properties ? "up" : "down"} `}></i>
+              </div>
+              <ul
+                className={`sidebar-submenu ${
+                  openMenus.properties ? "show" : ""
+                }`}
+              >
+                <li>
+                  <Link
+                    to="/categories"
+                    className={`sidebar-sublink ${isActive("/categories")}`}
+                  >
+                    <i className="fas fa-tags sidebar-icon"></i>
+                    <span>Catégories</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/admin/logements"
+                    className={`sidebar-sublink ${isActive(
+                      "/admin/logements"
+                    )}`}
+                  >
+                    <i className="fas fa-home sidebar-icon"></i>
+                    <span>Logements</span>
+                  </Link>
+                </li>
+              </ul>
+            </li>
+            {/* Groupe de gestion des réservations */}
             <li className="sidebar-item">
               <Link
-                to="/users"
-                className={`sidebar-link ${isActive("/users")}`}
+                to="/admin/reservations"
+                className={`sidebar-link ${isActive("/admin/reservations")}`}
               >
-                <i className="fas fa-users sidebar-icon"></i>
-                <span>Utilisateurs</span>
+                <i className="fas fa-calendar-alt sidebar-icon"></i>
+                <span>Réservations</span>
               </Link>
             </li>
-            <li className="sidebar-item">
-              <Link
-                to="/proprietairelist"
-                className={`sidebar-link ${isActive("/proprietairelist")}`}
-              >
-                <i className="fas fa-user-tie sidebar-icon"></i>
-                <span>Propriétaires</span>
-              </Link>
-            </li>
-            <li className="sidebar-item">
-              <Link
-                to="/gestProps"
-                className={`sidebar-link ${isActive("/gestProps")}`}
-              >
-                <i className="fas fa-user-check sidebar-icon"></i>
-                <span>Approbations</span>
-              </Link>
-            </li>
-            {/* Nouveaux éléments ajoutés pour l'admin */}
-            <li className="sidebar-item">
-              <Link
-                to="/categories"
-                className={`sidebar-link ${isActive("/categories")}`}
-              >
-                <i className="fas fa-tags sidebar-icon"></i>
-                <span>Catégories</span>
-              </Link>
-            </li>
-            <li className="sidebar-item">
-              <Link
-                to="/logements"
-                className={`sidebar-link ${isActive("/logements")}`}
-              >
-                <i className="fas fa-home sidebar-icon"></i>
-                <span>Logements</span>
-              </Link>
-            </li>
+
             <li className="sidebar-item">
               <Link
                 to="/notifications"
@@ -122,24 +192,49 @@ const Sidebar = () => {
 
         {user.role === "proprietaire" && (
           <>
-            <li className="sidebar-item">
-              <Link
-                to="/MesLogements"
-                className={`sidebar-link ${isActive("/MesLogements")}`}
+            <li className="sidebar-item dropdown">
+              <div
+                className={`sidebar-link dropdown-toggle ${
+                  isMenuActive(["/MesLogements", "/AddLogement"])
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() => toggleMenu("proprietaire")}
               >
                 <i className="fas fa-building sidebar-icon"></i>
-                <span>Mes propriétés</span>
-              </Link>
-            </li>
-            <li className="sidebar-item">
-              <Link
-                to="/AddLogement"
-                className={`sidebar-link ${isActive("/AddLogement")}`}
+                <span>Mes Propriétés</span>
+                <i
+                  className={`fas fa-chevron-${
+                    openMenus.proprietaire ? "up" : "down"
+                  } ms-auto`}
+                ></i>
+              </div>
+              <ul
+                className={`sidebar-submenu ${
+                  openMenus.proprietaire ? "show" : ""
+                }`}
               >
-                <i className="fas fa-plus-circle sidebar-icon"></i>
-                <span>Ajouter propriété</span>
-              </Link>
+                <li>
+                  <Link
+                    to="/MesLogements"
+                    className={`sidebar-sublink ${isActive("/MesLogements")}`}
+                  >
+                    <i className="fas fa-list sidebar-icon"></i>
+                    <span>Liste des propriétés</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/AddLogement"
+                    className={`sidebar-sublink ${isActive("/AddLogement")}`}
+                  >
+                    <i className="fas fa-plus-circle sidebar-icon"></i>
+                    <span>Ajouter propriété</span>
+                  </Link>
+                </li>
+              </ul>
             </li>
+
             <li className="sidebar-item">
               <Link
                 to="/mes-reservations"
@@ -154,32 +249,70 @@ const Sidebar = () => {
 
         {user.role === "client" && (
           <>
-            <li className="sidebar-item">
-              <Link
-                to="/FavorisPage"
-                className={`sidebar-link ${isActive("/FavorisPage")}`}
+            <li className="sidebar-item dropdown">
+              <div
+                className={`sidebar-link dropdown-toggle ${
+                  isMenuActive([
+                    "/FavorisPage",
+                    "/MesReservations",
+                    "/mes-commandes",
+                    "/historique",
+                  ])
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() => toggleMenu("client")}
               >
-                <i className="fas fa-heart sidebar-icon"></i>
-                <span>Favoris</span>
-              </Link>
-            </li>
-            <li className="sidebar-item">
-              <Link
-                to="/MesReservations"
-                className={`sidebar-link ${isActive("/MesReservations")}`}
+                <i className="fas fa-user sidebar-icon"></i>
+                <span>Mon Espace</span>
+                <i
+                  className={`fas fa-chevron-${
+                    openMenus.client ? "up" : "down"
+                  } ms-auto`}
+                ></i>
+              </div>
+              <ul
+                className={`sidebar-submenu ${openMenus.client ? "show" : ""}`}
               >
-                <i className="fas fa-calendar-alt sidebar-icon"></i>
-                <span>Mes réservations</span>
-              </Link>
-            </li>
-            <li className="sidebar-item">
-              <Link
-                to="/historique"
-                className={`sidebar-link ${isActive("/historique")}`}
-              >
-                <i className="fas fa-history sidebar-icon"></i>
-                <span>Historique</span>
-              </Link>
+                <li>
+                  <Link
+                    to="/FavorisPage"
+                    className={`sidebar-sublink ${isActive("/FavorisPage")}`}
+                  >
+                    <i className="fas fa-heart sidebar-icon"></i>
+                    <span>Favoris</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/MesReservations"
+                    className={`sidebar-sublink ${isActive(
+                      "/MesReservations"
+                    )}`}
+                  >
+                    <i className="fas fa-calendar-alt sidebar-icon"></i>
+                    <span>Mes réservations</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/mes-commandes"
+                    className={`sidebar-sublink ${isActive("/mes-commandes")}`}
+                  >
+                    <i className="fas fa-shopping-cart sidebar-icon"></i>
+                    <span>Mes commandes</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/historique"
+                    className={`sidebar-sublink ${isActive("/historique")}`}
+                  >
+                    <i className="fas fa-history sidebar-icon"></i>
+                    <span>Historique</span>
+                  </Link>
+                </li>
+              </ul>
             </li>
           </>
         )}
