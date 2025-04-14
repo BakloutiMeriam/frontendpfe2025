@@ -1,0 +1,243 @@
+/* Devenir Connecter Styles - dc prefix used for specific classes */
+.dc-container {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color: #333;
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+/* Hero Section */
+.dc-hero {
+  background: linear-gradient(135deg, #0071c2 0%, #00487c 100%);
+  color: white;
+  padding: 3rem 0;
+  text-align: center;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dc-hero-title {
+  font-weight: 700;
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+.dc-hero-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Main Content Card */
+.dc-main-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border-top: 5px solid #0071c2;
+  margin-bottom: 2rem;
+}
+
+.dc-card-header {
+  padding: 2rem 2rem 0;
+  text-align: center;
+}
+
+.dc-logo {
+  height: 50px;
+  margin-bottom: 1.5rem;
+}
+
+.dc-card-title {
+  font-weight: 600;
+  font-size: 1.75rem;
+  color: #0071c2;
+  margin-bottom: 1rem;
+}
+
+.dc-card-body {
+  padding: 1.5rem 2rem 2rem;
+}
+
+/* Alert */
+.dc-alert {
+  display: flex;
+  align-items: flex-start;
+  background-color: #e1f5fe;
+  border-radius: 8px;
+  padding: 1.25rem;
+  color: #0071c2;
+  font-size: 0.95rem;
+  border-left: 4px solid #0071c2;
+  margin-bottom: 2rem;
+}
+
+.dc-alert-icon {
+  font-size: 1.2rem;
+  margin-right: 1rem;
+  margin-top: 0.2rem;
+}
+
+/* Options Sections */
+.dc-option-section {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.dc-option-section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+}
+
+.dc-option-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #0071c2;
+  margin-bottom: 0.75rem;
+}
+
+.dc-option-text {
+  color: #555;
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+}
+
+/* Buttons */
+.dc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  width: 100%;
+  border: none;
+}
+
+.dc-btn-primary {
+  background: #0071c2;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 113, 194, 0.25);
+}
+
+.dc-btn-primary:hover {
+  background: #005fa3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 113, 194, 0.35);
+  color: white;
+}
+
+.dc-btn-outline {
+  background: transparent;
+  color: #0071c2;
+  border: 2px solid #0071c2;
+}
+
+.dc-btn-outline:hover {
+  background: rgba(0, 113, 194, 0.05);
+  color: #0071c2;
+}
+
+/* Bottom Link */
+.dc-bottom-link {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.dc-link {
+  color: #0071c2;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.dc-link:hover {
+  color: #005fa3;
+  text-decoration: underline;
+}
+
+.dc-link-icon {
+  margin-right: 0.5rem;
+}
+
+/* Features Section */
+.dc-features {
+  margin-top: 2.5rem;
+}
+
+.dc-features-title {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: #0071c2;
+  margin-bottom: 1.5rem;
+}
+
+.dc-feature-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.dc-feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dc-feature-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #0071c2 0%, #00487c 100%);
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.dc-feature-title {
+  color: #0071c2;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.dc-feature-text {
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .dc-hero {
+    padding: 2rem 0;
+  }
+
+  .dc-hero-title {
+    font-size: 1.8rem;
+  }
+
+  .dc-card-body {
+    padding: 1.25rem;
+  }
+
+  .dc-option-section {
+    padding: 1.25rem;
+  }
+}

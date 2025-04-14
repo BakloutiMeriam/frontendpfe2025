@@ -1,194 +1,316 @@
-/* Main styling for the UpgradeToOwner component */
-.upgrade-owner-container {
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+/* Devenir Propriétaire Styles - dpo prefix used for specific classes */
+.dpo-container {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color: #333;
+  background-color: #f5f7fa;
   min-height: 100vh;
-  padding: 2rem 0;
-  font-family: "Inter", "Segoe UI", sans-serif;
 }
 
-/* Card styling - with modified width */
-.upgrade-owner-container .card {
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  border: none;
-  max-width: 1000px;
+/* Hero Section */
+.dpo-hero {
+  background: linear-gradient(135deg, #0071c2 0%, #00487c 100%);
+  color: white;
+  padding: 3.5rem 0;
+  text-align: center;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dpo-hero-title {
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.dpo-hero-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  max-width: 800px;
   margin: 0 auto;
 }
 
-.upgrade-owner-container .card-header {
-  background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
-  padding: 1.5rem;
-  border: none;
-  position: relative;
+/* Main content */
+.dpo-main {
+  margin-bottom: 3rem;
 }
 
-.upgrade-owner-container .card-header h2 {
-  font-weight: 700;
+/* Section titles */
+.dpo-section-title {
+  font-weight: 600;
   font-size: 1.75rem;
-  margin: 0;
-  color: white;
-  position: relative;
-  z-index: 2;
+  color: #0071c2;
+  margin-bottom: 1.5rem;
 }
 
-/* Card body styling - with modified padding */
-.upgrade-owner-container .card-body {
-  padding: 2rem;
-  background-color: #ffffff;
+/* Cards */
+.dpo-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  height: 100%;
 }
 
-/* Alert styling */
-.upgrade-owner-container .alert {
-  background-color: rgba(96, 165, 250, 0.1);
-  border-left: 4px solid #3b82f6;
+.dpo-card-header {
+  padding: 1.5rem;
+  background: white;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.dpo-card-body {
+  padding: 1.5rem;
+}
+
+/* Alert */
+.dpo-alert {
+  display: flex;
+  align-items: center;
+  background-color: #e1f5fe;
   border-radius: 8px;
   padding: 1rem;
-  color: #1e40af;
+  color: #0071c2;
   font-size: 0.95rem;
+  border-left: 4px solid #0071c2;
 }
 
-.upgrade-owner-container .alert strong {
-  font-weight: 600;
-}
-
-/* Benefits cards - modified to be more compact */
-.upgrade-owner-container .card-title {
-  color: #111827;
-  font-weight: 700;
-  margin-bottom: 1.25rem;
-  font-size: 1.2rem;
-}
-
-.upgrade-owner-container .col-md-6 .card {
-  border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+/* Benefit cards */
+.dpo-benefit-card {
+  display: flex;
+  background: white;
+  border-radius: 10px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
   height: 100%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.upgrade-owner-container .col-md-6 .card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.09);
+.dpo-benefit-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Modified grid layout - using 3 columns on larger screens */
-@media (min-width: 992px) {
-  .upgrade-owner-container .row .col-md-6 {
-    flex: 0 0 33.333%;
-    max-width: 33.333%;
-  }
-}
-
-/* Icon styling - smaller dimensions */
-.icon-circle {
-  width: 40px;
-  height: 40px;
+.dpo-benefit-icon {
+  background: linear-gradient(135deg, #0071c2 0%, #00487c 100%);
+  color: white;
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
-  background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
-  margin-right: 0.75rem;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+  font-size: 1.25rem;
+  margin-right: 1rem;
 }
 
-.upgrade-owner-container .d-flex h6 {
-  font-size: 1rem;
+.dpo-benefit-title {
+  color: #0071c2;
+  font-size: 1.1rem;
   font-weight: 600;
-  color: #111827;
+  margin-bottom: 0.5rem;
 }
 
-.upgrade-owner-container .card-text {
-  color: #4b5563;
-  font-size: 0.9rem;
-  line-height: 1.5;
+.dpo-benefit-text {
+  color: #555;
+  font-size: 0.95rem;
   margin-bottom: 0;
 }
 
-/* Benefit card body with reduced padding */
-.upgrade-owner-container .col-md-6 .card-body {
-  padding: 1rem;
-}
-
-/* Lower section */
-.upgrade-owner-container .border-top {
-  border-top: 1px solid #e5e7eb !important;
-  padding-top: 1.5rem;
-  margin-top: 1rem;
-}
-
-.upgrade-owner-container h5 {
-  font-weight: 600;
-  color: #111827;
-  font-size: 1.1rem;
-}
-
-.upgrade-owner-container p {
-  color: #4b5563;
-  line-height: 1.5;
-  font-size: 0.95rem;
-}
-
-/* Button styling - more compact */
-.upgrade-owner-container .btn {
-  border-radius: 8px;
-  font-weight: 500;
-  padding: 0.6rem 1.25rem;
-  transition: all 0.2s ease;
-}
-
-.upgrade-owner-container .btn-primary {
-  background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
-  border: none;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
-}
-
-.upgrade-owner-container .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(59, 130, 246, 0.35);
-}
-
-.upgrade-owner-container .btn-outline-secondary {
-  color: #4b5563;
-  border: 2px solid #e5e7eb;
+/* CTA Card */
+.dpo-cta-card {
   background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  padding: 1.75rem;
+  border-top: 5px solid #0071c2;
+  height: 100%;
+  position: sticky;
+  top: 20px;
 }
 
-.upgrade-owner-container .btn-outline-secondary:hover {
-  background-color: #f9fafb;
-  color: #111827;
-  border-color: #d1d5db;
+.dpo-cta-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #0071c2;
+  margin-bottom: 1rem;
 }
 
-/* Container width adjustments */
-.upgrade-owner-container .container {
-  max-width: 1200px;
+.dpo-cta-text {
+  color: #555;
+  margin-bottom: 1.5rem;
 }
 
-.upgrade-owner-container .col-md-8 {
-  flex: 0 0 auto;
-  width: 90%;
-  max-width: 1100px;
+/* Steps */
+.dpo-steps {
+  margin-bottom: 2rem;
 }
 
-/* Media queries for responsiveness */
-@media (max-width: 768px) {
-  .upgrade-owner-container {
-    padding: 1rem 0;
+.dpo-step {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.dpo-step:last-child {
+  margin-bottom: 0;
+}
+
+.dpo-step-number {
+  width: 30px;
+  height: 30px;
+  background: #0071c2;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-right: 1rem;
+  margin-top: 0.25rem;
+}
+
+.dpo-step-content h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.dpo-step-content p {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0;
+}
+
+/* CTA Buttons */
+.dpo-cta-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dpo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+.dpo-btn-primary {
+  background: #0071c2;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 113, 194, 0.25);
+}
+
+.dpo-btn-primary:hover {
+  background: #005fa3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 113, 194, 0.35);
+  color: white;
+}
+
+.dpo-btn-outline {
+  background: transparent;
+  color: #0071c2;
+  border: 2px solid #0071c2;
+}
+
+.dpo-btn-outline:hover {
+  background: rgba(0, 113, 194, 0.05);
+  color: #0071c2;
+}
+
+/* Testimonials */
+.dpo-testimonials {
+  padding: 2rem 0;
+}
+
+.dpo-testimonial-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dpo-testimonial-rating {
+  color: #ffc107;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.dpo-testimonial-text {
+  font-style: italic;
+  color: #444;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.dpo-testimonial-author {
+  display: flex;
+  align-items: center;
+}
+
+.dpo-testimonial-avatar {
+  width: 45px;
+  height: 45px;
+  background: #0071c2;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-right: 1rem;
+}
+
+.dpo-testimonial-author h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.dpo-testimonial-author p {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+  .dpo-cta-card {
+    position: static;
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .dpo-hero {
+    padding: 2.5rem 0;
   }
 
-  .upgrade-owner-container .card-body {
-    padding: 1.25rem;
+  .dpo-hero-title {
+    font-size: 2rem;
   }
 
-  .upgrade-owner-container .btn {
-    width: 100%;
-    margin-bottom: 0.75rem;
+  .dpo-testimonials .row {
+    flex-direction: column;
   }
 
-  .upgrade-owner-container .col-md-8 {
-    width: 95%;
+  .dpo-testimonial-card {
+    margin-bottom: 1.5rem;
+  }
+
+  .dpo-benefit-card {
+    margin-bottom: 1rem;
   }
 }

@@ -22,12 +22,14 @@ import PublicLogementDetails from "../pages/PublicLogementDetails";
 import ReservationForm from "../pages/ReservationForm";
 import MesReservations from "../pages/MesResevations";
 import ReservationDetail from "../pages/ReservationDetail";
-import DevenirHote from "../pages/devenirconnecter";
 import UpgradeToOwner from "../pages/devenirproprietaire";
 import MesReservationsProp from "../pages/reservationPourProp";
 import CommandesClient from "../pages/CommandesClient";
 import AdminLogementsPage from "../pages/AdminLogementsPage";
 import AdminReservationsPage from "../pages/AdminReservationsPage";
+import DevenirConnecter from "../pages/devenirconnecter";
+import NousPage from "../pages/NousPage";
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -57,13 +59,14 @@ const AppRoutes = () => {
       <Route path="/MesReservations" element={<MesReservations />} />
       <Route path="/DetailReservation/:id" element={<ReservationDetail />} />
       <Route path="/" element={<HomePage />} />
-      <Route path="/devenir-hote" element={<DevenirHote />} />
+      <Route path="/devenir-connecter" element={<DevenirConnecter />} />
       <Route path="/devenir-proprietaire" element={<UpgradeToOwner />} />
       <Route path="/mes-reservations" element={<MesReservationsProp />} />
       <Route path="/mes-commandes" element={<CommandesClient />} />
       <Route path="/admin/reservations" element={<AdminReservationsPage />} />
       <Route path="/admin/logements" element={<AdminLogementsPage />} />
       <Route path="*" element={<HomePage />} />
+      <Route path="/Nous" element={<NousPage />} />
     </Routes>
   );
 };

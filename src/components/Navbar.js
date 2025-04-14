@@ -9,7 +9,6 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-  //const [sidebarOpen, setSidebarOpen] = useState(true);
   const [navbarCollapsed, setNavbarCollapsed] = useState(true);
   const notificationsRef = useRef(null);
 
@@ -59,30 +58,9 @@ const Navbar = () => {
     setShowNotifications(!showNotifications);
   };
 
-  /*const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-    // Utiliser un événement personnalisé pour communiquer avec le layout parent
-    document.dispatchEvent(
-      new CustomEvent("toggleSidebar", { detail: !sidebarOpen })
-    );
-  };*/
   // Toggle du menu hamburger
   const toggleNavbar = () => {
     setNavbarCollapsed(!navbarCollapsed);
-  };
-  // Fonction pour gérer le clic sur "Ajouter mon logement"
-  const handleAddProperty = () => {
-    if (user) {
-      if (user.role === "proprietaire") {
-        navigate("/AddLogement");
-      } else {
-        // Si l'utilisateur est connecté mais n'est pas propriétaire
-        navigate("/devenir-proprietaire");
-      }
-    } else {
-      // Si l'utilisateur n'est pas connecté
-      navigate("/devenir-hote");
-    }
   };
 
   return (
@@ -92,22 +70,14 @@ const Navbar = () => {
       }`}
     >
       <div className="container-fluid navbar-container-custom">
-        {/* Bouton toggle sidebar (uniquement si l'utilisateur est connecté) */}
-        {/*{user && (
-          <button className="sidebar-toggle me-2" onClick={toggleSidebar}>
-            <i className="fas fa-bars"></i>
-          </button>
-        )}*/}
-
         {/* Logo visible uniquement quand l'utilisateur n'est pas connecté (sinon il est dans la sidebar) */}
         {!user && (
-          <Link
-            className="navbar-brand navbar-brand-custom"
-            to="/"
-            onClick={() => navigate("/")}
-          >
-            {" "}
-            <img src="/images/logo2.png" alt="Logo" />
+          <Link className="navbar-brand" to="/" onClick={() => navigate("/")}>
+            <img
+              src="/images/logo2.png"
+              alt="Logo"
+              style={{ height: "36px" }}
+            />
           </Link>
         )}
 
@@ -129,42 +99,14 @@ const Navbar = () => {
           }`}
           id="navbarNav"
         >
-          {/* Barre de recherche pour tous les utilisateurs connectés */}
-          {/*{user && (
-            <div className="search-container me-auto">
-              <form className="d-flex" onSubmit={(e) => e.preventDefault()}>
-                <input
-                  className="form-control me-2"
-                  type="search"
-                  placeholder="Rechercher..."
-                  aria-label="Search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <button className="btn btn-outline-primary" type="submit">
-                  <i className="fas fa-search"></i>
-                </button>
-              </form>
-            </div>
-          )}*/}
-
           <ul className="navbar-nav ms-auto">
-            {/* Bouton "Ajouter mon logement" - maintenant formaté comme un lien nav */}
-            <li className="nav-item me-3">
-              <button
-                className="nav-link add-property-btn"
-                onClick={handleAddProperty}
-              >
-                <i className="fas fa-home me-1"></i> Ajouter mon logement
-              </button>
-            </li>
             {user ? (
               <>
                 {/* Notifications pour admin avec dropdown */}
                 {user.role === "admin" && (
                   <li className="nav-item dropdown" ref={notificationsRef}>
                     <a
-                      className="nav-link nav-link-custom position-relative"
+                      className="nav-link position-relative"
                       href="/"
                       onClick={(e) => {
                         e.preventDefault();
@@ -192,7 +134,7 @@ const Navbar = () => {
                             {notifications.map((notification) => (
                               <div
                                 key={notification.id}
-                                className="notification-item p-2 border-bottom"
+                                className="notification-item"
                               >
                                 <div className="d-flex justify-content-between">
                                   <span className="notification-message">
@@ -226,7 +168,7 @@ const Navbar = () => {
                 {/* Profil utilisateur simplifié */}
                 <li className="nav-item dropdown">
                   <a
-                    className="nav-link dropdown-toggle d-flex align-items-center"
+                    className="nav-link dropdown-toggle profile-dropdown-toggle"
                     href="/"
                     id="navbarDropdown"
                     role="button"
@@ -238,7 +180,6 @@ const Navbar = () => {
                         src={user.url_img || "../images/avatar.png"}
                         alt="Profile"
                         className="rounded-circle me-2"
-                        style={{ width: "30px", height: "30px" }}
                       />
                     )}
                     <span className="d-none d-md-inline">
@@ -275,17 +216,17 @@ const Navbar = () => {
               <>
                 {/* Liens pour les utilisateurs non connectés */}
                 <li className="nav-item">
-                  <Link className="nav-link nav-link-custom" to="/Nous">
+                  <Link className="nav-link" to="/Nous">
                     Qui Sommes-Nous
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link nav-link-custom" to="/login">
+                  <Link className="nav-link" to="/login">
                     <i className="fas fa-sign-in-alt me-1"></i> Se connecter
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link nav-link-custom" to="/register">
+                  <Link className="nav-link" to="/register">
                     <i className="fas fa-user-plus me-1"></i> S'inscrire
                   </Link>
                 </li>

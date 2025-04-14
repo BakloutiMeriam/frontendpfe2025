@@ -1,160 +1,208 @@
-/* Style de base pour la navbar */
+/* Style de base pour la navbar inspiré d'Airbnb */
 .navbar-custom {
-  background-color: #fffefe; /* Fond blanc */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre légère */
-  padding: 0 20px; /* Espacement interne */
-  height: 70px;
-  position: sticky; /* Changé de fixed à sticky */
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 0 24px;
+  height: 80px;
+  position: sticky;
   top: 0;
   width: 100%;
   z-index: 999;
   margin-bottom: 0px;
+  border-bottom: 1px solid #ebebeb;
 }
 
 /* Logo de la navbar */
-.navbar-brand-custom {
-  font-size: 1.5rem; /* Taille du texte */
-  font-weight: bold; /* Texte en gras */
-  color: #2653a4; /* Couleur bleu foncé */
+.navbar-brand {
+  font-weight: 800;
+  color: #ff385c;
   display: flex;
   align-items: center;
 }
 
-.navbar-brand-custom img {
-  height: 40px; /* Taille réduite du logo */
-  margin-right: 10px; /* Espacement entre le logo et le texte */
+.navbar-brand img {
+  height: 36px;
+  margin-right: 8px;
 }
 
-/* Liens de la navbar */
-.nav-link-custom {
-  color: #2653a4 !important; /* Couleur bleu foncé */
-  font-size: 1rem; /* Taille du texte */
-  margin: 0 10px; /* Espacement entre les liens */
-  transition: color 0.3s ease; /* Transition fluide */
+/* Style pour les éléments de navigation */
+.navbar-nav {
+  align-items: center;
 }
 
-.nav-link-custom:hover {
-  color: #125be1 !important; /* Couleur bleu clair au survol */
+.nav-item {
+  display: flex;
+  align-items: center;
+  margin: 0 4px;
 }
 
-/* Bouton de déconnexion */
-.btn-logout-custom {
-  background-color: #2653a4; /* Fond bleu foncé */
-  color: #fffefe !important; /* Texte blanc */
-  border: none; /* Pas de bordure */
-  padding: 8px 16px; /* Espacement interne */
-  border-radius: 4px; /* Coins arrondis */
-  transition: background-color 0.3s ease; /* Transition fluide */
+/* Style pour les liens dans la navbar */
+.nav-link {
+  color: #222222 !important;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 12px 16px;
+  border-radius: 22px;
+  transition: all 0.2s ease;
 }
 
-.btn-logout-custom:hover {
-  background-color: #125be1; /* Fond bleu clair au survol */
+.nav-link:hover {
+  background-color: #f7f7f7;
+  color: #222222 !important;
 }
 
+/* Style pour le dropdown du profil */
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  border: 1px solid #dddddd;
+  border-radius: 22px;
+  padding: 5px 12px;
+  transition: box-shadow 0.2s ease;
+}
+
+.dropdown-toggle:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+  background-color: #ffffff;
+}
+
+.dropdown-menu {
+  min-width: 240px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ebebeb;
+  padding: 8px 0;
+  margin-top: 12px;
+}
+
+.dropdown-item {
+  color: #222222;
+  font-size: 0.95rem;
+  padding: 12px 16px;
+  transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: #f7f7f7;
+}
+
+.dropdown-divider {
+  margin: 8px 0;
+  border-top: 1px solid #ebebeb;
+}
+
+/* Style pour le bouton hamburger */
 .navbar-toggler {
-  padding: 0.25rem 0.5rem;
-  border-color: rgba(38, 83, 164, 0.2);
+  border: 1px solid #dddddd;
+  border-radius: 22px;
+  padding: 4px 12px;
+  transition: box-shadow 0.2s ease;
 }
 
 .navbar-toggler:focus {
-  box-shadow: none; /* Pas d'ombre au focus */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+  outline: none;
 }
 
-/* Conteneur de la navbar */
-.navbar-container-custom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 100%;
-}
-
-/* Barre de recherche */
-.search-container {
-  max-width: 300px;
-  width: 100%;
-}
-
-/* Bouton toggle sidebar */
-.sidebar-toggle {
+/* Style pour le bouton "Mettre mon logement sur Stayzy" */
+button.nav-link {
   background: transparent;
   border: none;
-  color: #2653a4;
-  font-size: 1.1rem;
-  padding: 0.25rem 0.5rem;
   cursor: pointer;
-  border-radius: 4px;
-  margin-right: 10px;
+  font-weight: 500;
 }
 
-.sidebar-toggle:hover {
-  background-color: #f0f0f0;
+/* Style pour le bouton "Devenir hôte" */
+.host-button {
+  color: #222222;
+  font-weight: 500;
+  background-color: transparent;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 22px;
+  transition: background-color 0.2s;
 }
 
-/* Dropdown notifications */
+.host-button:hover {
+  background-color: #f7f7f7;
+}
+
+/* Style pour le profile image dans le dropdown */
+.dropdown-toggle img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Style pour l'avatar du compte */
+.profile-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 22px;
+  padding: 5px 5px 5px 12px;
+  transition: box-shadow 0.2s ease;
+}
+
+.profile-dropdown-toggle:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+}
+
+/* Notification badge */
+.position-absolute.badge {
+  font-size: 0.7rem;
+  padding: 0.25em 0.5em;
+}
+
+/* Style pour le dropdown de notifications */
 .notification-dropdown {
   max-height: 400px;
   overflow-y: auto;
+  min-width: 300px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 .notification-item {
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+  padding: 12px 16px;
+  border-bottom: 1px solid #ebebeb;
+  transition: background-color 0.2s;
 }
 
 .notification-item:hover {
-  background-color: #f8f9fa;
+  background-color: #f7f7f7;
 }
 
-/* Style pour le menu déroulant dans la navbar */
-.dropdown-menu {
-  background-color: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
-}
-
-/* Assurer que la navbar est toujours visible en mode mobile */
+/* Style pour le menu en mode mobile */
 @media (max-width: 991.98px) {
   .navbar-collapse {
-    background-color: #ffffff; /* Fond blanc pour le menu hamburger déplié */
-    padding: 10px;
-    border-radius: 0 0 5px 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     position: absolute;
-    top: 60px; /* Sous la navbar */
+    top: 80px;
     left: 0;
     right: 0;
-    z-index: 999;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    z-index: 1000;
+    border: 1px solid #ebebeb;
+    border-top: none;
   }
-}
 
-/* Style modifié pour le bouton "Ajouter mon logement" - version nav-link*/
-.add-property-btn {
-  background: transparent !important;
-  border: none !important;
-  color: #2653a4 !important;
-  font-size: 1rem !important;
-  padding: 8px 16px !important;
-  margin: 0 10px !important;
-  font-weight: normal !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  transition: color 0.3s ease !important;
-}
+  .nav-item {
+    margin: 8px 0;
+  }
 
-.add-property-btn:hover {
-  color: #125be1 !important;
-  background-color: transparent !important;
-  transform: none !important;
-  box-shadow: none !important;
-  text-decoration: none;
-}
+  .nav-link {
+    border-radius: 8px;
+  }
 
-/* Responsive styles pour liens de navigation */
-@media (max-width: 767px) {
-  .add-property-btn {
-    width: auto;
-    text-align: left;
-    margin-bottom: 0 !important;
-    padding-left: 0 !important;
+  .dropdown-toggle {
+    width: 100%;
+    justify-content: space-between;
   }
 }
