@@ -1,169 +1,146 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import "../styles/devenirhote.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import {
+  FaArrowLeft,
+  FaInfoCircle,
+  FaUser,
+  FaUserPlus,
+  FaHome,
+  FaHandshake,
+  FaStar,
+} from "react-icons/fa";
+import NavbarHome from "../components/NavbarHome";
+import Footer from "../components/Footer";
+import "../styles/devenirconnecter.css"; // Assurez-vous de créer ce fichier CSS
 
-const DevenirHote = () => {
+const DevenirConnecter = () => {
   return (
-    <div className="devenir-hote-page">
-      <div className="top-sections-container">
-        <div className="hero-section">
-          <div className="hero-content">
-            <h1>Devenez hôte et commencez à gagner</h1>
-            <p>
-              Transformez votre espace en source de revenus et rejoignez notre
-              communauté d'hôtes
+    <>
+      <NavbarHome />
+      <div className="dc-container">
+        <div className="dc-hero">
+          <div className="container">
+            <h1 className="dc-hero-title">Accès réservé aux propriétaires</h1>
+            <p className="dc-hero-subtitle">
+              Connectez-vous ou créez un compte pour accéder à toutes les
+              fonctionnalités de Stayzy
             </p>
           </div>
         </div>
 
-        <div className="cta-card">
-          <div className="cta-card-content">
-            <h2>Prêt à vous lancer ?</h2>
-            <p>
-              Rejoignez notre communauté d'hôtes et commencez à gagner dès
-              aujourd'hui.
-            </p>
-            <div className="cta-buttons">
-              <Link to="/register" className="btn btn-primary">
-                S'inscrire maintenant
-              </Link>
-              <Link to="/login" className="btn btn-secondary">
-                Se connecter
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+        <div className="container py-4">
+          <div className="row justify-content-center">
+            <div className="col-lg-7">
+              <div className="dc-main-card">
+                <div className="dc-card-header">
+                  <img
+                    src="/images/logo2.png"
+                    alt="Logo Stayzy"
+                    className="dc-logo"
+                  />
+                  <h2 className="dc-card-title">
+                    Mettre mon logement sur Stayzy
+                  </h2>
+                </div>
 
-      <div className="benefits-section">
-        <div className="container">
-          <h2>Pourquoi devenir hôte ?</h2>
+                <div className="dc-card-body">
+                  <div className="dc-alert">
+                    <FaInfoCircle className="dc-alert-icon" />
+                    <div>
+                      La fonctionnalité{" "}
+                      <strong>"Mettre mon logement sur Stayzy"</strong> est
+                      réservée aux propriétaires approuvés par notre service.
+                      Veuillez vous connecter ou créer un compte pour continuer.
+                    </div>
+                  </div>
 
-          <div className="benefits-grid">
-            <div className="benefit-card">
-              <div className="benefit-icon">
-                <i className="fas fa-wallet"></i>
-              </div>
-              <h3>Revenus supplémentaires</h3>
-              <p>
-                Gagnez jusqu'à 1500€ par mois en louant votre bien pendant les
-                périodes qui vous conviennent.
-              </p>
-            </div>
+                  <div className="dc-option-section">
+                    <h3 className="dc-option-title">
+                      <FaUser className="me-2" /> Vous avez déjà un compte ?
+                    </h3>
+                    <p className="dc-option-text">
+                      Connectez-vous pour accéder à votre espace propriétaire ou
+                      demander l'approbation de votre compte en tant que
+                      propriétaire.
+                    </p>
+                    <Link to="/login" className="dc-btn dc-btn-primary">
+                      Se connecter
+                    </Link>
+                  </div>
 
-            <div className="benefit-card">
-              <div className="benefit-icon">
-                <i className="fas fa-globe"></i>
-              </div>
-              <h3>Rencontres enrichissantes</h3>
-              <p>
-                Élargissez vos horizons en accueillant des voyageurs du monde
-                entier.
-              </p>
-            </div>
+                  <div className="dc-option-section">
+                    <h3 className="dc-option-title">
+                      <FaUserPlus className="me-2" /> Nouveau sur Stayzy ?
+                    </h3>
+                    <p className="dc-option-text">
+                      Créez un compte pour profiter de tous nos services et
+                      faire une demande pour devenir propriétaire approuvé sur
+                      notre plateforme.
+                    </p>
+                    <Link to="/register" className="dc-btn dc-btn-outline">
+                      Créer un compte
+                    </Link>
+                  </div>
 
-            <div className="benefit-card">
-              <div className="benefit-icon">
-                <i className="fas fa-shield-alt"></i>
-              </div>
-              <h3>Sécurité garantie</h3>
-              <p>
-                Profitez d'une assurance hôte et d'un support 24/7 pour une
-                tranquillité d'esprit totale.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="how-it-works">
-        <div className="container">
-          <h2>Comment commencer ?</h2>
-
-          <div className="steps-container">
-            <div className="step">
-              <div className="step-number">1</div>
-              <div className="step-content">
-                <h3>Créez votre profil</h3>
-                <p>
-                  Inscrivez-vous en quelques minutes et personnalisez votre
-                  profil d'hôte.
-                </p>
-              </div>
-            </div>
-
-            <div className="step">
-              <div className="step-number">2</div>
-              <div className="step-content">
-                <h3>Présentez votre logement</h3>
-                <p>
-                  Ajoutez des photos et une description détaillée pour mettre en
-                  valeur votre bien.
-                </p>
-              </div>
-            </div>
-
-            <div className="step">
-              <div className="step-number">3</div>
-              <div className="step-content">
-                <h3>Définissez vos tarifs</h3>
-                <p>
-                  Fixez le prix qui vous convient, avec notre aide pour
-                  optimiser vos revenus.
-                </p>
-              </div>
-            </div>
-
-            <div className="step">
-              <div className="step-number">4</div>
-              <div className="step-content">
-                <h3>Accueillez vos premiers voyageurs</h3>
-                <p>
-                  Recevez des réservations et commencez votre aventure d'hôte.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="testimonials-section">
-        <div className="container">
-          <h2>Ce que disent nos hôtes</h2>
-
-          <div className="testimonials-grid">
-            <div className="testimonial-card">
-              <div className="testimonial-text">
-                "Devenir hôte a complètement changé ma vie. Je gagne maintenant
-                assez pour financer mes propres voyages !"
-              </div>
-              <div className="testimonial-author">
-                <div className="author-avatar"></div>
-                <div className="author-info">
-                  <h4>Marie D.</h4>
-                  <p>Hôte depuis 2 ans à Lyon</p>
+                  <div className="dc-bottom-link">
+                    <Link to="/" className="dc-link">
+                      <FaArrowLeft className="dc-link-icon" />
+                      Retourner à l'accueil
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div className="testimonial-card">
-              <div className="testimonial-text">
-                "Le processus d'inscription était si simple, et j'ai reçu ma
-                première réservation en moins de 48 heures."
+          <div className="dc-features">
+            <h3 className="dc-features-title">Avantages de notre plateforme</h3>
+            <div className="row g-4">
+              <div className="col-md-4">
+                <div className="dc-feature-card">
+                  <div className="dc-feature-icon">
+                    <FaHome />
+                  </div>
+                  <h4 className="dc-feature-title">Gestion simplifiée</h4>
+                  <p className="dc-feature-text">
+                    Des outils intuitifs pour gérer vos annonces, réservations
+                    et paiements en quelques clics.
+                  </p>
+                </div>
               </div>
-              <div className="testimonial-author">
-                <div className="author-avatar"></div>
-                <div className="author-info">
-                  <h4>Thomas L.</h4>
-                  <p>Hôte depuis 6 mois à Paris</p>
+
+              <div className="col-md-4">
+                <div className="dc-feature-card">
+                  <div className="dc-feature-icon">
+                    <FaHandshake />
+                  </div>
+                  <h4 className="dc-feature-title">Assistance dédiée</h4>
+                  <p className="dc-feature-text">
+                    Une équipe de support disponible 24/7 pour vous accompagner
+                    dans toutes vos démarches.
+                  </p>
+                </div>
+              </div>
+
+              <div className="col-md-4">
+                <div className="dc-feature-card">
+                  <div className="dc-feature-icon">
+                    <FaStar />
+                  </div>
+                  <h4 className="dc-feature-title">Visibilité optimale</h4>
+                  <p className="dc-feature-text">
+                    Augmentez l'exposition de vos biens grâce à notre large
+                    audience et nos outils de promotion.
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 
-export default DevenirHote;
+export default DevenirConnecter;

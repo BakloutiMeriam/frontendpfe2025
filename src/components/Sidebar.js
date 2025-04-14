@@ -204,7 +204,7 @@ const Sidebar = () => {
                 <i className="fas fa-building sidebar-icon"></i>
                 <span>Mes Propriétés</span>
                 <i
-                  className={`fas fa-chevron-${
+                  className={`${
                     openMenus.proprietaire ? "up" : "down"
                   } ms-auto`}
                 ></i>
@@ -266,9 +266,7 @@ const Sidebar = () => {
                 <i className="fas fa-user sidebar-icon"></i>
                 <span>Mon Espace</span>
                 <i
-                  className={`fas fa-chevron-${
-                    openMenus.client ? "up" : "down"
-                  } ms-auto`}
+                  className={`${openMenus.client ? "up" : "down"} ms-auto`}
                 ></i>
               </div>
               <ul

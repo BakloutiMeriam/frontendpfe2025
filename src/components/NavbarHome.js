@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/navbar.css";
 
-const Navbar = () => {
+const NavbarHome = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const [navbarCollapsed, setNavbarCollapsed] = useState(true);
@@ -25,18 +25,18 @@ const Navbar = () => {
     setNavbarCollapsed(!navbarCollapsed);
   };
 
-  const handleAddLogementClick = () => {
-    if (!user) {
-      window.alert(
-        "Veuillez vous connecter ou vous inscrire pour ajouter un logement."
-      );
-      navigate("/login");
-    } else if (user.role === "proprietaire") {
-      navigate("/AddLogement");
+  // Fonction pour gérer le clic sur "Ajouter mon logement"
+  const handleAddProperty = () => {
+    if (user) {
+      if (user.role === "proprietaire") {
+        navigate("/AddLogement");
+      } else {
+        // Si l'utilisateur est connecté mais n'est pas propriétaire
+        navigate("/devenir-proprietaire");
+      }
     } else {
-      window.alert(
-        "Cette fonctionnalité est réservée uniquement aux propriétaires."
-      );
+      // Si l'utilisateur n'est pas connecté
+      navigate("/devenir-Connecter");
     }
   };
 
@@ -47,7 +47,7 @@ const Navbar = () => {
           <img
             src="/images/logo2.png"
             alt="Logo Stayzy"
-            style={{ height: "40px" }}
+            style={{ height: "36px" }}
           />
         </Link>
 
@@ -81,11 +81,11 @@ const Navbar = () => {
               </Link>
             </li>
 
-            {/* Lien Ajouter Logement */}
+            {/* Bouton "Ajouter mon logement" */}
             <li className="nav-item">
               <button
-                className="btn btn-primary ms-3"
-                onClick={handleAddLogementClick}
+                className="nav-link host-button"
+                onClick={handleAddProperty}
               >
                 Mettre mon logement sur Stayzy
               </button>
@@ -95,7 +95,7 @@ const Navbar = () => {
             {user ? (
               <li className="nav-item dropdown ms-3">
                 <a
-                  className="nav-link dropdown-toggle d-flex align-items-center"
+                  className="nav-link dropdown-toggle profile-dropdown-toggle"
                   href="/"
                   id="navbarDropdown"
                   role="button"
@@ -106,7 +106,6 @@ const Navbar = () => {
                     src={user.url_img || "/images/avatar.png"}
                     alt="Profil"
                     className="rounded-circle me-2"
-                    style={{ width: "30px", height: "30px" }}
                   />
                   <span>{user.prenom || "Profil"}</span>
                 </a>
@@ -122,11 +121,7 @@ const Navbar = () => {
                       Mon Profil
                     </Link>
                   </li>
-                  <li>
-                    <Link className="dropdown-item" to="/AddLogement">
-                      Gestion Logement
-                    </Link>
-                  </li>
+
                   <li>
                     <hr className="dropdown-divider" />
                   </li>
@@ -146,7 +141,7 @@ const Navbar = () => {
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/register">
-                    S’inscrire
+                    S'inscrire
                   </Link>
                 </li>
               </>
@@ -158,4 +153,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavbarHome;

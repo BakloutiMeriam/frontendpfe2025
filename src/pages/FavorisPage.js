@@ -6,6 +6,7 @@ import "../styles/Home.css";
 import "../styles/Favoris.css";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
+
 const FavorisPage = () => {
   const [favoris, setFavoris] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -62,7 +63,7 @@ const FavorisPage = () => {
   const renderErrorMessage = () =>
     error && (
       <div
-        className="alert alert-danger"
+        className="fav-alert fav-alert-danger"
         style={{ position: "fixed", top: "20px", right: "20px", zIndex: 1000 }}
       >
         {error}
@@ -81,13 +82,16 @@ const FavorisPage = () => {
 
   const renderFavorisList = () => {
     if (loading)
-      return <div className="loading">Chargement de vos favoris...</div>;
+      return <div className="fav-loading">Chargement de vos favoris...</div>;
 
     if (!user || user.role !== "client") {
       return (
-        <div className="favoris-require-login">
+        <div className="fav-require-login">
           <h3>Connectez-vous pour voir vos favoris</h3>
-          <button className="btn-primary" onClick={() => navigate("/login")}>
+          <button
+            className="fav-btn-primary"
+            onClick={() => navigate("/login")}
+          >
             Se connecter
           </button>
         </div>
@@ -96,10 +100,10 @@ const FavorisPage = () => {
 
     if (!Array.isArray(favoris) || favoris.length === 0) {
       return (
-        <div className="empty-favoris">
+        <div className="fav-empty-state">
           <h3>Vous n'avez pas encore de favoris</h3>
           <p>Explorez nos logements et ajoutez-les à vos favoris</p>
-          <button className="btn-primary" onClick={() => navigate("/")}>
+          <button className="fav-btn-primary" onClick={() => navigate("/")}>
             Découvrir des logements
           </button>
         </div>
@@ -107,10 +111,10 @@ const FavorisPage = () => {
     }
 
     return (
-      <div className="logements-grid">
+      <div className="fav-logements-grid">
         {favoris.map((logement) => (
-          <div key={logement._id} className="logement-card">
-            <div className="logement-image">
+          <div key={logement._id} className="fav-logement-card">
+            <div className="fav-logement-image">
               <img
                 src={logement.photoprincipale}
                 alt={logement.titre}
@@ -119,22 +123,22 @@ const FavorisPage = () => {
                 }}
               />
               <button
-                className="favoris-button"
+                className="fav-heart-button"
                 onClick={() => supprimerDesFavoris(logement._id)}
               >
-                <FaHeart className="favoris-icon active" />
+                <FaHeart className="fav-heart-icon active" />
               </button>
             </div>
-            <div className="logement-details">
-              <h3>{logement.titre}</h3>
-              <p className="logement-price">
+            <div className="fav-logement-details">
+              <h3 className="fav-logement-title">{logement.titre}</h3>
+              <p className="fav-logement-price">
                 {logement.prix?.toLocaleString() || "Prix non disponible"} €
               </p>
-              <p className="logement-address">
+              <p className="fav-logement-address">
                 {logement.adresse?.ville || "Ville non spécifiée"},
                 {logement.adresse?.pays || "Pays non spécifié"}
               </p>
-              <div className="logement-specs">
+              <div className="fav-logement-specs">
                 <span>
                   {logement.description || "Pas de description disponible"}
                 </span>
@@ -148,10 +152,10 @@ const FavorisPage = () => {
 
   return (
     <Layout>
-      <div className="favoris-container">
-        <h1>Mes Logements Favoris</h1>
+      <div className="fav-page-container">
+        <h1 className="fav-page-title">Mes Logements Favoris</h1>
         {renderErrorMessage()}
-        <div className="favoris-list-container">{renderFavorisList()}</div>
+        <div className="fav-list-container">{renderFavorisList()}</div>
       </div>
     </Layout>
   );
