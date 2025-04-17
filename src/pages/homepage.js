@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import { logementService } from "../services/LogementService";
+import { reservationService } from "../services/reservationService"; // Ajoutez cette importation
 import { AuthContext } from "../context/AuthContext";
-import "../styles/Home.css"; // Conservez votre CSS existant
+import "../styles/Home.css";
 import NavbarHome from "../components/NavbarHome.js";
 import CategoryMenu from "../components/CategoryMenu";
 import SearchBar from "../components/SearchBar";
-import Footer from "../components/Footer"; // Importation du nouveau composant Footer
+import Footer from "../components/Footer";
 import { FaHeart, FaRegHeart, FaStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -21,6 +22,8 @@ const HomePage = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchParams, setSearchParams] = useState(null);
+  // Pour stocker les réservations par logement
+  const [reservationsMap, setReservationsMap] = useState({});
 
   const navigate = useNavigate();
 
@@ -31,8 +34,11 @@ const HomePage = () => {
     }
   }, [user]);
 
+  // Filtrage de base (tout sauf les dates)
   useEffect(() => {
-    // Filtre par catégorie et recherche
+    if (!logements.length) return;
+
+    // Appliquer les filtres de base (catégorie, destination, prix)
     let filtered = logements;
 
     // Filtre par catégorie
@@ -71,21 +77,85 @@ const HomePage = () => {
           (logement) => logement.prix <= parseFloat(searchParams.prixMax)
         );
       }
-
-      // Note: Pour les dates, vous devrez implémenter une logique avec vos données
-      // Ceci est un exemple de base, à adapter selon votre modèle de données
-      if (searchParams.dateDebut && searchParams.dateFin) {
-        // Exemple: Supposons que vous avez un tableau de disponibilités dans logement
-        // À adapter selon votre structure de données réelle
-        filtered = filtered.filter((logement) => {
-          // Logique de vérification des disponibilités
-          return true; // Remplacer par votre logique de filtrage des dates
-        });
-      }
     }
 
-    setFilteredLogements(filtered);
+    // Si une recherche par date est en cours, on va charger les réservations pour chaque logement
+    if (searchParams && searchParams.dateDebut && searchParams.dateFin) {
+      loadReservationsForLogements(filtered);
+    } else {
+      // Si pas de recherche par date, on applique directement les filtres
+      setFilteredLogements(filtered);
+    }
   }, [logements, selectedCategory, searchParams]);
+
+  // Cette fonction charge les réservations pour chaque logement filtré
+  const loadReservationsForLogements = async (logementsToCheck) => {
+    setLoading(true);
+
+    try {
+      // Créer un nouvel objet pour stocker les réservations
+      const newReservationsMap = {};
+
+      // Pour chaque logement, charger ses réservations confirmées
+      for (const logement of logementsToCheck) {
+        try {
+          const reservations =
+            await reservationService.getAllReservationsConfirmee(logement._id);
+          newReservationsMap[logement._id] = reservations;
+        } catch (error) {
+          console.error(
+            `Erreur lors du chargement des réservations pour ${logement._id}:`,
+            error
+          );
+          newReservationsMap[logement._id] = []; // En cas d'erreur, considérer qu'il n'y a pas de réservation
+        }
+      }
+
+      // Mettre à jour l'état des réservations
+      setReservationsMap(newReservationsMap);
+
+      // Une fois toutes les réservations chargées, filtrer les logements par disponibilité
+      filterLogementsByAvailability(logementsToCheck, newReservationsMap);
+    } catch (error) {
+      console.error("Erreur lors du chargement des réservations:", error);
+      setFilteredLogements(logementsToCheck); // En cas d'erreur globale, afficher tous les logements filtrés
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fonction pour vérifier si un logement est disponible aux dates demandées
+  const filterLogementsByAvailability = (logements, reservationsMap) => {
+    if (!searchParams || !searchParams.dateDebut || !searchParams.dateFin) {
+      setFilteredLogements(logements);
+      return;
+    }
+
+    const dateDebutRecherche = new Date(searchParams.dateDebut);
+    const dateFinRecherche = new Date(searchParams.dateFin);
+
+    // Filtrer les logements qui n'ont pas de réservation confirmée dans cette période
+    const availableLogements = logements.filter((logement) => {
+      const reservations = reservationsMap[logement._id] || [];
+
+      // Vérifier si aucune des réservations ne chevauche la période demandée
+      return !reservations.some((reservation) => {
+        const dateDebutRes = new Date(reservation.dateDebut);
+        const dateFinRes = new Date(reservation.dateFin);
+
+        // Vérifier le chevauchement des dates
+        return (
+          (dateDebutRecherche <= dateFinRes &&
+            dateDebutRecherche >= dateDebutRes) ||
+          (dateFinRecherche >= dateDebutRes &&
+            dateFinRecherche <= dateFinRes) ||
+          (dateDebutRecherche <= dateDebutRes && dateFinRecherche >= dateFinRes)
+        );
+      });
+    });
+
+    setFilteredLogements(availableLogements);
+  };
 
   const fetchLogements = async () => {
     try {
@@ -125,8 +195,10 @@ const HomePage = () => {
 
   const handleSearch = (params) => {
     setSearchParams(params);
-    // Vous pouvez aussi réinitialiser la catégorie si vous le souhaitez
-    // setSelectedCategory(null);
+    // Si les dates ont changé, on réinitialise les réservations pour forcer un rechargement
+    if (params.dateDebut && params.dateFin) {
+      setReservationsMap({});
+    }
   };
 
   const navigateToLogementDetails = (logementId) => {
@@ -299,7 +371,6 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Remplacé l'ancien footer minimaliste par notre nouveau composant Footer */}
       <Footer />
     </>
   );

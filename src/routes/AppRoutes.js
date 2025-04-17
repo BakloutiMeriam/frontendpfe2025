@@ -29,6 +29,10 @@ import AdminLogementsPage from "../pages/AdminLogementsPage";
 import AdminReservationsPage from "../pages/AdminReservationsPage";
 import DevenirConnecter from "../pages/devenirconnecter";
 import NousPage from "../pages/NousPage";
+import NotificationsPage from "../pages/NotificationsPage";
+import Layout from "../components/Layout";
+import HelpPage from "../pages/HelpPage";
+import InfoMessages from "../pages/InfoMessages";
 
 const AppRoutes = () => {
   return (
@@ -67,6 +71,17 @@ const AppRoutes = () => {
       <Route path="/admin/logements" element={<AdminLogementsPage />} />
       <Route path="*" element={<HomePage />} />
       <Route path="/Nous" element={<NousPage />} />
+      <Route
+        path="/notifications"
+        element={
+          <Layout>
+            <NotificationsPage />
+          </Layout>
+        }
+      />
+      <Route path="/help" element={<HelpPage />} />
+      <Route path="/admin/help" element={<HelpPage />} />
+      <Route path="/messages/info" element={<InfoMessages />} />
     </Routes>
   );
 };

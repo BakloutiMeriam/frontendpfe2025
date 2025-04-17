@@ -2,11 +2,13 @@ import { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/sidebar.css";
+import { NotificationContext } from "../context/NotificationContext";
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const location = useLocation();
+  const { unreadCount } = useContext(NotificationContext);
 
   // État pour suivre les menus déroulants ouverts
   const [openMenus, setOpenMenus] = useState({});
@@ -182,8 +184,8 @@ const Sidebar = () => {
               >
                 <i className="fas fa-bell sidebar-icon"></i>
                 <span>Notifications</span>
-                {user.notifications > 0 && (
-                  <span className="sidebar-badge">{user.notifications}</span>
+                {unreadCount > 0 && (
+                  <span className="sidebar-badge">{unreadCount}</span>
                 )}
               </Link>
             </li>

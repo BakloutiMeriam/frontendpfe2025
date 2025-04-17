@@ -164,6 +164,8 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    //zedt hethy
+    setUser(null);
   };
 
   useEffect(() => {

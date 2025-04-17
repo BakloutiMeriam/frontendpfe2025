@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "../styles/ListUsers.css";
 import Layout from "../components/Layout";
+import ContactModal from "../components/ContactModal"; // Importez le nouveau composant
 
 const ListProprietaire = () => {
   const [proprietaires, setProprietaires] = useState([]);
@@ -13,6 +14,10 @@ const ListProprietaire = () => {
   const [usersPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("table"); // table or card
+
+  // États pour le modal de contact
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [selectedProprietaire, setSelectedProprietaire] = useState(null);
 
   useEffect(() => {
     const fetchProprietaires = async () => {
@@ -57,6 +62,18 @@ const ListProprietaire = () => {
 
   const getDefaultAvatar = (name) => {
     return `https://ui-avatars.com/api/?name=${name}&background=2653a4&color=fff&size=50`;
+  };
+
+  // Fonction pour ouvrir le modal de contact
+  const handleOpenContactModal = (proprietaire) => {
+    setSelectedProprietaire(proprietaire);
+    setShowContactModal(true);
+  };
+
+  // Fonction pour fermer le modal de contact
+  const handleCloseContactModal = () => {
+    setShowContactModal(false);
+    setSelectedProprietaire(null);
   };
 
   if (loading)
@@ -170,6 +187,7 @@ const ListProprietaire = () => {
                           <button
                             className="btn btn-primary admin-btn"
                             title="Contacter"
+                            onClick={() => handleOpenContactModal(proprietaire)}
                           >
                             <i className="bi bi-envelope"></i>
                           </button>
@@ -223,6 +241,7 @@ const ListProprietaire = () => {
                           <button
                             className="btn btn-primary admin-btn"
                             title="Contacter"
+                            onClick={() => handleOpenContactModal(proprietaire)}
                           >
                             <i className="bi bi-envelope"></i> Contacter
                           </button>
@@ -287,6 +306,15 @@ const ListProprietaire = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal de contact */}
+      {selectedProprietaire && (
+        <ContactModal
+          show={showContactModal}
+          handleClose={handleCloseContactModal}
+          proprietaire={selectedProprietaire}
+        />
+      )}
     </Layout>
   );
 };

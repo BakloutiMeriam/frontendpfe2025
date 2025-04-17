@@ -391,9 +391,9 @@ const ReservationForm = () => {
                 </div>
               </div>
 
-              {logement.photos && logement.photos.length > 0 ? (
+              {logement.photoprincipale && logement.photos.length > 0 ? (
                 <div className="modern-property-image">
-                  <img src={logement.photos[0]} alt={logement.titre} />
+                  <img src={logement.photoprincipale} alt={logement.titre} />
                 </div>
               ) : (
                 <div className="modern-property-image modern-placeholder-image">

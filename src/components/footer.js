@@ -58,16 +58,10 @@ const Footer = () => {
                 <Link to="/Nous">Qui sommes-nous</Link>
               </li>
               <li>
-                <Link to="/aide">Centre d'aide</Link>
+                <Link to="/help">Centre d'aide</Link>
               </li>
               <li>
-                <Link to="/devenir-hote">Devenir hôte</Link>
-              </li>
-              <li>
-                <Link to="/confidentialite">Confidentialité</Link>
-              </li>
-              <li>
-                <Link to="/conditions">Conditions générales</Link>
+                <Link to="/devenir-connecter">Devenir propriétaire</Link>
               </li>
             </ul>
           </div>
@@ -76,16 +70,7 @@ const Footer = () => {
             <h4 className="footer-heading">Explorer</h4>
             <ul className="footer-links">
               <li>
-                <Link to="/logements">Tous les logements</Link>
-              </li>
-              <li>
-                <Link to="/villes">Villes populaires</Link>
-              </li>
-              <li>
-                <Link to="/experiences">Expériences</Link>
-              </li>
-              <li>
-                <Link to="/promotions">Promotions</Link>
+                <Link to="/">Tous les logements</Link>
               </li>
             </ul>
           </div>
@@ -115,13 +100,6 @@ const Footer = () => {
               <p className="copyright">
                 © {currentYear} Stayzy. Tous droits réservés.
               </p>
-            </div>
-            <div className="col-md-6">
-              <div className="footer-bottom-links">
-                <Link to="/cookies">Cookies</Link>
-                <Link to="/legal">Mentions légales</Link>
-                <Link to="/sitemap">Plan du site</Link>
-              </div>
             </div>
           </div>
         </div>
