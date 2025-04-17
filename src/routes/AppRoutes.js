@@ -33,6 +33,8 @@ import NotificationsPage from "../pages/NotificationsPage";
 import Layout from "../components/Layout";
 import HelpPage from "../pages/HelpPage";
 import InfoMessages from "../pages/InfoMessages";
+import PaymentPage from "../pages/PaymentPage";
+import PaymentConfirmation from "../pages/paymentConfirmation";
 
 const AppRoutes = () => {
   return (
@@ -82,6 +84,11 @@ const AppRoutes = () => {
       <Route path="/help" element={<HelpPage />} />
       <Route path="/admin/help" element={<HelpPage />} />
       <Route path="/messages/info" element={<InfoMessages />} />
+      <Route path="/paiement/:commandeId" element={<PaymentPage />} />
+      <Route
+        path="/commande/:commandeId/confirmation"
+        element={<PaymentConfirmation />}
+      />
     </Routes>
   );
 };

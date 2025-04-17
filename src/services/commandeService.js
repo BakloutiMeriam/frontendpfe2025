@@ -65,6 +65,24 @@ const CommandeService = {
     if (!status || status === "toutes") return commandes;
     return commandes.filter((commande) => commande.statut === status);
   },
+  // Récupérer une commande par son ID
+  getCommandeById: async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_URL}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Erreur lors de la récupération de la commande par ID:",
+        error
+      );
+      throw error;
+    }
+  },
 };
 
 export default CommandeService;

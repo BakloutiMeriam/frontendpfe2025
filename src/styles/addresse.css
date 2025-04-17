@@ -1,0 +1,323 @@
+/* Styles pour le composant d'adresse style Airbnb avec préfixe "addr-" */
+.addr-airbnb-address-container {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.addr-address-header {
+  margin-bottom: 1.5rem;
+}
+
+.addr-address-subtitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--dark);
+}
+
+.addr-address-description {
+  color: var(--gray);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+/* Sélecteur de mode (recherche vs manuel) */
+.addr-address-mode-selector {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+}
+
+.addr-address-mode-btn {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  border-radius: 30px;
+  border: 1px solid var(--border);
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.addr-address-mode-btn:hover {
+  border-color: var(--dark);
+}
+
+.addr-address-mode-btn.active {
+  background-color: var(--dark);
+  color: white;
+  border-color: var(--dark);
+}
+
+.addr-address-mode-icon {
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+}
+
+/* Mode recherche */
+.addr-address-search-container {
+  width: 100%;
+  position: relative;
+}
+
+.addr-address-search-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.addr-address-search-input {
+  width: 100%;
+  padding: 1.2rem 3rem 1.2rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+.addr-address-search-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(255, 56, 92, 0.2);
+  outline: none;
+}
+
+.addr-address-search-icon {
+  position: absolute;
+  right: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray);
+  pointer-events: none;
+}
+
+/* Suggestions */
+.addr-address-suggestions {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+}
+
+.addr-address-suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid var(--border);
+}
+
+.addr-address-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.addr-address-suggestion-item:hover {
+  background-color: #f7f7f7;
+}
+
+.addr-suggestion-icon {
+  margin-right: 0.75rem;
+  color: var(--primary);
+}
+
+.addr-suggestion-text {
+  font-size: 0.95rem;
+}
+
+/* Map placeholder */
+.addr-address-map-container {
+  width: 100%;
+  height: 250px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 1.5rem;
+  position: relative;
+}
+
+.addr-address-map-placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--border);
+  color: var(--gray);
+}
+
+.addr-map-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.addr-map-instruction {
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  opacity: 0.7;
+}
+
+/* Mode saisie manuelle */
+.addr-address-manual-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.addr-airbnb-input {
+  width: 100%;
+  padding: 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+.addr-airbnb-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(255, 56, 92, 0.2);
+  outline: none;
+}
+
+.addr-airbnb-select-container {
+  position: relative;
+}
+
+.addr-airbnb-select {
+  width: 100%;
+  padding: 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #f9f9f9;
+  appearance: none;
+  cursor: pointer;
+}
+
+.addr-airbnb-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(255, 56, 92, 0.2);
+  outline: none;
+}
+
+.addr-select-arrow {
+  position: absolute;
+  right: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray);
+  pointer-events: none;
+  font-size: 0.8rem;
+}
+
+/* Confirmation et note de confidentialité */
+.addr-address-confirmation {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.addr-address-privacy-note {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 56, 92, 0.05);
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.addr-privacy-icon {
+  margin-right: 0.75rem;
+  font-size: 1.25rem;
+}
+
+/* Classe pour le bouton de géolocalisation */
+.addr-geolocate-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 999;
+  background-color: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.addr-geolocate-icon {
+  margin-right: 6px;
+}
+
+/* Animation */
+@keyframes addrPulseBorder {
+  0% {
+    border-color: var(--border);
+  }
+  50% {
+    border-color: var(--primary);
+  }
+  100% {
+    border-color: var(--border);
+  }
+}
+
+.addr-address-search-input:focus,
+.addr-airbnb-input:focus,
+.addr-airbnb-select:focus {
+  animation: addrPulseBorder 2s infinite;
+}
+
+/* Map loading */
+.addr-map-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: #f3f4f6;
+}
+
+/* Instructions pour la carte */
+.addr-map-instructions {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: var(--gray);
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .addr-address-mode-selector {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .addr-address-mode-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .addr-address-map-container {
+    height: 200px;
+  }
+}

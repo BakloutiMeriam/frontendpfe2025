@@ -9,6 +9,7 @@ import SearchBar from "../components/SearchBar";
 import Footer from "../components/Footer";
 import { FaHeart, FaRegHeart, FaStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import SuccessAlert from "../components/SuccessAlert.js";
 
 const HomePage = () => {
   const [logements, setLogements] = useState([]);
@@ -358,6 +359,8 @@ const HomePage = () => {
 
   return (
     <>
+      <SuccessAlert />
+
       <NavbarHome />
       <div className="airbnb-navbar-separator"></div>
       <div className="airbnb-home-container">

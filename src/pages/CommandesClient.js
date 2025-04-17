@@ -86,6 +86,23 @@ const MesCommandesPage = () => {
     }
   };
 
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case "en attente":
+        return "⏳";
+      case "confirmée":
+        return "✓";
+      case "non payé":
+        return "💳";
+      case "terminée":
+        return "✅";
+      case "annulée":
+        return "✕";
+      default:
+        return "•";
+    }
+  };
+
   const getStatusLabel = (status) => {
     switch (status) {
       case "en attente":
@@ -109,24 +126,28 @@ const MesCommandesPage = () => {
 
   if (loading) {
     return (
-      <div className="commandes-container loading-container">
-        <div className="loader"></div>
-        <p>Chargement de vos commandes...</p>
-      </div>
+      <Layout>
+        <div className="commandes-container loading-container">
+          <div className="loader"></div>
+          <p>Chargement de vos commandes...</p>
+        </div>
+      </Layout>
     );
   }
 
   if (error) {
     return (
-      <div className="commandes-container error-container">
-        <div className="alert alert-danger">{error}</div>
-        <button
-          className="btn btn-outline-primary"
-          onClick={() => window.location.reload()}
-        >
-          Réessayer
-        </button>
-      </div>
+      <Layout>
+        <div className="commandes-container error-container">
+          <div className="alert alert-danger">{error}</div>
+          <button
+            className="btn btn-outline-primary"
+            onClick={() => window.location.reload()}
+          >
+            Réessayer
+          </button>
+        </div>
+      </Layout>
     );
   }
 
@@ -173,9 +194,9 @@ const MesCommandesPage = () => {
 
         {filteredCommandes.length === 0 ? (
           <div className="no-commandes">
-            <i className="fas fa-shopping-bag empty-icon"></i>
+            <div className="empty-icon">🏠</div>
             <p>
-              Vous n'avez pas encore de commandes{" "}
+              Vous n'avez pas encore de réservations{" "}
               {activeFilter !== "toutes"
                 ? `avec le statut "${getStatusLabel(activeFilter)}"`
                 : ""}
@@ -199,10 +220,14 @@ const MesCommandesPage = () => {
                         commande.statut
                       )}`}
                     >
+                      <span className="status-icon">
+                        {getStatusIcon(commande.statut)}
+                      </span>
                       {getStatusLabel(commande.statut)}
                     </span>
                   </div>
                   <div className="commande-date">
+                    <span className="date-icon">📅</span>
                     {commande.createdAt && formatDate(commande.createdAt)}
                   </div>
                 </div>
@@ -211,34 +236,36 @@ const MesCommandesPage = () => {
                   <div className="commande-property">
                     {commande.logement && (
                       <>
-                        <img
-                          src={
-                            commande.logement.photoprincipale.startsWith(
-                              "data:"
-                            )
-                              ? commande.logement.photoprincipale
-                              : `/uploads/${commande.logement.photoprincipale}`
-                          }
-                          alt={commande.logement.titre}
-                          className="property-img"
-                        />
+                        <div className="property-image-container">
+                          <img
+                            src={
+                              commande.logement.photoprincipale.startsWith(
+                                "data:"
+                              )
+                                ? commande.logement.photoprincipale
+                                : `/uploads/${commande.logement.photoprincipale}`
+                            }
+                            alt={commande.logement.titre}
+                            className="property-img"
+                          />
+                        </div>
                         <div className="property-details">
                           <h3>{commande.logement.titre}</h3>
-
                           <p className="property-address">
+                            <span className="address-icon">📍</span>
                             {commande.logement.adresse.rue},{" "}
                             {commande.logement.adresse.codePostal}{" "}
                             {commande.logement.adresse.ville},{" "}
                             {commande.logement.adresse.pays}
                           </p>
                           <div className="reservation-dates">
-                            <div>
+                            <div className="date-item">
                               <span className="date-label">Arrivée:</span>
                               <span className="date-value">
                                 {formatDate(commande.dateDebut)}
                               </span>
                             </div>
-                            <div>
+                            <div className="date-item">
                               <span className="date-label">Départ:</span>
                               <span className="date-value">
                                 {formatDate(commande.dateFin)}
@@ -263,13 +290,14 @@ const MesCommandesPage = () => {
                           className="btn btn-primary"
                           onClick={() => handlePayment(commande._id)}
                         >
-                          Paiement
+                          Procéder au paiement
                         </button>
                       ) : commande.statut === "terminée" ? (
                         <button className="btn btn-success" disabled>
                           Terminée
                         </button>
                       ) : null}
+
                       {/*{commande.statut === "non payé" && (
                       <button
                         className="btn btn-outline-danger"

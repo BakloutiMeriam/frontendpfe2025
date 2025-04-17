@@ -1,0 +1,251 @@
+.payment-page {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 2rem 1rem;
+}
+
+.payment-container {
+  width: 100%;
+  max-width: 800px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.payment-header {
+  background-color: #4a6fa5;
+  color: white;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.payment-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.payment-form {
+  padding: 2rem;
+}
+
+.payment-details,
+.payment-method {
+  margin-bottom: 2rem;
+}
+
+.payment-details h2,
+.payment-method h2 {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.order-summary {
+  background-color: #f7f9fc;
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+.order-summary p {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+}
+
+.order-summary span {
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.card-input {
+  margin-bottom: 1.5rem;
+}
+
+.card-input label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.card-input input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d2d6dc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.card-element-container {
+  margin-bottom: 1.5rem;
+}
+
+.card-element-container label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.StripeElement {
+  height: 40px;
+  padding: 10px 12px;
+  width: 100%;
+  color: #32325d;
+  background-color: white;
+  border: 1px solid #d2d6dc;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+  border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
+
+.secure-payment-info {
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #718096;
+  margin-top: 1rem;
+}
+
+.secure-payment-info i {
+  margin-right: 0.5rem;
+  color: #48bb78;
+}
+
+.payment-error {
+  color: #e53e3e;
+  background-color: #fed7d7;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.payment-actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.pay-button {
+  background-color: #4c51bf;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 200px;
+}
+
+.pay-button:hover {
+  background-color: #434190;
+}
+
+.pay-button:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.payment-loading {
+  text-align: center;
+  padding: 2rem;
+  color: #4a5568;
+}
+
+/* Media queries pour la responsivité */
+
+@media (max-width: 768px) {
+  .payment-form {
+    padding: 1.5rem;
+  }
+
+  .payment-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .payment-details h2,
+  .payment-method h2 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-form {
+    padding: 1rem;
+  }
+
+  .payment-actions {
+    flex-direction: column;
+  }
+
+  .pay-button {
+    width: 100%;
+  }
+}
+/* Ajoutez ces styles à votre fichier PaymentPage.css */
+
+.back-link-container {
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 0;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  color: #4a6fa5;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.back-link:hover {
+  background-color: rgba(74, 111, 165, 0.1);
+  transform: translateX(-3px);
+}
+
+.back-arrow {
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.back-link:hover .back-arrow {
+  transform: translateX(-4px);
+}
+
+/* Style pour les écrans mobiles */
+@media (max-width: 768px) {
+  .back-link-container {
+    padding: 1rem 1rem 0;
+  }
+
+  .back-link {
+    font-size: 0.9rem;
+  }
+}
