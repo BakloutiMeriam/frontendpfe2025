@@ -76,7 +76,7 @@ const NavbarHome = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/aide">
+              <Link className="nav-link" to="/help">
                 Aide
               </Link>
             </li>

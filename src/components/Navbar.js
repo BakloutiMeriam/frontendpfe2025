@@ -1,42 +1,15 @@
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/navbar.css";
+import NotificationIcon from "./NotificationIcon";
+import MessageIcon from "./MessageIcon";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [notifications, setNotifications] = useState([]);
-  const [showNotifications, setShowNotifications] = useState(false);
   const [navbarCollapsed, setNavbarCollapsed] = useState(true);
-  const notificationsRef = useRef(null);
-
-  // Simuler le chargement des notifications (à remplacer par votre API réelle)
-  useEffect(() => {
-    if (user && user.role === "admin") {
-      // Exemple de données de notification - à remplacer par votre appel API réel
-      const fakeNotifications = [];
-      setNotifications(fakeNotifications);
-    }
-  }, [user]);
-
-  // Fermer les notifications quand on clique ailleurs
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (
-        notificationsRef.current &&
-        !notificationsRef.current.contains(event.target)
-      ) {
-        setShowNotifications(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   // Fonction de déconnexion modifiée
   const handleLogout = async () => {
@@ -46,16 +19,12 @@ const Navbar = () => {
       // Force la redirection vers la page de login pour tous les utilisateurs
       setTimeout(() => {
         navigate("/login", { replace: true });
-      }, 100);
+      }, 300);
     } catch (error) {
       console.error("Erreur lors de la déconnexion:", error);
       // En cas d'erreur, essayez quand même de rediriger
       navigate("/login", { replace: true });
     }
-  };
-
-  const toggleNotifications = () => {
-    setShowNotifications(!showNotifications);
   };
 
   // Toggle du menu hamburger
@@ -102,68 +71,8 @@ const Navbar = () => {
           <ul className="navbar-nav ms-auto">
             {user ? (
               <>
-                {/* Notifications pour admin avec dropdown */}
-                {user.role === "admin" && (
-                  <li className="nav-item dropdown" ref={notificationsRef}>
-                    <a
-                      className="nav-link position-relative"
-                      href="/"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleNotifications();
-                      }}
-                    >
-                      <i className="fas fa-bell"></i>
-                      {notifications.length > 0 && (
-                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                          {notifications.length}
-                          <span className="visually-hidden">
-                            notifications non lues
-                          </span>
-                        </span>
-                      )}
-                    </a>
-                    {showNotifications && (
-                      <div
-                        className="dropdown-menu dropdown-menu-end notification-dropdown show"
-                        style={{ minWidth: "300px", padding: "10px" }}
-                      >
-                        <h6 className="dropdown-header">Notifications</h6>
-                        {notifications.length > 0 ? (
-                          <>
-                            {notifications.map((notification) => (
-                              <div
-                                key={notification.id}
-                                className="notification-item"
-                              >
-                                <div className="d-flex justify-content-between">
-                                  <span className="notification-message">
-                                    {notification.message}
-                                  </span>
-                                  <small className="text-muted">
-                                    {notification.date}
-                                  </small>
-                                </div>
-                              </div>
-                            ))}
-                            <div className="text-center mt-2">
-                              <Link
-                                to="/notifications"
-                                className="btn btn-sm btn-primary"
-                              >
-                                Voir toutes les notifications
-                              </Link>
-                            </div>
-                          </>
-                        ) : (
-                          <div className="p-3 text-center">
-                            <p className="mb-0">Aucune notification</p>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </li>
-                )}
+                <MessageIcon />
+                <NotificationIcon />
 
                 {/* Profil utilisateur simplifié */}
                 <li className="nav-item dropdown">
