@@ -204,3 +204,35 @@ export const downloadAttachment = async (messageId, attachmentId) => {
     throw error;
   }
 };
+// Dans le fichier messageService.js, ajoutez cette fonction
+export const sendDirectMessage = async (messageData) => {
+  // Pour l'envoi de fichiers, nous devons utiliser FormData
+  const formData = new FormData();
+  formData.append("recipientId", messageData.recipientId);
+  formData.append("subject", messageData.subject);
+  formData.append("content", messageData.content);
+
+  // Ajout des pièces jointes si présentes
+  if (messageData.attachments) {
+    messageData.attachments.forEach((file) => {
+      formData.append("attachments", file);
+    });
+  }
+
+  const response = await axios.post(`${API_URL}/directmessage`, formData, {
+    headers: {
+      ...authHeader(),
+    },
+    withCredentials: true,
+  });
+  return response.data;
+};
+export const getDirectMessageConversations = async () => {
+  const response = await axios.get(`${API_URL}/direct/conversations`, {
+    headers: {
+      ...authHeader(),
+    },
+    withCredentials: true,
+  });
+  return response.data;
+};

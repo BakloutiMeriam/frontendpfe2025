@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { reservationService } from "../services/reservationService";
 import { format, differenceInHours } from "date-fns";
 import { fr } from "date-fns/locale";
+import { toast } from "react-toastify";
+
+import AjouterAvisModal from "../components/Avis/ajouterAvis";
 import {
   FaSearch,
   FaFilter,
@@ -19,12 +22,12 @@ import {
   FaCheck,
   FaTimes,
   FaClock,
+  FaComment,
 } from "react-icons/fa";
 import "../styles/MesReservations.css";
 import Layout from "../components/Layout";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-
 const MesReservations = () => {
   const [reservations, setReservations] = useState([]);
   const [filteredReservations, setFilteredReservations] = useState([]);
@@ -62,14 +65,34 @@ const MesReservations = () => {
     type: "info", // info, warning, error, success
   });
 
+  // Ajouter un état pour la modale d'ajout d'avis
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [selectedLogementId, setSelectedLogementId] = useState(null);
+
+  // Fonction pour gérer l'ouverture de la fenêtre modale d'ajout d'avis
+  const handleOpenReviewModal = (logementId) => {
+    setSelectedLogementId(logementId);
+    setShowReviewModal(true);
+  };
+
+  // Fonction pour rediriger vers la page d'ajout d'avis
+  const navigateToAddReview = () => {
+    setShowReviewModal(false);
+    if (selectedLogementId) {
+      window.location.href = `/ajouter-avis/${selectedLogementId}`;
+    }
+  };
+
   // Chargement des réservations
   useEffect(() => {
     const fetchReservations = async () => {
       try {
         setLoading(true);
         const data = await reservationService.getUserReservations();
-        setReservations(data);
-        setFilteredReservations(data);
+        // Filtrer les réservations sans logement
+        const validReservations = data.filter((res) => res.logement !== null);
+        setReservations(validReservations);
+        setFilteredReservations(validReservations);
         setLoading(false);
       } catch (err) {
         setError("Erreur lors du chargement des réservations");
@@ -546,7 +569,15 @@ const MesReservations = () => {
               <div className="d-flex align-items-center">
                 {reservation.logement.photoprincipale ? (
                   <img
-                    src={reservation.logement.photoprincipale}
+                    src={
+                      reservation.logement.photoprincipale.startsWith("data:")
+                        ? reservation.logement.photoprincipale
+                        : reservation.logement.photoprincipale.startsWith(
+                            "http://localhost:3000/uploads/"
+                          )
+                        ? reservation.logement.photoprincipale
+                        : `/uploads/${reservation.logement.photoprincipale}`
+                    }
                     alt={reservation.logement.titre}
                     className="reservation-card-img"
                   />
@@ -611,6 +642,13 @@ const MesReservations = () => {
                 className="btn btn-details"
               >
                 <FaEye className="me-2" /> Détails
+              </button>
+              {/* Bouton pour laisser un avis */}
+              <button
+                onClick={() => handleOpenReviewModal(reservation.logement._id)}
+                className="btn btn-comment ms-2"
+              >
+                <FaComment className="me-2" /> Avis
               </button>
 
               {(reservation.statut === "confirmée" ||
@@ -922,7 +960,13 @@ const MesReservations = () => {
                               <div className="d-flex align-items-center">
                                 {reservation.logement.photoprincipale ? (
                                   <img
-                                    src={reservation.logement.photoprincipale}
+                                    src={
+                                      reservation.logement.photoprincipale.startsWith(
+                                        "data:"
+                                      )
+                                        ? reservation.logement.photoprincipale
+                                        : `/uploads/${reservation.logement.photoprincipale}`
+                                    }
                                     alt={reservation.logement.titre}
                                     className="reservation-thumbnail me-2"
                                   />
@@ -982,6 +1026,19 @@ const MesReservations = () => {
                                 <FaEye />
                               </button>
 
+                              {reservation.statut === "terminée" && (
+                                <button
+                                  onClick={() =>
+                                    handleOpenReviewModal(
+                                      reservation.logement._id
+                                    )
+                                  }
+                                  className="btn btn-sm btn-comment me-2"
+                                  title="Laisser un avis"
+                                >
+                                  <FaComment />
+                                </button>
+                              )}
                               {(reservation.statut === "confirmée" ||
                                 reservation.statut === "en attente") && (
                                 <>
@@ -1062,6 +1119,46 @@ const MesReservations = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      {/* Fenêtre modale pour confirmation d'ajout d'avis */}
+      {/*<Modal
+        show={showReviewModal}
+        onHide={() => setShowReviewModal(false)}
+        centered
+        className="reservation-modal"
+      >
+        <Modal.Header closeButton className="modal-header-info">
+          <Modal.Title>
+            <FaComment className="me-2" />
+            Laisser un avis
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Souhaitez-vous laisser un avis pour ce logement ?</p>
+          <p className="small text-muted">
+            Votre avis est précieux pour les futurs voyageurs et nous aidera à
+            améliorer notre service.
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowReviewModal(false)}>
+            Annuler
+          </Button>
+          <Button variant="primary" onClick={navigateToAddReview}>
+            <FaComment className="me-2" />
+            Oui, laisser un avis
+          </Button>
+        </Modal.Footer>
+      </Modal>*/}
+      {/* Composant pour ajouter un avis */}
+      <AjouterAvisModal
+        show={showReviewModal}
+        onHide={() => setShowReviewModal(false)}
+        logementId={selectedLogementId}
+        onSuccess={() => {
+          // Vous pouvez ajouter ici une logique à exécuter après un avis réussi
+          toast.success("Votre avis a été ajouté avec succès !");
+        }}
+      />
     </Layout>
   );
 };

@@ -9,8 +9,9 @@ const MessageIcon = () => {
   const { user } = useContext(AuthContext);
   const [stats, setStats] = useState({
     totalUnread: 0,
-    helpUnread: 0.0,
+    helpUnread: 0,
     infoUnread: 0,
+    directUnread: 0,
   });
   const [loading, setLoading] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -81,27 +82,82 @@ const MessageIcon = () => {
               ) : (
                 <>
                   {user.role === "proprietaire" && (
+                    <>
+                      <Link
+                        to="/messages/info"
+                        className="notification-item"
+                        onClick={() => setShowDropdown(false)}
+                      >
+                        <div className="notification-icon-container info">
+                          <i className="fas fa-info-circle"></i>
+                        </div>
+                        <div className="notification-details">
+                          <p className="notification-content">
+                            Messages informatifs
+                          </p>
+                          <p className="notification-text">
+                            {stats.infoUnread > 0
+                              ? `${stats.infoUnread} nouveau(x) message(s)`
+                              : "Pas de nouveaux messages"}
+                          </p>
+                        </div>
+                        {stats.infoUnread > 0 && (
+                          <span className="badge bg-primary rounded-pill">
+                            {stats.infoUnread}
+                          </span>
+                        )}
+                      </Link>
+
+                      <Link
+                        to="/messages/direct"
+                        className="notification-item"
+                        onClick={() => setShowDropdown(false)}
+                      >
+                        <div className="notification-icon-container direct">
+                          <i className="fas fa-comment"></i>
+                        </div>
+                        <div className="notification-details">
+                          <p className="notification-content">
+                            Messages des clients
+                          </p>
+                          <p className="notification-text">
+                            {stats.directUnread > 0
+                              ? `${stats.directUnread} nouveau(x) message(s)`
+                              : "Pas de nouveaux messages"}
+                          </p>
+                        </div>
+                        {stats.directUnread > 0 && (
+                          <span className="badge bg-primary rounded-pill">
+                            {stats.directUnread}
+                          </span>
+                        )}
+                      </Link>
+                    </>
+                  )}
+
+                  {/* Messages directs pour les clients */}
+                  {user.role === "client" && (
                     <Link
-                      to="/messages/info"
+                      to="/messages/direct"
                       className="notification-item"
                       onClick={() => setShowDropdown(false)}
                     >
-                      <div className="notification-icon-container info">
-                        <i className="fas fa-info-circle"></i>
+                      <div className="notification-icon-container direct">
+                        <i className="fas fa-comment"></i>
                       </div>
                       <div className="notification-details">
                         <p className="notification-content">
-                          Messages informatifs
+                          Messages aux propriétaires
                         </p>
                         <p className="notification-text">
-                          {stats.infoUnread > 0
-                            ? `${stats.infoUnread} nouveau(x) message(s)`
+                          {stats.directUnread > 0
+                            ? `${stats.directUnread} nouveau(x) message(s)`
                             : "Pas de nouveaux messages"}
                         </p>
                       </div>
-                      {stats.infoUnread > 0 && (
+                      {stats.directUnread > 0 && (
                         <span className="badge bg-primary rounded-pill">
-                          {stats.infoUnread}
+                          {stats.directUnread}
                         </span>
                       )}
                     </Link>

@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import { logementService } from "../services/LogementService";
-import { reservationService } from "../services/reservationService"; // Ajoutez cette importation
+import { reservationService } from "../services/reservationService";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/Home.css";
 import NavbarHome from "../components/NavbarHome.js";
 import CategoryMenu from "../components/CategoryMenu";
 import SearchBar from "../components/SearchBar";
 import Footer from "../components/Footer";
-import { FaHeart, FaRegHeart, FaStar } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import SuccessAlert from "../components/SuccessAlert.js";
+import StarRating from "../components/Avis/StarRating";
 
 const HomePage = () => {
   const [logements, setLogements] = useState([]);
@@ -26,6 +27,8 @@ const HomePage = () => {
   // Pour stocker les réservations par logement
   const [reservationsMap, setReservationsMap] = useState({});
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(12); // Modifié de 6 à 8 logements par page
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,6 +40,7 @@ const HomePage = () => {
 
   // Filtrage de base (tout sauf les dates)
   useEffect(() => {
+    setCurrentPage(1);
     if (!logements.length) return;
 
     // Appliquer les filtres de base (catégorie, destination, prix)
@@ -270,6 +274,67 @@ const HomePage = () => {
     );
   };
 
+  // Obtenir les logements de la page courante
+  const getCurrentLogements = () => {
+    const indexOfLastLogement = currentPage * itemsPerPage;
+    const indexOfFirstLogement = indexOfLastLogement - itemsPerPage;
+    return filteredLogements.slice(indexOfFirstLogement, indexOfLastLogement);
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    const totalPages = Math.ceil(filteredLogements.length / itemsPerPage);
+
+    // Afficher au maximum 5 boutons de pagination
+    const maxPageButtons = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxPageButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
+
+    // Ajuster startPage si on est près de la fin
+    if (endPage - startPage + 1 < maxPageButtons) {
+      startPage = Math.max(1, endPage - maxPageButtons + 1);
+    }
+
+    // Bouton pour la première page si on n'y est pas
+    if (startPage > 1) {
+      pageNumbers.push(
+        <button key="first" onClick={() => setCurrentPage(1)}>
+          1
+        </button>
+      );
+      if (startPage > 2) {
+        pageNumbers.push(<span key="ellipsis1">...</span>);
+      }
+    }
+
+    // Pages principales
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => setCurrentPage(i)}
+          className={currentPage === i ? "active" : ""}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    // Bouton pour la dernière page si on n'y est pas
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pageNumbers.push(<span key="ellipsis2">...</span>);
+      }
+      pageNumbers.push(
+        <button key="last" onClick={() => setCurrentPage(totalPages)}>
+          {totalPages}
+        </button>
+      );
+    }
+
+    return pageNumbers;
+  };
+
   const renderLogementsList = () => {
     if (loading) {
       return (
@@ -289,9 +354,12 @@ const HomePage = () => {
       );
     }
 
+    // Utiliser les logements de la page courante
+    const currentLogements = getCurrentLogements();
+
     return (
       <div className="airbnb-logements-grid">
-        {filteredLogements.map((logement) => {
+        {currentLogements.map((logement) => {
           // Troncation du titre et description pour l'affichage
           const shortTitle = logement.titre
             ? logement.titre.length > 26
@@ -338,10 +406,7 @@ const HomePage = () => {
                     {logement.adresse?.ville || "Ville"},{" "}
                     {logement.adresse?.pays || "Pays"}
                   </span>
-                  <span style={{ display: "flex", alignItems: "center" }}>
-                    <FaStar style={{ marginRight: "4px", fontSize: "14px" }} />{" "}
-                    4.9
-                  </span>
+                  <StarRating rating={logement.noteMoyenne} />
                 </div>
                 <h3 className="airbnb-logement-title">{shortTitle}</h3>
                 <div className="airbnb-logement-description">{shortDesc}</div>
@@ -367,10 +432,33 @@ const HomePage = () => {
         <SearchBar onSearch={handleSearch} />
         <div className="airbnb-search-category-separator"></div>
         <CategoryMenu onCategorySelect={handleCategorySelect} />
-
         {renderAlert()}
         <div className="airbnb-logements-list-container">
           {renderLogementsList()}
+        </div>
+        <div className="airbnb-pagination">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            Précédent
+          </button>
+          {renderPageNumbers()}
+          <button
+            onClick={() =>
+              setCurrentPage((prev) =>
+                Math.min(
+                  prev + 1,
+                  Math.ceil(filteredLogements.length / itemsPerPage)
+                )
+              )
+            }
+            disabled={
+              currentPage === Math.ceil(filteredLogements.length / itemsPerPage)
+            }
+          >
+            Suivant
+          </button>
         </div>
       </div>
 

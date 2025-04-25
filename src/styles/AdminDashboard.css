@@ -1,0 +1,875 @@
+/* Variables globales */
+:root {
+  --primary-color: #3a36db;
+  --primary-light: #eae9ff;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --info-color: #17a2b8;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --light-color: #f8f9fa;
+  --dark-color: #343a40;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --border-radius: 10px;
+  --transition: all 0.3s ease;
+
+  /* Couleurs spécifiques */
+  --users-color: #4caf50;
+  --properties-color: #2196f3;
+  --reservations-color: #ffc107;
+  --payments-color: #e91e63;
+  --messages-color: #9c27b0;
+  --categories-color: #ff9800;
+}
+
+/* Base du dashboard */
+.admin-dashboard {
+  padding: 24px;
+  max-width: 1920px;
+  margin: 0 auto;
+  font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.dashboard-header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--dark-color);
+  margin: 0;
+}
+
+.period-selector select {
+  padding: 10px 16px;
+  border: 1px solid #e1e1e1;
+  border-radius: var(--border-radius);
+  background-color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.period-selector select:focus,
+.period-selector select:hover {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(58, 54, 219, 0.1);
+}
+
+/* États de chargement et erreur */
+.dashboard-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  font-size: 18px;
+  color: var(--secondary-color);
+}
+
+.dashboard-error {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  color: var(--danger-color);
+}
+
+.dashboard-error svg {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.dashboard-error button {
+  margin-top: 16px;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.dashboard-error button:hover {
+  background-color: #2a28a7;
+}
+
+/* Cartes statistiques */
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.stats-card {
+  background-color: #ffffff;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  transition: var(--transition);
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.stats-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  color: white;
+  font-size: 24px;
+  margin-right: 20px;
+}
+
+.stats-icon.users {
+  background-color: var(--users-color);
+}
+
+.stats-icon.properties {
+  background-color: var(--properties-color);
+}
+
+.stats-icon.reservations {
+  background-color: var(--reservations-color);
+}
+
+.stats-icon.payments {
+  background-color: var(--payments-color);
+}
+
+.stats-info {
+  flex: 1;
+}
+
+.stats-info h3 {
+  font-size: 16px;
+  color: var(--secondary-color);
+  margin: 0 0 10px 0;
+  font-weight: 500;
+}
+
+.stats-numbers {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.stats-main-number {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--dark-color);
+  margin: 0;
+  line-height: 1;
+}
+
+.stats-details {
+  display: flex;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--secondary-color);
+}
+
+.stats-details span {
+  margin-right: 15px;
+}
+
+.stats-alert {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: var(--danger-color);
+}
+
+.stats-alert svg {
+  margin-right: 5px;
+}
+
+.stats-categories,
+.stats-revenue {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: var(--success-color);
+  font-weight: 500;
+}
+
+.stats-revenue svg {
+  margin-right: 5px;
+}
+
+/* Section d'analyses */
+.analytics-section {
+  margin-bottom: 30px;
+}
+
+.analytics-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.analytics-card {
+  background-color: #ffffff;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.analytics-card.full-width {
+  grid-column: 1 / -1;
+}
+
+.analytics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.analytics-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--dark-color);
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.analytics-header h3 svg {
+  margin-right: 8px;
+  color: var(--primary-color);
+}
+
+.analytics-content {
+  padding: 24px;
+}
+
+/* Chart placeholders pour la démo */
+.activity-chart {
+  height: 300px;
+  position: relative;
+}
+
+.chart-placeholder {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 200px;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.chart-line {
+  width: calc(100% / 8);
+  background: linear-gradient(
+    180deg,
+    var(--primary-color) 0%,
+    rgba(58, 54, 219, 0.5) 100%
+  );
+  border-radius: 4px 4px 0 0;
+  margin: 0 5px;
+  transition: height 0.5s ease;
+}
+
+.chart-legend {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.legend-color {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  margin-right: 8px;
+}
+
+.legend-color.users {
+  background-color: var(--users-color);
+}
+
+.legend-color.reservations {
+  background-color: var(--reservations-color);
+}
+
+/* Pie chart placeholder */
+.pie-chart-placeholder {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  position: relative;
+  margin: 0 auto 30px;
+  background-color: #f5f5f5;
+  overflow: hidden;
+}
+
+.pie-slice {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  transform-origin: 100% 100%;
+  left: 50%;
+  top: 0;
+  border-radius: 0 100% 0 0;
+}
+
+.pie-center {
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  background-color: white;
+  border-radius: 50%;
+  top: 20%;
+  left: 20%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.categories-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.category-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  margin-right: 8px;
+}
+
+.category-name {
+  flex: 1;
+}
+
+.category-count {
+  font-weight: 500;
+}
+
+/* Top logements */
+.top-properties-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.top-property-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: var(--transition);
+}
+
+.top-property-item:hover {
+  background-color: var(--primary-light);
+}
+
+.property-rank {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 12px;
+  margin-right: 12px;
+}
+
+.property-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-right: 12px;
+}
+
+.property-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.property-info {
+  flex: 1;
+}
+
+.property-info h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.property-info p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--secondary-color);
+}
+
+.property-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: var(--secondary-color);
+}
+
+.stat-item svg {
+  margin-right: 5px;
+  font-size: 14px;
+}
+
+/* Actions rapides et notifications */
+.quick-actions-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.quick-actions-card,
+.notifications-card {
+  background-color: #ffffff;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+.quick-actions-card h3,
+.notifications-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--dark-color);
+  margin: 0 0 16px 0;
+}
+
+.quick-actions-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.quick-action-button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quick-action-button:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.quick-action-button svg {
+  margin-right: 8px;
+}
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: var(--transition);
+}
+
+.notification-item:hover {
+  background-color: var(--primary-light);
+}
+
+.notification-icon {
+  font-size: 18px;
+  margin-right: 12px;
+  margin-top: 2px;
+}
+
+.notification-icon.success {
+  color: var(--success-color);
+}
+
+.notification-icon.info {
+  color: var(--info-color);
+}
+
+.notification-icon.warning {
+  color: var(--warning-color);
+}
+
+.notification-icon.danger {
+  color: var(--danger-color);
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-content p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: var(--secondary-color);
+}
+
+.no-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  color: var(--secondary-color);
+  font-size: 14px;
+}
+
+/* Styles pour le graphique d'activité */
+.activity-chart {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+}
+
+.custom-tooltip {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.tooltip-date {
+  margin: 0 0 8px;
+  font-weight: bold;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+
+.tooltip-users,
+.tooltip-reservations,
+.tooltip-revenue {
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.dot.users {
+  background-color: #4290f5;
+}
+
+.dot.reservations {
+  background-color: #e9546b;
+}
+
+.no-data-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  color: #666;
+  font-style: italic;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+/* Styles pour le graphique circulaire des catégories */
+.categories-chart {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.pie-chart-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+}
+
+.categories-legend {
+  margin-top: 15px;
+  max-height: 150px;
+  overflow-y: auto;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 5px 0;
+}
+
+.category-color {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  margin-right: 8px;
+}
+
+.category-name {
+  flex: 1;
+  font-size: 14px;
+}
+
+.category-count {
+  font-weight: bold;
+  padding: 2px 6px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.custom-pie-tooltip {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.pie-tooltip-name {
+  font-weight: bold;
+  margin: 0 0 5px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 3px;
+}
+
+.pie-tooltip-value,
+.pie-tooltip-percent {
+  margin: 3px 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pie-tooltip-percent {
+  font-weight: bold;
+}
+/* Ajouts pour les nouveaux composants dans AdminDashboard.css */
+
+/* Style pour le tableau des utilisateurs récents */
+.recent-users-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.recent-users-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.recent-users-table th,
+.recent-users-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.recent-users-table th {
+  font-weight: 600;
+  color: #555;
+  background-color: #f9f9f9;
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.role-badge.proprietaire {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.role-badge.client {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+.status-approved {
+  display: flex;
+  align-items: center;
+  color: #4caf50;
+}
+
+.status-pending {
+  display: flex;
+  align-items: center;
+  color: #ffc107;
+}
+
+.status-rejected {
+  display: flex;
+  align-items: center;
+  color: #f44336;
+}
+
+.status-approved svg,
+.status-pending svg,
+.status-rejected svg {
+  margin-right: 5px;
+}
+
+/* Styles pour les cartes d'analyse */
+.analytics-card.half-width {
+  flex: 1;
+  min-width: 48%;
+}
+
+.analytics-card.full-width {
+  width: 100%;
+}
+
+/* Style pour la carte de taux de conversion */
+.stats-icon.conversion {
+  background-color: #9c27b0;
+}
+
+/* Pour corriger la mise en page des graphiques */
+.analytics-content {
+  position: relative;
+  height: 300px;
+  width: 100%;
+}
+
+/* Règle pour l'absence de données */
+.no-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #777;
+  font-style: italic;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+/* Media queries pour la responsivité */
+@media (max-width: 992px) {
+  .stats-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 16px;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .period-selector {
+    width: 100%;
+  }
+
+  .period-selector select {
+    width: 100%;
+  }
+
+  .stats-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-row {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions-section {
+    grid-template-columns: 1fr;
+  }
+}

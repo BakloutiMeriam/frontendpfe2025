@@ -200,7 +200,7 @@ export const reservationService = {
       throw error;
     }
   },
-  getAllReservationsConfirmee: async (logementId) => {
+  /*getAllReservationsConfirmee: async (logementId) => {
     console.log("Fetching reservations for logement:", logementId);
     try {
       const response = await axios.get(
@@ -220,6 +220,35 @@ export const reservationService = {
       // Généralement: confirmée, en attente, etc.
       const reservationsBloquantes = response.data.filter(
         (res) => res.statut === "confirmée"
+      );
+      console.log("Réservations bloquantes filtrées:", reservationsBloquantes);
+
+      return reservationsBloquantes;
+    } catch (error) {
+      console.error("Error fetching reservations:", error);
+      return [];
+    }
+  },*/
+
+  getAllReservationsConfirmee: async (logementId) => {
+    console.log("Fetching reservations for logement:", logementId);
+    try {
+      const response = await axios.get(
+        `${API_URL}/allResconfirmee/${logementId}`,
+        {
+          headers: { ...authHeader() },
+          withCredentials: true,
+        }
+      );
+
+      console.log("Tous les statuts disponibles:", [
+        ...new Set(response.data.map((res) => res.statut)),
+      ]);
+      console.log("Toutes les réservations:", response.data);
+
+      // Modifier cette partie pour inclure les statuts "confirmée" ET "terminée"
+      const reservationsBloquantes = response.data.filter(
+        (res) => res.statut === "confirmée" || res.statut === "terminée"
       );
       console.log("Réservations bloquantes filtrées:", reservationsBloquantes);
 

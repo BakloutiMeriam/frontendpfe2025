@@ -5,6 +5,8 @@ import { AuthContext } from "../context/AuthContext";
 import SimpleAvailabilityDisplay from "../components/SimpleAvailabilityDisplay";
 import { reservationService } from "../services/reservationService.js";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import ContactModal from "../components/ContactModal";
+
 import * as Yup from "yup";
 import {
   FaCalendar,
@@ -44,6 +46,7 @@ const ReservationForm = () => {
     prixTotal: 0,
   });
   const [datesIndisponibles, setDatesIndisponibles] = useState([]);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   useEffect(() => {
     const fetchLogementAndReservations = async () => {
@@ -469,6 +472,13 @@ const ReservationForm = () => {
                     <FaShieldAlt className="modern-host-icon" />
                     <span>Identité vérifiée</span>
                   </div>
+                  <button
+                    className="modern-contact-btn"
+                    onClick={() => setShowContactModal(true)}
+                  >
+                    <FaEnvelope className="modern-btn-icon" />
+                    Contacter le propriétaire
+                  </button>
                 </div>
               </div>
             </div>
@@ -712,7 +722,12 @@ const ReservationForm = () => {
             </div>
           </div>
         </div>
-
+        <ContactModal
+          show={showContactModal}
+          handleClose={() => setShowContactModal(false)}
+          proprietaire={logement.proprietaire || {}}
+          messageType="direct"
+        />
         <Modal
           show={showSuccessModal}
           onHide={() => setShowSuccessModal(false)}

@@ -117,6 +117,12 @@ const Navbar = () => {
                         <i className="fas fa-sign-out-alt me-2"></i>
                         Déconnexion
                       </button>
+                      <Link className="dropdown-item" to={"/messages/direct"}>
+                        Messagerie
+                      </Link>
+                      <Link className="dropdown-item" to={"/help"}>
+                        Centre d'aide
+                      </Link>
                     </li>
                   </ul>
                 </li>

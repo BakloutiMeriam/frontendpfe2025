@@ -13,6 +13,8 @@ const Sidebar = () => {
   // État pour suivre les menus déroulants ouverts
   const [openMenus, setOpenMenus] = useState({});
 
+  // État pour suivre les menus déroulants ouverts
+
   // Vérifier si un lien est actif
   const isActive = (path) => {
     return location.pathname === path ? "active" : "";
@@ -70,8 +72,8 @@ const Sidebar = () => {
           <>
             <li className="sidebar-item">
               <Link
-                to="/dashbordAdmin"
-                className={`sidebar-link ${isActive("/dashbordAdmin")}`}
+                to="/adminDash"
+                className={`sidebar-link ${isActive("/adminDash")}`}
               >
                 <i className="fas fa-chart-line sidebar-icon"></i>
                 <span>Tableau de bord</span>
@@ -235,6 +237,15 @@ const Sidebar = () => {
                   </Link>
                 </li>
               </ul>
+            </li>
+            <li className="sidebar-item">
+              <Link
+                to="/propDash"
+                className={`sidebar-link ${isActive("/propDash")}`}
+              >
+                <i className="fas fa-home sidebar-icon"></i>
+                <span>Dashboard</span>
+              </Link>
             </li>
 
             <li className="sidebar-item">

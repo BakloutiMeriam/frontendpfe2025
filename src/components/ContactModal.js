@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { Modal, Button, Form, Spinner, Alert } from "react-bootstrap";
 import * as messageService from "../services/messageService";
 
-const ContactModal = ({ show, handleClose, proprietaire }) => {
+const ContactModal = ({
+  show,
+  handleClose,
+  proprietaire,
+  messageType = "info",
+}) => {
   const [messageData, setMessageData] = useState({
     subject: "",
     content: "",
@@ -27,7 +32,7 @@ const ContactModal = ({ show, handleClose, proprietaire }) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  /*const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!messageData.subject.trim() || !messageData.content.trim()) {
@@ -65,8 +70,54 @@ const ContactModal = ({ show, handleClose, proprietaire }) => {
     } finally {
       setSending(false);
     }
-  };
+  };*/
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
+    if (!messageData.subject.trim() || !messageData.content.trim()) {
+      setError("Veuillez remplir tous les champs obligatoires");
+      return;
+    }
+
+    try {
+      setSending(true);
+      setError(null);
+
+      // Choisir la fonction appropriée selon le type de message
+      if (messageType === "direct") {
+        await messageService.sendDirectMessage({
+          ...messageData,
+          recipientId: proprietaire._id,
+        });
+      } else {
+        // Par défaut, utiliser sendInfoMessage
+        await messageService.sendInfoMessage({
+          ...messageData,
+          recipientId: proprietaire._id,
+        });
+      }
+
+      setSuccess(true);
+      setMessageData({
+        subject: "",
+        content: "",
+        attachments: [],
+      });
+
+      // Fermer le modal après 2 secondes
+      setTimeout(() => {
+        handleClose();
+        setSuccess(false);
+      }, 2000);
+    } catch (err) {
+      console.error("Erreur lors de l'envoi du message:", err);
+      setError(
+        "Une erreur s'est produite lors de l'envoi du message. Veuillez réessayer."
+      );
+    } finally {
+      setSending(false);
+    }
+  };
   return (
     <Modal show={show} onHide={handleClose} centered backdrop="static">
       <Modal.Header closeButton>

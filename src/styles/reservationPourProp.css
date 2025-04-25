@@ -341,3 +341,124 @@
 .reset-filters-button:hover {
   background-color: #e0e0e0;
 }
+
+/* Style pour le bouton de contact */
+.action-button.contact {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: auto; /* Pour le placer à droite quand il y a d'autres boutons */
+}
+
+.action-button.contact:hover {
+  background-color: #16497b;
+}
+
+.action-button.contact i {
+  margin-right: 6px;
+}
+
+/* Style pour le conteneur d'actions lorsqu'il contient plusieurs boutons */
+.reservation-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* Styles pour les boutons d'action (existants) */
+.action-button {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.action-button i {
+  margin-right: 6px;
+}
+
+/* Style spécifique pour les actions quand il n'y a que le bouton contact */
+.reservation-card:not(.status-en-attente) .reservation-actions {
+  justify-content: flex-end;
+}
+/* Styles pour les boutons-icônes */
+.action-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.action-button i {
+  margin-right: 0;
+}
+
+.action-button.confirm {
+  background-color: #4caf50;
+  color: white;
+}
+
+.action-button.confirm:hover {
+  background-color: #388e3c;
+  transform: scale(1.1);
+}
+
+.action-button.reject {
+  background-color: #f44336;
+  color: white;
+}
+
+.action-button.reject:hover {
+  background-color: #d32f2f;
+  transform: scale(1.1);
+}
+
+.action-button.contact {
+  background-color: #4a90e2;
+  color: white;
+  margin-left: auto; /* Pour le placer à droite quand il y a d'autres boutons */
+}
+
+.action-button.contact:hover {
+  background-color: #16497b;
+  transform: scale(1.1);
+}
+
+/* Ajustement pour la version mobile */
+@media (max-width: 768px) {
+  .action-button {
+    width: 100%;
+    height: 38px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+  }
+
+  .action-button i {
+    margin-right: 8px;
+  }
+
+  .action-button::after {
+    content: attr(title);
+    display: inline;
+  }
+}

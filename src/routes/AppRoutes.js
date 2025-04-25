@@ -35,6 +35,9 @@ import HelpPage from "../pages/HelpPage";
 import InfoMessages from "../pages/InfoMessages";
 import PaymentPage from "../pages/PaymentPage";
 import PaymentConfirmation from "../pages/paymentConfirmation";
+import DirectMessagesPage from "../pages/DirectMessagesPage";
+import AdminDashboard from "../pages/adminDash";
+import OwnerDashboard from "../pages/propDash";
 
 const AppRoutes = () => {
   return (
@@ -84,11 +87,14 @@ const AppRoutes = () => {
       <Route path="/help" element={<HelpPage />} />
       <Route path="/admin/help" element={<HelpPage />} />
       <Route path="/messages/info" element={<InfoMessages />} />
+      <Route path="/messages/direct" element={<DirectMessagesPage />} />
       <Route path="/paiement/:commandeId" element={<PaymentPage />} />
       <Route
         path="/commande/:commandeId/confirmation"
         element={<PaymentConfirmation />}
       />
+      <Route path="/adminDash" element={<AdminDashboard />} />
+      <Route path="/propDash" element={<OwnerDashboard />} />
     </Routes>
   );
 };

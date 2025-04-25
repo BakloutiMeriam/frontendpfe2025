@@ -916,3 +916,52 @@ input:checked + .toggle-slider:before {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+.category-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  font-size: 24px;
+}
+
+.category-icon-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+.custom-amenity-section {
+  margin-top: 20px;
+}
+
+.custom-amenity-input {
+  display: flex;
+  gap: 10px;
+}
+
+.add-amenity-button {
+  background-color: #ff385c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  min-width: 100px;
+}
+
+.add-amenity-button:hover {
+  background-color: #e31c5f;
+}
+
+.add-amenity-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Styles pour les aménités personnalisées */
+.amenity-card[key^="custom-"] {
+  border: 1px dashed #ff385c;
+}

@@ -22,7 +22,6 @@ const HelpConversations = ({
       try {
         setLoading(true);
 
-        // Si c'est un admin, utiliser l'endpoint admin
         let response;
         if (isAdmin) {
           response = await getHelpConversations();

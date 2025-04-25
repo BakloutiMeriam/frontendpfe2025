@@ -129,6 +129,12 @@ const NavbarHome = () => {
                     <button className="dropdown-item" onClick={handleLogout}>
                       Déconnexion
                     </button>
+                    <Link className="dropdown-item" to={"/messages/direct"}>
+                      Messagerie
+                    </Link>
+                    <Link className="dropdown-item" to={"/help"}>
+                      Centre d'aide
+                    </Link>
                   </li>
                 </ul>
               </li>

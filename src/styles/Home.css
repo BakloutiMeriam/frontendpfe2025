@@ -715,3 +715,27 @@
     gap: 16px;
   }
 }
+.star-rating-display {
+  display: flex;
+  align-items: center;
+}
+
+.star-icon {
+  color: #e4e5e9;
+  font-size: 14px;
+  margin-right: 1px;
+}
+
+.star-icon.filled {
+  color: #ffb800;
+}
+
+.star-icon.half {
+  color: #ffb800;
+}
+
+.rating-value {
+  margin-left: 4px;
+  font-size: 12px;
+  color: #717171;
+}

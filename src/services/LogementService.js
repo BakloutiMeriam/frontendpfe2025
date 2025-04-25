@@ -39,8 +39,11 @@ export const logementService = {
       });
 
       // Gestion des fichiers
-      if (logementData.photoprincipale && logementData.photoprincipale[0]) {
+      /*if (logementData.photoprincipale && logementData.photoprincipale[0]) {
         formData.append("photoprincipale", logementData.photoprincipale[0]);
+      }*/
+      if (logementData.photoprincipale) {
+        formData.append("photoprincipale", logementData.photoprincipale);
       }
 
       if (logementData.photos && logementData.photos.length) {

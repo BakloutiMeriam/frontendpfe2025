@@ -171,7 +171,11 @@ const ReservationDetail = () => {
                 <div className="reservation-property-image">
                   {reservation.logement.photoprincipale ? (
                     <img
-                      src={reservation.logement.photoprincipale}
+                      src={
+                        reservation.logement.photoprincipale.startsWith("data:")
+                          ? reservation.logement.photoprincipale
+                          : `/uploads/${reservation.logement.photoprincipale}`
+                      }
                       alt={reservation.logement.titre}
                     />
                   ) : (

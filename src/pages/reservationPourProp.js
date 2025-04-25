@@ -4,13 +4,16 @@ import { reservationService } from "../services/reservationService";
 import "../styles/reservationPourProp.css";
 import { toast } from "react-toastify";
 import Layout from "../components/Layout";
+import ContactModal from "../components/ContactModal";
 
 const MesReservationsProp = () => {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("toutes");
-  const [searchQuery, setSearchQuery] = useState(""); // Barre de recherche pour le nom du logement
+  const [searchQuery, setSearchQuery] = useState("");
   const { user } = useContext(AuthContext);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [selectedClient, setSelectedClient] = useState(null);
 
   useEffect(() => {
     const fetchReservations = async () => {
@@ -48,6 +51,12 @@ const MesReservationsProp = () => {
     }
   };
 
+  // Ouvrir le modal de contact avec un client spécifique
+  const handleContactClient = (client) => {
+    setSelectedClient(client);
+    setShowContactModal(true);
+  };
+
   // Filtrer les réservations selon l'onglet actif et la recherche par nom de logement
   const filteredReservations = reservations.filter((reservation) => {
     // Filtre par statut
@@ -83,7 +92,7 @@ const MesReservationsProp = () => {
   return (
     <Layout>
       <div className="reservations-container">
-        <h1 className="reservations-title">Mes Réservations</h1>
+        <h1 className="reservations-title">Liste demande des Réservations</h1>
 
         <div className="filters-container">
           <div className="reservations-tabs">
@@ -264,31 +273,57 @@ const MesReservationsProp = () => {
                   </div>
                 )}
 
-                {reservation.statut === "en attente" && (
-                  <div className="reservation-actions">
+                <div className="reservation-actions">
+                  {reservation.statut === "en attente" && (
+                    <>
+                      <button
+                        className="action-button confirm"
+                        onClick={() =>
+                          handleReponseReservation(reservation._id, "confirmée")
+                        }
+                        title="Accepter"
+                      >
+                        <i className="fas fa-check"></i>
+                      </button>
+                      <button
+                        className="action-button reject"
+                        onClick={() =>
+                          handleReponseReservation(reservation._id, "annulée")
+                        }
+                        title="Refuser"
+                      >
+                        <i className="fas fa-times"></i>
+                      </button>
+                    </>
+                  )}
+                  {reservation.client && (
                     <button
-                      className="action-button confirm"
-                      onClick={() =>
-                        handleReponseReservation(reservation._id, "confirmée")
-                      }
+                      className="action-button contact"
+                      onClick={() => handleContactClient(reservation.client)}
+                      title="Contacter le client"
                     >
-                      <i className="fas fa-check"></i> Accepter
+                      <i className="fas fa-envelope"></i>
                     </button>
-                    <button
-                      className="action-button reject"
-                      onClick={() =>
-                        handleReponseReservation(reservation._id, "annulée")
-                      }
-                    >
-                      <i className="fas fa-times"></i> Refuser
-                    </button>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {/* Modal de contact client */}
+      {selectedClient && (
+        <ContactModal
+          show={showContactModal}
+          handleClose={() => {
+            setShowContactModal(false);
+            setSelectedClient(null);
+          }}
+          proprietaire={selectedClient}
+          messageType="direct"
+        />
+      )}
     </Layout>
   );
 };

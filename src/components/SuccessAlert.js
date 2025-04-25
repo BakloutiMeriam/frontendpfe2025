@@ -33,7 +33,6 @@ const SuccessAlert = () => {
           <h3>Félicitations!</h3>
           <p>Votre logement a été ajouté avec succès</p>
         </div>
-        {/* Bouton de fermeture supprimé */}
       </div>
     </div>
   );

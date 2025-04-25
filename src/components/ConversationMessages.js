@@ -4,6 +4,7 @@ import {
   getConversationMessages,
   respondToHelpMessage,
   downloadAttachment,
+  sendDirectMessage,
 } from "../services/messageService";
 import { AuthContext } from "../context/AuthContext";
 import { format } from "date-fns";
@@ -74,6 +75,26 @@ const ConversationMessages = ({
     setAttachments(Array.from(e.target.files));
   };
 
+  // Fonction pour déterminer le destinataire en fonction des messages précédents
+  const getRecipientIdFromConversation = (messages) => {
+    if (messages.length === 0) return null;
+
+    const lastMessage = messages[messages.length - 1];
+    if (isCurrentUserMessage(lastMessage)) {
+      // Si vous êtes l'expéditeur du dernier message, trouvez le message précédent
+      for (let i = messages.length - 2; i >= 0; i--) {
+        if (!isCurrentUserMessage(messages[i])) {
+          return messages[i].sender._id;
+        }
+      }
+    } else {
+      // Si vous n'êtes pas l'expéditeur, le destinataire est l'expéditeur du dernier message
+      return lastMessage.sender._id;
+    }
+
+    return null;
+  };
+
   const handleSendReply = async (e) => {
     e.preventDefault();
 
@@ -85,21 +106,41 @@ const ConversationMessages = ({
     setSendingReply(true);
 
     try {
-      if (isHelpMessage && isAdmin) {
-        // Cas spécial pour l'admin qui répond à un message d'aide
-        await respondToHelpMessage({
-          conversationId,
-          content: replyContent,
-          attachments,
-          markAsResolved,
-        });
+      if (isHelpMessage) {
+        // Cas des messages d'aide
+        if (isAdmin) {
+          // Admin répondant à un message d'aide
+          await respondToHelpMessage({
+            conversationId,
+            content: replyContent,
+            attachments,
+            markAsResolved,
+          });
+        } else {
+          // Utilisateur envoyant un message d'aide
+          await respondToHelpMessage({
+            conversationId,
+            content: replyContent,
+            attachments,
+          });
+        }
       } else {
-        // Pour les autres cas, on utilise la réponse standard
-        // Cette partie devra être adaptée selon votre API
-        await respondToHelpMessage({
-          conversationId,
+        // Cas des messages directs entre client et propriétaire
+        const recipientId = getRecipientIdFromConversation(messages);
+
+        if (!recipientId) {
+          throw new Error("Impossible de déterminer le destinataire");
+        }
+
+        await sendDirectMessage({
+          recipientId,
+          subject:
+            messages.length > 0 && messages[0].subject
+              ? `RE: ${messages[0].subject}`
+              : "Sans objet",
           content: replyContent,
           attachments,
+          conversationId, // Si nécessaire pour votre API
         });
       }
 
@@ -264,7 +305,7 @@ const ConversationMessages = ({
             );
           })
         )}
-        <div ref={messageEndRef} />{" "}
+        <div ref={messageEndRef} />
         {/* Élément pour faire défiler vers le bas */}
       </div>
 

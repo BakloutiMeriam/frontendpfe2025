@@ -172,3 +172,10 @@
   margin-bottom: 15px;
   opacity: 0.5;
 }
+.notification-icon-container.direct {
+  background-color: #ff6b6b; /* ou une autre couleur de votre choix */
+}
+
+.notification-icon-container.direct i {
+  color: white;
+}

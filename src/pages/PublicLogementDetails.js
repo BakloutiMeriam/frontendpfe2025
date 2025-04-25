@@ -20,7 +20,9 @@ import {
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import NavbarHome from "../components/NavbarHome.js";
-import "../styles/detailsAllLogement.css"; // Nous allons créer ce fichier CSS
+import "../styles/detailsAllLogement.css";
+import AvisSection from "../components/Avis/AvisSection.js";
+
 const PublicLogementDetails = () => {
   const [logement, setLogement] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -343,7 +345,11 @@ const PublicLogementDetails = () => {
                 </div>
               </div>
             )}
-
+            {/* Avis - AJOUTEZ CE BLOC */}
+            <div className="ldp-section">
+              <h3 className="ldp-section-title">Commentaires</h3>
+              <AvisSection logementId={id} />
+            </div>
             {/* Emplacement */}
             <div className="ldp-section">
               <h3 className="ldp-section-title">Emplacement</h3>

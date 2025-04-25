@@ -180,7 +180,7 @@ const UserService = {
     try {
       const response = await axios.post(
         `${API_URL}/reject/${userId}`,
-        { reason },
+        { rejectionReason: reason },
         {
           withCredentials: true,
           headers: authService.authHeader(),

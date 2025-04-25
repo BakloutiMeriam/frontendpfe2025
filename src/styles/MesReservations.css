@@ -729,3 +729,20 @@
   color: #6c757d;
   margin-top: 5px;
 }
+/* Style pour le bouton d'avis */
+.btn-comment {
+  background-color: #28a745;
+  color: white;
+  border: none;
+}
+
+.btn-comment:hover {
+  background-color: #218838;
+  color: white;
+}
+
+/* Pour les icônes dans les modales */
+.modal-header-info {
+  background-color: #17a2b8;
+  color: white;
+}
