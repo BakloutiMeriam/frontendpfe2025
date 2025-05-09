@@ -243,6 +243,10 @@ const MesCommandesPage = () => {
                                 "data:"
                               )
                                 ? commande.logement.photoprincipale
+                                : commande.logement.photoprincipale.startsWith(
+                                    "http://localhost:3000/uploads/"
+                                  )
+                                ? commande.logement.photoprincipale
                                 : `/uploads/${commande.logement.photoprincipale}`
                             }
                             alt={commande.logement.titre}

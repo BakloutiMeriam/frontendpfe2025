@@ -104,11 +104,11 @@ const AdminReservationsPage = () => {
           (reservation._id && reservation._id.toLowerCase().includes(term)) ||
           (reservation.prixTotal &&
             reservation.prixTotal.toString().includes(term)) ||
-          (reservation.logement.titre &&
+          (reservation.logement?.titre &&
             reservation.logement.titre.toLowerCase().includes(term)) ||
-          (reservation.client.nom &&
+          (reservation.client?.nom &&
             reservation.client.nom.toLowerCase().includes(term)) ||
-          (reservation.client.prenom &&
+          (reservation.client?.prenom &&
             reservation.client.prenom.toLowerCase().includes(term))
       );
     }
@@ -116,14 +116,14 @@ const AdminReservationsPage = () => {
     // Filtre par client
     if (selectedClient) {
       filtered = filtered.filter(
-        (reservation) => reservation.client._id === selectedClient
+        (reservation) => reservation.client?._id === selectedClient
       );
     }
 
     // Filtre par logement
     if (selectedLogement) {
       filtered = filtered.filter(
-        (reservation) => reservation.logement._id === selectedLogement
+        (reservation) => reservation.logement?._id === selectedLogement
       );
     }
 
@@ -163,17 +163,20 @@ const AdminReservationsPage = () => {
 
   // Formatage de la date
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("fr-FR");
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("fr-FR");
+    } catch (error) {
+      return "Date invalide";
+    }
   };
 
   // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredReservations.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const currentItems = Array.isArray(filteredReservations)
+    ? filteredReservations.slice(indexOfFirstItem, indexOfLastItem)
+    : [];
   const totalPages = Math.ceil(filteredReservations.length / itemsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -231,9 +234,23 @@ const AdminReservationsPage = () => {
           statusClasses[status] || "res-badge-light"
         }`}
       >
-        {status}
+        {status || "inconnu"}
       </span>
     );
+  };
+
+  // Calculer la durée en nuits avec sécurité
+  const calculateNights = (startDate, endDate) => {
+    try {
+      if (!startDate || !endDate) return "?";
+      return (
+        Math.ceil(
+          (new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)
+        ) + " nuits"
+      );
+    } catch (error) {
+      return "? nuits";
+    }
   };
 
   if (!user || user.role !== "admin") {
@@ -413,53 +430,90 @@ const AdminReservationsPage = () => {
                         </tr>
                       ) : (
                         currentItems.map((reservation) => (
-                          <tr key={reservation._id}>
+                          <tr
+                            key={
+                              reservation._id || `reservation-${Math.random()}`
+                            }
+                          >
                             <td className="res-reservation-id">
-                              {reservation._id.substring(
-                                reservation._id.length - 8
-                              )}
+                              {reservation._id
+                                ? reservation._id.substring(
+                                    Math.max(0, reservation._id.length - 8)
+                                  )
+                                : "N/A"}
                             </td>
                             <td className="res-client-info">
-                              <div className="res-client-details">
-                                <img
-                                  src={
-                                    reservation.client.url_img ||
-                                    "/images/avatar.png"
-                                  }
-                                  alt="Avatar"
-                                  className="res-client-avatar"
-                                  onError={(e) => {
-                                    e.target.src = "/images/avatar.png";
-                                  }}
-                                />
-                                <div>
-                                  <div className="res-client-name">
-                                    {reservation.client.nom}{" "}
-                                    {reservation.client.prenom}
-                                  </div>
-                                  <div className="res-client-email">
-                                    {reservation.client.email}
+                              {reservation.client ? (
+                                <div className="res-client-details">
+                                  <img
+                                    src={
+                                      reservation.client.url_img ||
+                                      "/images/avatar.png"
+                                    }
+                                    alt="Avatar"
+                                    className="res-client-avatar"
+                                    onError={(e) => {
+                                      e.target.src = "/images/avatar.png";
+                                    }}
+                                  />
+                                  <div>
+                                    <div className="res-client-name">
+                                      {reservation.client.nom || "N/A"}{" "}
+                                      {reservation.client.prenom || ""}
+                                    </div>
+                                    <div className="res-client-email">
+                                      {reservation.client.email || "N/A"}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
+                              ) : (
+                                <div className="res-client-details">
+                                  <img
+                                    src="/images/avatar.png"
+                                    alt="Avatar"
+                                    className="res-client-avatar"
+                                  />
+                                  <div>
+                                    <div className="res-client-name">
+                                      Client inconnu
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
                             </td>
                             <td className="res-logement-info">
-                              <div className="res-logement-details">
-                                <img
-                                  src={
-                                    reservation.logement.photoprincipale ||
-                                    "/images/image.png"
-                                  }
-                                  alt={reservation.logement.titre}
-                                  className="res-logement-image"
-                                  onError={(e) => {
-                                    e.target.src = "/images/image.png";
-                                  }}
-                                />
-                                <div className="res-logement-title">
-                                  {reservation.logement.titre}
+                              {reservation.logement ? (
+                                <div className="res-logement-details">
+                                  <img
+                                    src={
+                                      reservation.logement.photoprincipale ||
+                                      "/images/image.png"
+                                    }
+                                    alt={
+                                      reservation.logement.titre || "Logement"
+                                    }
+                                    className="res-logement-image"
+                                    onError={(e) => {
+                                      e.target.src = "/images/image.png";
+                                    }}
+                                  />
+                                  <div className="res-logement-title">
+                                    {reservation.logement.titre ||
+                                      "Titre inconnu"}
+                                  </div>
                                 </div>
-                              </div>
+                              ) : (
+                                <div className="res-logement-details">
+                                  <img
+                                    src="/images/image.png"
+                                    alt="Logement"
+                                    className="res-logement-image"
+                                  />
+                                  <div className="res-logement-title">
+                                    Logement inconnu
+                                  </div>
+                                </div>
+                              )}
                             </td>
                             <td className="res-period-cell">
                               <div className="res-period-dates">
@@ -472,16 +526,14 @@ const AdminReservationsPage = () => {
                                 </div>
                               </div>
                               <div className="res-duration">
-                                {Math.ceil(
-                                  (new Date(reservation.dateFin) -
-                                    new Date(reservation.dateDebut)) /
-                                    (1000 * 60 * 60 * 24)
-                                )}{" "}
-                                nuits
+                                {calculateNights(
+                                  reservation.dateDebut,
+                                  reservation.dateFin
+                                )}
                               </div>
                             </td>
                             <td className="res-price-cell">
-                              {reservation.prixTotal} €
+                              {reservation.prixTotal || 0} €
                             </td>
                             <td className="res-status-cell">
                               {getStatusBadge(reservation.statut)}

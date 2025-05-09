@@ -34,13 +34,22 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import AppRoutes from "./routes/AppRoutes";
 import { ProfileProvider } from "./context/ProfileContext";
 import { AuthProvider } from "./context/AuthContext";
+import { AuthContext } from "./context/AuthContext";
 import { NotificationProvider } from "./context/NotificationContext";
-import { ChatbotProvider } from "./context/ChatbotContext"; // Importez le ChatbotProvider
-import ChatbotContainer from "./components/chatbot/ChatbotContainer"; // Importez le composant ChatbotContainer
+import { ChatbotProvider } from "./context/ChatbotContext";
+import ChatbotContainer from "./components/chatbot/ChatbotContainer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import "./styles/chatbot.css"; // Assurez-vous d'importer le CSS du chatbot
+import "./styles/chatbot.css";
+
+// Composant qui affiche le chatbot conditionnellement
+const ConditionalChatbot = () => {
+  const { user } = React.useContext(AuthContext);
+
+  // Afficher le chatbot uniquement si l'utilisateur est un client
+  return user && user.role === "client" ? <ChatbotContainer /> : null;
+};
 
 const App = () => {
   return (
@@ -51,11 +60,8 @@ const App = () => {
             <ProfileProvider>
               <NotificationProvider>
                 <ChatbotProvider>
-                  {" "}
-                  {/* Ajoutez le ChatbotProvider ici */}
                   <AppRoutes />
-                  <ChatbotContainer />{" "}
-                  {/* Ajoutez le composant ChatbotContainer ici */}
+                  <ConditionalChatbot />
                 </ChatbotProvider>
               </NotificationProvider>
             </ProfileProvider>

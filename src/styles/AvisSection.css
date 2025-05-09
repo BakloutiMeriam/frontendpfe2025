@@ -258,3 +258,260 @@
     padding-right: 15px;
   }
 }
+/*hneeee*/
+.avis-section {
+  margin-top: 20px;
+  padding: 20px 0;
+  border-top: 1px solid #e6e6e6;
+}
+
+.avis-summary {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 10px 0;
+}
+
+.avis-summary:hover {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 10px;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.avis-rating {
+  display: flex;
+  align-items: center;
+}
+
+.avis-stars {
+  display: flex;
+  color: #ff5a5f;
+  margin-right: 10px;
+}
+
+.star-icon {
+  margin-right: 2px;
+}
+
+.avis-score {
+  font-weight: bold;
+  font-size: 18px;
+  margin-right: 15px;
+}
+
+.avis-count {
+  font-size: 16px;
+}
+
+.avis-preview {
+  margin-bottom: 20px;
+}
+
+.avis-preview-item {
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  position: relative;
+}
+
+.avis-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.avis-preview-user {
+  display: flex;
+  align-items: center;
+}
+
+.avis-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.avis-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.avis-user-name {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.avis-date {
+  color: #717171;
+  font-size: 14px;
+}
+
+.avis-preview-comment {
+  line-height: 1.5;
+  color: #222;
+  margin-bottom: 15px;
+}
+
+/* Styles pour les actions (boutons modifier/supprimer) */
+.avis-actions {
+  display: flex;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.avis-action-btn {
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.avis-action-btn.edit {
+  background-color: #e8f4fd;
+  color: #0077cc;
+}
+
+.avis-action-btn.edit:hover {
+  background-color: #d0e8fc;
+}
+
+.avis-action-btn.delete {
+  background-color: #fee8e7;
+  color: #e53935;
+}
+
+.avis-action-btn.delete:hover {
+  background-color: #fdd6d4;
+}
+
+.avis-show-all {
+  background: none;
+  border: none;
+  color: #222;
+  font-weight: 600;
+  text-decoration: underline;
+  padding: 0;
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.2s ease;
+}
+
+.avis-show-all:hover {
+  color: #000;
+}
+
+/* Styles pour la modale */
+.avis-modal .modal-content {
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.modal-rating-header {
+  display: flex;
+  align-items: center;
+}
+
+.modal-stars {
+  display: flex;
+  color: #ff5a5f;
+  margin-right: 10px;
+}
+
+.modal-score {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.avis-modal-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.avis-statistics {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.avis-statistics h4 {
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.avis-bars {
+  display: flex;
+  flex-direction: column;
+}
+
+.avis-bar-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.avis-bar-label {
+  min-width: 20px;
+  margin-right: 10px;
+  text-align: right;
+}
+
+.avis-bar-wrapper {
+  flex: 1;
+  height: 8px;
+  background-color: #eaeaea;
+  border-radius: 4;
+}
+/* Ajoutez ces styles à votre fichier AvisSection.css */
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.upload-btn {
+  position: relative;
+  z-index: 1;
+}
+
+/* Supprimez la classe .file-input existante si elle est définie et remplacez-la par celle-ci */
+.file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* Assurez-vous que les textareas et les champs de formulaire ont un z-index approprié */
+.form-control {
+  position: relative;
+  z-index: 1;
+}
+
+/* Assurez-vous que le modal se comporte correctement */
+.avis-edit-modal .modal-content {
+  overflow: hidden !important;
+}
+
+/* Ajoutez de l'espace autour des contrôles de formulaire pour les rendre plus accessibles */
+.form-group {
+  margin-bottom: 1.5rem;
+}

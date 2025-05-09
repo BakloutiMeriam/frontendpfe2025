@@ -13,8 +13,6 @@ const Sidebar = () => {
   // État pour suivre les menus déroulants ouverts
   const [openMenus, setOpenMenus] = useState({});
 
-  // État pour suivre les menus déroulants ouverts
-
   // Vérifier si un lien est actif
   const isActive = (path) => {
     return location.pathname === path ? "active" : "";
@@ -33,6 +31,26 @@ const Sidebar = () => {
     }));
   };
 
+  // Fonction pour gérer correctement l'URL de l'image de profil
+  const getProfileImageSrc = () => {
+    if (!user || !user.url_img) {
+      return "/images/avatar.png";
+    }
+
+    // Si l'URL commence par http(s), c'est une URL complète (réseaux sociaux)
+    if (user.url_img.startsWith("http")) {
+      return user.url_img;
+    }
+
+    // Si l'URL contient déjà /uploads/, on ne duplique pas
+    if (user.url_img.includes("/uploads/")) {
+      return user.url_img;
+    }
+
+    // Sinon, on ajoute le préfixe /uploads/
+    return `/uploads/${user.url_img}`;
+  };
+
   // Si l'utilisateur n'est pas connecté, ne pas afficher la sidebar
   if (!user) return null;
 
@@ -46,14 +64,17 @@ const Sidebar = () => {
       <div className="sidebar-divider"></div>
 
       <div className="sidebar-user">
-        {user.role !== "admin" && (
-          <img
-            src={user.url_img || "/images/avatar.png"}
-            alt="Profile"
-            className="rounded-circle me-2"
-            style={{ width: "30px", height: "30px" }}
-          />
-        )}
+        {/* Affichage de la photo pour tous les utilisateurs, y compris les administrateurs */}
+        <img
+          src={getProfileImageSrc()}
+          alt="Profile"
+          className="rounded-circle me-2"
+          style={{ width: "30px", height: "30px" }}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "/images/avatar.png";
+          }}
+        />
         <div className="sidebar-user-info">
           <p className="sidebar-user-name">{user.prenom || "Utilisateur"}</p>
           <span className="sidebar-user-role">{user.role}</span>

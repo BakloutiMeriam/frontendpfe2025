@@ -98,7 +98,7 @@ const AdminLogementsPage = () => {
     // Filtre par propriétaire
     if (selectedProprietaire) {
       filtered = filtered.filter(
-        (logement) => logement.proprietaire._id === selectedProprietaire
+        (logement) => logement.proprietaire?._id === selectedProprietaire
       );
     }
 
@@ -364,32 +364,47 @@ const AdminLogementsPage = () => {
                               </td>
                               <td>{logement.titre}</td>
                               <td className="proprietaire-cell">
-                                <div className="proprietaire-info">
-                                  <img
-                                    src={
-                                      logement.proprietaire.url_img ||
-                                      "/images/avatar.png"
-                                    }
-                                    alt="Avatar"
-                                    className="proprietaire-avatar"
-                                    onError={(e) => {
-                                      e.target.src = "/images/avatar.png";
-                                    }}
-                                  />
-                                  <div>
-                                    <div className="proprietaire-name">
-                                      {logement.proprietaire.nom}{" "}
-                                      {logement.proprietaire.prenom}
-                                    </div>
-                                    <div className="proprietaire-email">
-                                      {logement.proprietaire.email}
+                                {logement.proprietaire ? (
+                                  <div className="proprietaire-info">
+                                    <img
+                                      src={
+                                        logement.proprietaire.url_img ||
+                                        "/images/avatar.png"
+                                      }
+                                      alt="Avatar"
+                                      className="proprietaire-avatar"
+                                      onError={(e) => {
+                                        e.target.src = "/images/avatar.png";
+                                      }}
+                                    />
+                                    <div>
+                                      <div className="proprietaire-name">
+                                        {logement.proprietaire.nom}{" "}
+                                        {logement.proprietaire.prenom}
+                                      </div>
+                                      <div className="proprietaire-email">
+                                        {logement.proprietaire.email}
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
+                                ) : (
+                                  <div className="proprietaire-info">
+                                    <img
+                                      src="/images/avatar.png"
+                                      alt="Avatar"
+                                      className="proprietaire-avatar"
+                                    />
+                                    <div>
+                                      <div className="proprietaire-name">
+                                        Propriétaire inconnu
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
                               </td>
                               <td>
-                                {logement.adresse?.ville},{" "}
-                                {logement.adresse?.pays}
+                                {logement.adresse?.ville || "N/A"},{" "}
+                                {logement.adresse?.pays || "N/A"}
                               </td>
                               <td className="price-cell">{logement.prix} €</td>
 

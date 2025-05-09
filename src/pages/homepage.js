@@ -285,56 +285,87 @@ const HomePage = () => {
     const pageNumbers = [];
     const totalPages = Math.ceil(filteredLogements.length / itemsPerPage);
 
-    // Afficher au maximum 5 boutons de pagination
-    const maxPageButtons = 5;
-    let startPage = Math.max(1, currentPage - Math.floor(maxPageButtons / 2));
-    let endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
+    // Add previous button
+    pageNumbers.push(
+      <button
+        key="prev"
+        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+        disabled={currentPage === 1}
+        className="pagination-nav-btn"
+        aria-label="Page précédente"
+      >
+        &lt;
+      </button>
+    );
 
-    // Ajuster startPage si on est près de la fin
-    if (endPage - startPage + 1 < maxPageButtons) {
-      startPage = Math.max(1, endPage - maxPageButtons + 1);
+    // First page
+    pageNumbers.push(
+      <button
+        key={1}
+        onClick={() => setCurrentPage(1)}
+        className={currentPage === 1 ? "active" : ""}
+      >
+        1
+      </button>
+    );
+
+    // Add ellipsis if needed
+    if (currentPage > 3) {
+      pageNumbers.push(<span key="ellipsis-1">...</span>);
     }
 
-    // Bouton pour la première page si on n'y est pas
-    if (startPage > 1) {
-      pageNumbers.push(
-        <button key="first" onClick={() => setCurrentPage(1)}>
-          1
-        </button>
-      );
-      if (startPage > 2) {
-        pageNumbers.push(<span key="ellipsis1">...</span>);
+    // Pages around current page
+    for (
+      let i = Math.max(2, currentPage - 1);
+      i <= Math.min(totalPages - 1, currentPage + 1);
+      i++
+    ) {
+      if (i !== 1 && i !== totalPages) {
+        pageNumbers.push(
+          <button
+            key={i}
+            onClick={() => setCurrentPage(i)}
+            className={currentPage === i ? "active" : ""}
+          >
+            {i}
+          </button>
+        );
       }
     }
 
-    // Pages principales
-    for (let i = startPage; i <= endPage; i++) {
+    // Add ellipsis if needed
+    if (currentPage < totalPages - 2) {
+      pageNumbers.push(<span key="ellipsis-2">...</span>);
+    }
+
+    // Last page if not first page
+    if (totalPages > 1) {
       pageNumbers.push(
         <button
-          key={i}
-          onClick={() => setCurrentPage(i)}
-          className={currentPage === i ? "active" : ""}
+          key={totalPages}
+          onClick={() => setCurrentPage(totalPages)}
+          className={currentPage === totalPages ? "active" : ""}
         >
-          {i}
-        </button>
-      );
-    }
-
-    // Bouton pour la dernière page si on n'y est pas
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        pageNumbers.push(<span key="ellipsis2">...</span>);
-      }
-      pageNumbers.push(
-        <button key="last" onClick={() => setCurrentPage(totalPages)}>
           {totalPages}
         </button>
       );
     }
 
+    // Add next button
+    pageNumbers.push(
+      <button
+        key="next"
+        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+        disabled={currentPage === totalPages}
+        className="pagination-nav-btn"
+        aria-label="Page suivante"
+      >
+        &gt;
+      </button>
+    );
+
     return pageNumbers;
   };
-
   const renderLogementsList = () => {
     if (loading) {
       return (
@@ -436,29 +467,12 @@ const HomePage = () => {
         <div className="airbnb-logements-list-container">
           {renderLogementsList()}
         </div>
-        <div className="airbnb-pagination">
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-          >
-            Précédent
-          </button>
-          {renderPageNumbers()}
-          <button
-            onClick={() =>
-              setCurrentPage((prev) =>
-                Math.min(
-                  prev + 1,
-                  Math.ceil(filteredLogements.length / itemsPerPage)
-                )
-              )
-            }
-            disabled={
-              currentPage === Math.ceil(filteredLogements.length / itemsPerPage)
-            }
-          >
-            Suivant
-          </button>
+        <div className="airbnb-pagination-container">
+          <div className="airbnb-pagination">{renderPageNumbers()}</div>
+          <div className="airbnb-pagination-info">
+            Page {currentPage} sur{" "}
+            {Math.ceil(filteredLogements.length / itemsPerPage)}
+          </div>
         </div>
       </div>
 

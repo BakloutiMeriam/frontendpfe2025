@@ -22,7 +22,6 @@ import {
   FaShieldAlt,
   FaClock,
   FaExclamationTriangle,
-  FaStar,
   FaRegCreditCard,
 } from "react-icons/fa";
 import Modal from "react-bootstrap/Modal";
@@ -346,20 +345,6 @@ const ReservationForm = () => {
     acceptTerms: false,
   };
 
-  // Formatage des dates indisponibles pour affichage
-  /*const formatterDatesIndisponibles = () => {
-    if (datesIndisponibles.length === 0) return [];
-
-    return datesIndisponibles.slice(0, 5).map((date) => {
-      return new Date(date).toLocaleDateString("fr-FR", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      });
-    });
-  };*/
-
   return (
     <>
       <NavbarHome />
@@ -387,11 +372,6 @@ const ReservationForm = () => {
                     {logement.adresse?.pays || ""}
                   </span>
                 </p>
-                <div className="modern-property-rating">
-                  <FaStar className="modern-star-icon" />
-                  <span>4.9</span>
-                  <span className="modern-reviews-count">(24 avis)</span>
-                </div>
               </div>
 
               {logement.photoprincipale && logement.photos.length > 0 ? (
@@ -411,16 +391,6 @@ const ReservationForm = () => {
                     <div className="modern-highlight-label">Type</div>
                     <div className="modern-highlight-value">
                       {logement.type || "Appartement"}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="modern-highlight-item">
-                  <FaUsers className="modern-highlight-icon" />
-                  <div>
-                    <div className="modern-highlight-label">Capacité</div>
-                    <div className="modern-highlight-value">
-                      {logement.nombrePersonnes || "2"} personnes
                     </div>
                   </div>
                 </div>
@@ -447,7 +417,15 @@ const ReservationForm = () => {
               <h3 className="modern-section-title">À propos de l'hôte</h3>
               <div className="modern-host-info">
                 <div className="modern-host-avatar">
-                  <FaUser />
+                  {logement.proprietaire?.url_img ? (
+                    <img
+                      src={logement.proprietaire.url_img}
+                      alt={`${logement.proprietaire?.prenom || "Propriétaire"}`}
+                      className="modern-host-image"
+                    />
+                  ) : (
+                    <FaUser />
+                  )}
                 </div>
                 <div className="modern-host-details">
                   <h4 className="modern-host-name">
@@ -464,10 +442,6 @@ const ReservationForm = () => {
                         })
                       : "Janvier 2023"}
                   </p>
-                  <div className="modern-host-stat">
-                    <FaStar className="modern-host-icon" />
-                    <span>Note moyenne: 4.8</span>
-                  </div>
                   <div className="modern-host-stat">
                     <FaShieldAlt className="modern-host-icon" />
                     <span>Identité vérifiée</span>

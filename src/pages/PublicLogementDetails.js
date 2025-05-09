@@ -13,7 +13,6 @@ import {
   FaArrowLeft,
   FaCalendarAlt,
   FaInfoCircle,
-  FaHeart,
   FaShare,
   FaUser,
 } from "react-icons/fa";
@@ -32,7 +31,6 @@ const PublicLogementDetails = () => {
   const [modalMessage, setModalMessage] = useState("");
   const [modalTitle, setModalTitle] = useState("");
   const [modalAction, setModalAction] = useState(null);
-  const [isFavorite, setIsFavorite] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -116,11 +114,6 @@ const PublicLogementDetails = () => {
     setSelectedPhoto(photo);
   };
 
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    // Ici vous pourriez appeler une API pour sauvegarder le favori
-  };
-
   const handleShare = () => {
     // Implémentation du partage
     navigator.clipboard.writeText(window.location.href);
@@ -187,14 +180,6 @@ const PublicLogementDetails = () => {
           <div className="ldp-actions">
             <button className="ldp-action-btn" onClick={handleShare}>
               <FaShare /> Partager
-            </button>
-            <button
-              className={`ldp-action-btn ${
-                isFavorite ? "ldp-favorite-active" : ""
-              }`}
-              onClick={toggleFavorite}
-            >
-              <FaHeart /> {isFavorite ? "Sauvegardé" : "Sauvegarder"}
             </button>
           </div>
         </div>

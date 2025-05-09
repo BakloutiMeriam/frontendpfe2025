@@ -40,6 +40,26 @@ const NavbarHome = () => {
     }
   };
 
+  // Fonction pour gérer correctement l'URL de l'image de profil
+  const getProfileImageSrc = () => {
+    if (!user || !user.url_img) {
+      return "/images/avatar.png";
+    }
+
+    // Si l'URL commence par http(s), c'est une URL complète (réseaux sociaux)
+    if (user.url_img.startsWith("http")) {
+      return user.url_img;
+    }
+
+    // Si l'URL contient déjà /uploads/, on ne duplique pas
+    if (user.url_img.includes("/uploads/")) {
+      return user.url_img;
+    }
+
+    // Sinon, on ajoute le préfixe /uploads/
+    return `/uploads/${user.url_img}`;
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-custom shadow-sm">
       <div className="container-fluid navbar-container-custom">
@@ -103,9 +123,13 @@ const NavbarHome = () => {
                   aria-expanded="false"
                 >
                   <img
-                    src={user.url_img || "/images/avatar.png"}
+                    src={getProfileImageSrc()}
                     alt="Profil"
                     className="rounded-circle me-2"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/images/avatar.png";
+                    }}
                   />
                   <span>{user.prenom || "Profil"}</span>
                 </a>

@@ -174,6 +174,10 @@ const ReservationDetail = () => {
                       src={
                         reservation.logement.photoprincipale.startsWith("data:")
                           ? reservation.logement.photoprincipale
+                          : reservation.logement.photoprincipale.startsWith(
+                              "http://localhost:3000/uploads/"
+                            )
+                          ? reservation.logement.photoprincipale
                           : `/uploads/${reservation.logement.photoprincipale}`
                       }
                       alt={reservation.logement.titre}

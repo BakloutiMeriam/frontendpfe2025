@@ -340,6 +340,8 @@ export const logementService = {
       });
 
       const logement = response.data;
+      console.log("Données brutes du logement reçues:", logement);
+      console.log("Propriétaire reçu:", logement.proprietaire);
       const baseUrl = "http://localhost:3000/uploads/";
 
       // Préfixer les chemins d'images...
