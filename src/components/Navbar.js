@@ -52,6 +52,9 @@ const Navbar = () => {
     return `/uploads/${user.url_img}`;
   };
 
+  // Vérifier si l'utilisateur est un administrateur
+  const isAdmin = user && user.role === "admin";
+
   return (
     <nav
       className={`navbar navbar-expand-lg navbar-custom shadow-sm ${
@@ -140,9 +143,14 @@ const Navbar = () => {
                         <i className="fas fa-sign-out-alt me-2"></i>
                         Déconnexion
                       </button>
-                      <Link className="dropdown-item" to={"/messages/direct"}>
-                        Messagerie
-                      </Link>
+
+                      {/* Afficher le lien de messagerie uniquement pour les utilisateurs non-admin */}
+                      {!isAdmin && (
+                        <Link className="dropdown-item" to={"/messages/direct"}>
+                          Messagerie
+                        </Link>
+                      )}
+
                       <Link className="dropdown-item" to={"/help"}>
                         Centre d'aide
                       </Link>

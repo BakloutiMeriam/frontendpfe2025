@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importez Link pour le lien
+import { useNavigate } from "react-router-dom";
 import { forgotPassword } from "../services/authService";
 import "../styles/reset.css";
 
@@ -24,22 +24,16 @@ const ForgotPasswordForm = () => {
 
   return (
     <div className="reset-container">
-      <div className="reset-left">
-        <div>
-          <h1>Mot de passe oublié ?</h1>
-          <p>
-            Pas de panique ! l'équipe stayzy vous aiderons à récupérer votre
-            compte.
-          </p>
-          <img src="/images/f3.jpg" alt="Illustration" />
-        </div>
-      </div>
-      <div className="reset-right">
+      {/* Decorative blobs are created with CSS ::before and ::after */}
+
+      <div className="reset-content">
         <div className="reset-card">
           <div className="reset-logo2">
             <img src="/images/logo.jpg" alt="Logo" />
           </div>
-          <h3 className="reset-title">Mise à jour du mot de passe</h3>
+
+          <h3 className="reset-title">Mot de passe oublié</h3>
+
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label className="reset-label">
@@ -59,8 +53,23 @@ const ForgotPasswordForm = () => {
             <button type="submit" className="reset-btn-custom">
               Envoyer le code
             </button>
-            {message && <p className="reset-message-error">{message}</p>}
+
+            {message && (
+              <p
+                className={
+                  message.includes("succès")
+                    ? "reset-message-success"
+                    : "reset-message-error"
+                }
+              >
+                {message}
+              </p>
+            )}
           </form>
+
+          <div className="reset-login-link">
+            <a href="/login">Retour à la page de connexion</a>
+          </div>
         </div>
       </div>
     </div>

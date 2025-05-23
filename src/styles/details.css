@@ -5,8 +5,8 @@
   --background-color: #ecf0f1;
   --text-color: #2c3e50;
   --card-bg: #ffffff;
-  --border-color: #bdc3c7;
-  --accent-color: #0d6efd;
+  --border-color: #74797d;
+  --accent-color: #072046;
   --warning-color: #ffc107;
   --danger-color: #dc3545;
   --success-color: #198754;
@@ -38,10 +38,10 @@ body {
   border-bottom: 1px solid var(--border-color);
 }
 
-.property-title {
-  font-size: 1.6rem;
+.property-title-prop {
+  font-size: 2rem;
   font-weight: 600;
-  color: var(--primary-color);
+  color: var(--primary) !important;
   margin-bottom: 0.25rem;
 }
 
@@ -282,7 +282,7 @@ body {
 .characteristic-icon {
   font-size: 1.4rem;
   margin-bottom: 0.5rem;
-  color: var(--primary-color);
+  color: var(--primary) !important;
   opacity: 0.8;
 }
 
@@ -321,13 +321,12 @@ body {
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 1.25rem;
-  text-align: center;
 }
 
 .price-highlight {
-  font-size: 1.4rem;
+  font-size: 1.8rem;
   font-weight: 600;
-  color: var(--primary-color);
+  color: var(--primary) !important;
   margin-bottom: 0.75rem;
 }
 

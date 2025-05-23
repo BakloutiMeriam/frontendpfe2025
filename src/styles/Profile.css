@@ -12,6 +12,7 @@
   --border-radius: 10px;
   --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
+  --accent: #dc3545;
 }
 
 body {
@@ -31,7 +32,7 @@ body {
 }
 
 .profile-header {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  background: linear-gradient(135deg, var(--accent), var(--primary-dark));
   color: var(--white);
   padding: 40px 30px;
   position: relative;

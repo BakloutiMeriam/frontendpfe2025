@@ -1,38 +1,3 @@
-// components/chatbot/ConversationsList.js
-/*import React from "react";
-import { useChatbot } from "../../context/ChatbotContext";
-
-const ConversationsList = () => {
-  const { conversations, loadConversation, startNewConversation } =
-    useChatbot();
-
-  return (
-    <div className="conversations-list">
-      <button
-        className="new-conversation-btn"
-        onClick={() => startNewConversation("Bonjour")}
-      >
-        Nouvelle conversation
-      </button>
-
-      <h4>Conversations précédentes</h4>
-      <ul>
-        {conversations.map((conversation) => (
-          <li
-            key={conversation._id}
-            onClick={() => loadConversation(conversation._id)}
-            className="conversation-item"
-          >
-            {new Date(conversation.createdAt).toLocaleDateString()} -
-            {conversation.messages[0]?.content.substring(0, 30)}...
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-export default ConversationsList;*/
 import React from "react";
 import { useChatbot } from "../../context/ChatbotContext";
 

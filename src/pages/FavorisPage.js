@@ -119,6 +119,10 @@ const FavorisPage = () => {
                 src={
                   logement.photoprincipale.startsWith("data:")
                     ? logement.photoprincipale
+                    : logement.photoprincipale.startsWith(
+                        "http://localhost:3000/uploads/"
+                      )
+                    ? logement.photoprincipale
                     : `/uploads/${logement.photoprincipale}`
                 }
                 alt={logement.titre}

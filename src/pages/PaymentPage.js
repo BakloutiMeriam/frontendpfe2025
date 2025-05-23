@@ -10,7 +10,9 @@ import {
 import PaiementService from "../services/PaiementService";
 import CommandeService from "../services/commandeService";
 import "../styles/paymentPage.css";
-// Charger Stripe (remplacez par votre clé publique)
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 const CheckoutForm = () => {
@@ -205,21 +207,25 @@ const CheckoutForm = () => {
 
 const PaymentPage = () => {
   return (
-    <div className="payment-page">
-      <div className="payment-container">
-        <div className="payment-header">
-          <h1>Paiement sécurisé</h1>
+    <>
+      <Navbar />
+      <div className="payment-page">
+        <div className="payment-container">
+          <div className="payment-header">
+            <h1>Paiement sécurisé</h1>
+          </div>
+          <div className="back-link-container">
+            <Link to="/mes-commandes" className="back-link">
+              <span className="back-arrow">&#8592;</span> Retour à mes commandes
+            </Link>
+          </div>
+          <Elements stripe={stripePromise}>
+            <CheckoutForm />
+          </Elements>
         </div>
-        <div className="back-link-container">
-          <Link to="/mes-commandes" className="back-link">
-            <span className="back-arrow">&#8592;</span> Retour à mes commandes
-          </Link>
-        </div>
-        <Elements stripe={stripePromise}>
-          <CheckoutForm />
-        </Elements>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 export default PaymentPage;

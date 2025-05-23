@@ -202,23 +202,23 @@ const CompleteProfile = () => {
 
   return (
     <>
-      <div className="complete-profile-container">
-        <div className="complete-profile-card">
+      <div className="cp-container">
+        <div className="cp-card">
           <h2>Compléter votre profil</h2>
 
-          <div className="user-info-header">
+          <div className="cp-user-header">
             {userInfo.url_img && userInfo.url_img !== "user.png" ? (
               <img
                 src={userInfo.url_img}
                 alt="profileImg"
-                className="profile-picture"
+                className="cp-profile-picture"
               />
             ) : (
-              <div className="profile-picture-placeholder">
+              <div className="cp-profile-placeholder">
                 <i className="bi bi-person"></i>
               </div>
             )}
-            <div className="user-details">
+            <div className="cp-user-details">
               <h3>
                 {userInfo.prenom} {userInfo.nom}
               </h3>
@@ -226,10 +226,10 @@ const CompleteProfile = () => {
             </div>
           </div>
 
-          {error && <div className="alert alert-danger">{error}</div>}
+          {error && <div className="cp-alert cp-alert-danger">{error}</div>}
 
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
+            <div className="cp-form-group">
               <label htmlFor="tel">Numéro de téléphone*</label>
               <input
                 type="tel"
@@ -237,16 +237,16 @@ const CompleteProfile = () => {
                 name="tel"
                 value={formData.tel}
                 onChange={handleChange}
-                className="form-control"
+                className="cp-form-control"
                 required
                 placeholder="Entrez votre numéro de téléphone"
               />
-              <small className="form-text text-muted">
+              <small className="cp-form-text text-muted">
                 Votre numéro doit contenir 8 chiffres.
               </small>
             </div>
 
-            <div className="form-group">
+            <div className="cp-form-group">
               <label htmlFor="adresse">Adresse*</label>
               <input
                 type="text"
@@ -254,40 +254,36 @@ const CompleteProfile = () => {
                 name="adresse"
                 value={formData.adresse}
                 onChange={handleChange}
-                className="form-control"
+                className="cp-form-control"
                 required
                 placeholder="Entrez votre adresse complète"
               />
             </div>
 
-            <div className="form-group">
+            <div className="cp-form-group">
               <label htmlFor="role">Rôle*</label>
               <select
                 id="role"
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="form-control"
+                className="cp-form-control"
                 required
               >
                 <option value="client">Client</option>
                 <option value="proprietaire">Propriétaire</option>
               </select>
-              <small className="form-text text-muted">
+              <small className="cp-form-text text-muted">
                 Choisissez "Client" si vous cherchez à louer ou "Propriétaire"
                 si vous souhaitez mettre des propriétés en location.
               </small>
             </div>
 
-            <button
-              type="submit"
-              className="btn btn-primary btn-block"
-              disabled={loading}
-            >
+            <button type="submit" className="cp-btn-primary" disabled={loading}>
               {loading ? (
                 <span>
                   <span
-                    className="spinner-border spinner-border-sm"
+                    className="cp-spinner"
                     role="status"
                     aria-hidden="true"
                   ></span>{" "}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Link } from "react-router-dom";
-
+import "../styles/register.css";
 const ProfileForm = ({ onSubmit, formError }) => {
   const [formData, setFormData] = useState({
     nom: "",

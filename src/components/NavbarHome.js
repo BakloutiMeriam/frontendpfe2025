@@ -59,6 +59,7 @@ const NavbarHome = () => {
     // Sinon, on ajoute le préfixe /uploads/
     return `/uploads/${user.url_img}`;
   };
+  const isAdmin = user && user.role === "admin";
 
   return (
     <nav className="navbar navbar-expand-lg navbar-custom shadow-sm">
@@ -153,9 +154,11 @@ const NavbarHome = () => {
                     <button className="dropdown-item" onClick={handleLogout}>
                       Déconnexion
                     </button>
-                    <Link className="dropdown-item" to={"/messages/direct"}>
-                      Messagerie
-                    </Link>
+                    {!isAdmin && (
+                      <Link className="dropdown-item" to={"/messages/direct"}>
+                        Messagerie
+                      </Link>
+                    )}
                     <Link className="dropdown-item" to={"/help"}>
                       Centre d'aide
                     </Link>

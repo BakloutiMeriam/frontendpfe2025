@@ -1,36 +1,5 @@
 // components/chatbot/ChatMessage.js
-/*import React from "react";
-
-const ChatMessage = ({ message }) => {
-  // Déterminer si le message vient de l'utilisateur ou du chatbot
-  const isUser = message.sender === "user";
-
-  return (
-    <div className={`chat-message ${isUser ? "user-message" : "bot-message"}`}>
-      <div className="message-content">
-        {message.html ? (
-          <div dangerouslySetInnerHTML={{ __html: message.content }} />
-        ) : (
-          <p>{message.content}</p>
-        )}
-      </div>
-
-      {message.timestamp && (
-        <div className="message-timestamp">
-          {new Date(message.timestamp).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default ChatMessage;*/
-// components/chatbot/ChatMessage.js
 import React from "react";
-
 const ChatMessage = ({ message }) => {
   // Vérifier plusieurs façons possibles d'identifier un message utilisateur
   const isUser =

@@ -138,10 +138,10 @@ const Login = () => {
       <div className="auth-container">
         <div className="color-blob"></div>
         <div className="auth-card-centered">
-          <h2>Identifiez-vous !</h2>
-          <div className="reset-logo2">
+          <h2>Identifiez-vous</h2>
+          {/*<div className="reset-logo2">
             <img src="/images/logo2.png" alt="Logo" />
-          </div>
+          </div>*/}
           <LoginForm
             login={login}
             errors={errors}
@@ -175,16 +175,16 @@ const Login = () => {
               callback={handleFacebookLoginSuccess}
               onFailure={handleFacebookLoginFailure}
               icon="bi-facebook"
-              textButton=" Continuer avec Facebook"
-              cssClass="btn-primary"
+              textButton=" Se connecter avec Facebook"
+              cssClass="btn-primary w-100"
             />
           </div>
-          <div className="text-center mt-3">
+          <div className="text-center mt-4">
             <p
               style={{
                 display: "inline",
                 marginRight: "5px",
-                fontSize: "12px",
+                fontSize: "14px",
               }}
             >
               Vous n'avez pas de compte ?

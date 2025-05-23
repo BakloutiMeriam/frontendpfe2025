@@ -148,3 +148,104 @@
     width: 100%;
   }
 }
+.download-receipt-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.download-receipt-button:hover {
+  background-color: #3a7bc8;
+}
+
+.download-receipt-button:disabled {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+.download-receipt-button i {
+  margin-right: 8px;
+}
+.confirmation-actions {
+  margin-top: 2rem;
+}
+
+.action-buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .action-buttons-container {
+    flex-direction: row;
+    justify-content: center;
+    max-width: 100%;
+  }
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-align: center;
+  min-width: 200px;
+}
+
+.action-button i {
+  margin-right: 0.5rem;
+}
+
+.download-receipt-button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.download-receipt-button:hover {
+  background-color: #2e75c5;
+}
+
+.download-receipt-button:disabled {
+  background-color: #a0c3e8;
+  cursor: not-allowed;
+}
+
+.primary-button {
+  background-color: #28a745;
+  color: white;
+  text-decoration: none;
+}
+
+.primary-button:hover {
+  background-color: #218838;
+}
+
+.secondary-button {
+  background-color: #f8f9fa;
+  color: #343a40;
+  border: 1px solid #dee2e6;
+  text-decoration: none;
+}
+
+.secondary-button:hover {
+  background-color: #e9ecef;
+}

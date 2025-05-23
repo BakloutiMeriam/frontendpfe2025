@@ -313,7 +313,9 @@ const LogementDetails = () => {
                 className="form-control mb-2"
               />
             ) : (
-              <h1 className="property-title">{renderSafely(logement.titre)}</h1>
+              <h1 className="property-title-prop">
+                {renderSafely(logement.titre)}
+              </h1>
             )}
             <div className="property-subtitle">
               <FaMapMarkerAlt />
@@ -606,7 +608,7 @@ const LogementDetails = () => {
               />
             ) : (
               <div className="price-highlight">
-                {renderSafely(logement.prix, "0")} € / mois
+                {renderSafely(logement.prix, "0")} € / nuit
               </div>
             )}
             <div className="mt-3">

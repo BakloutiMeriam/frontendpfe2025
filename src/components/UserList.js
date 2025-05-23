@@ -25,6 +25,7 @@ const UserList = () => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
+  const [failedImages, setFailedImages] = useState({});
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -51,11 +52,9 @@ const UserList = () => {
       adresse: user.adresse,
       role: user.role,
     });
-    // Reset file upload fields
     setUploadedFile(null);
     setImagePreview(user.url_img || null);
 
-    // Reset file input if it exists
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -69,35 +68,31 @@ const UserList = () => {
 
   const handleSaveEdit = async (userId) => {
     try {
-      // Here we would handle the file upload first
-      // For this example, let's assume we have a function that uploads the file
-      // and returns the URL
-      let imageUrl = userData.photo;
+      let updatedUserData = { ...userData };
 
       if (uploadedFile) {
-        // In a real scenario, you would upload the file to your server
-        // and get back a URL. Here's a placeholder for that process:
-        // imageUrl = await userService.uploadUserPhoto(uploadedFile);
-
-        // For demo purposes, we'll create a fake URL
-        imageUrl = URL.createObjectURL(uploadedFile);
-        // Note: In production, you should use your actual file upload API
+        const imageUrl = URL.createObjectURL(uploadedFile);
+        updatedUserData.url_img = imageUrl;
       }
-
-      const updatedUserData = {
-        ...userData,
-        url_img: imageUrl,
-      };
 
       await userService.updateUser(userId, updatedUserData);
 
       const updatedUsers = users.map((user) =>
         user._id === userId ? { ...user, ...updatedUserData } : user
       );
+
       setUsers(updatedUsers);
       setEditingUserId(null);
       setUploadedFile(null);
       setImagePreview(null);
+
+      if (failedImages[userId]) {
+        setFailedImages((prev) => {
+          const newFailedImages = { ...prev };
+          delete newFailedImages[userId];
+          return newFailedImages;
+        });
+      }
     } catch (err) {
       setError("Erreur lors de la mise à jour de l'utilisateur");
     }
@@ -123,6 +118,13 @@ const UserList = () => {
       setUploadedFile(file);
       setImagePreview(URL.createObjectURL(file));
     }
+  };
+
+  const handleImageError = (userId) => {
+    setFailedImages((prev) => ({
+      ...prev,
+      [userId]: true,
+    }));
   };
 
   // Pagination logic
@@ -153,6 +155,14 @@ const UserList = () => {
       default:
         return "admin-badge-default";
     }
+  };
+
+  // Fonction pour obtenir la source d'image appropriée
+  const getImageSource = (user) => {
+    if (failedImages[user._id] || !user.url_img) {
+      return getDefaultAvatar(`${user.nom} ${user.prenom}`);
+    }
+    return user.url_img;
   };
 
   if (loading)
@@ -242,15 +252,10 @@ const UserList = () => {
                           <td className="admin-user-photo">
                             <div className="admin-photo-edit">
                               <img
-                                src={
-                                  imagePreview ||
-                                  user.url_img ||
-                                  getDefaultAvatar(
-                                    `${userData.nom} ${userData.prenom}`
-                                  )
-                                }
+                                src={imagePreview || getImageSource(user)}
                                 alt={`${userData.nom} ${userData.prenom}`}
                                 className="admin-user-avatar"
+                                onError={() => handleImageError(user._id)}
                               />
                               <div className="mt-2">
                                 <input
@@ -395,12 +400,10 @@ const UserList = () => {
                         <>
                           <td className="admin-user-photo">
                             <img
-                              src={
-                                user.url_img ||
-                                getDefaultAvatar(`${user.nom} ${user.prenom}`)
-                              }
+                              src={getImageSource(user)}
                               alt={`${user.nom} ${user.prenom}`}
                               className="admin-user-avatar"
+                              onError={() => handleImageError(user._id)}
                             />
                           </td>
                           <td>{user.nom}</td>
@@ -451,15 +454,10 @@ const UserList = () => {
                       <div className="admin-user-card-edit">
                         <div className="admin-user-card-photo-edit">
                           <img
-                            src={
-                              imagePreview ||
-                              user.url_img ||
-                              getDefaultAvatar(
-                                `${userData.nom} ${userData.prenom}`
-                              )
-                            }
+                            src={imagePreview || getImageSource(user)}
                             alt={`${userData.nom} ${userData.prenom}`}
                             className="admin-user-card-avatar"
+                            onError={() => handleImageError(user._id)}
                           />
                           <div className="mt-2">
                             <label className="form-label">
@@ -616,12 +614,10 @@ const UserList = () => {
                       <>
                         <div className="admin-user-card-header">
                           <img
-                            src={
-                              user.url_img ||
-                              getDefaultAvatar(`${user.nom} ${user.prenom}`)
-                            }
+                            src={getImageSource(user)}
                             alt={`${user.nom} ${user.prenom}`}
                             className="admin-user-card-avatar"
+                            onError={() => handleImageError(user._id)}
                           />
                           <h5 className="admin-user-card-name">
                             {user.prenom} {user.nom}
@@ -725,3 +721,4 @@ const UserList = () => {
 };
 
 export default UserList;
+//hneee

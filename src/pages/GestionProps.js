@@ -2,6 +2,20 @@ import React, { useEffect, useState } from "react";
 import "../styles/PropsList.css";
 import UserService from "../services/UserService";
 import Layout from "../components/Layout";
+import {
+  FiSearch,
+  FiCheckCircle,
+  FiXCircle,
+  FiAlertTriangle,
+  FiInfo,
+  FiChevronLeft,
+  FiChevronRight,
+  FiUser,
+  FiMail,
+  FiPhone,
+  FiHome,
+  FiRefreshCw,
+} from "react-icons/fi";
 
 const GestionProps = () => {
   const [proprietaires, setProprietaires] = useState([]);
@@ -13,49 +27,47 @@ const GestionProps = () => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState({ type: "", text: "" });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 8;
 
+  // Chargement initial des données
   useEffect(() => {
-    fetchPendingProprietaires();
+    loadProprietaires();
   }, []);
 
-  const fetchPendingProprietaires = async () => {
+  const loadProprietaires = async () => {
     try {
       setLoading(true);
-      const response = await UserService.getPendingProprietaires();
-      setProprietaires(response);
-      setFilteredProprietaires(response);
+      const data = await UserService.getPendingProprietaires();
+      setProprietaires(data);
+      setFilteredProprietaires(data);
       setLoading(false);
     } catch (error) {
-      console.error(
-        "Erreur lors de la récupération des propriétaires en attente:",
-        error
-      );
-      setLoading(false);
-      setMessage({
-        type: "danger",
-        text: `Erreur lors du chargement des données: ${
-          error.response?.status || error.message
-        }`,
-      });
+      handleError("Erreur lors du chargement", error);
     }
   };
 
-  const handleSearch = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
+  const handleError = (context, error) => {
+    console.error(`${context}:`, error);
+    setMessage({
+      type: "error",
+      text: `${context}: ${error.message || "Erreur inconnue"}`,
+    });
+    setLoading(false);
+  };
 
-    if (value) {
-      const filtered = proprietaires.filter(
-        (prop) =>
-          prop.nom.toLowerCase().includes(value.toLowerCase()) ||
-          prop.prenom.toLowerCase().includes(value.toLowerCase()) ||
-          prop.email.toLowerCase().includes(value.toLowerCase())
-      );
-      setFilteredProprietaires(filtered);
-    } else {
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    if (!term) {
       setFilteredProprietaires(proprietaires);
+      return;
     }
+    const filtered = proprietaires.filter((prop) =>
+      `${prop.prenom} ${prop.nom} ${prop.email}`
+        .toLowerCase()
+        .includes(term.toLowerCase())
+    );
+    setFilteredProprietaires(filtered);
+    setCurrentPage(1);
   };
 
   const handleApprove = async (userId) => {
@@ -63,17 +75,11 @@ const GestionProps = () => {
       await UserService.approveProprietaire(userId);
       setMessage({
         type: "success",
-        text: "Propriétaire approuvé avec succès!",
+        text: "Propriétaire approuvé avec succès",
       });
-      fetchPendingProprietaires();
+      loadProprietaires();
     } catch (error) {
-      console.error("Erreur lors de l'approbation:", error);
-      setMessage({
-        type: "danger",
-        text: `Erreur lors de l'approbation: ${
-          error.response?.status || error.message
-        }`,
-      });
+      handleError("Erreur lors de l'approbation", error);
     }
   };
 
@@ -81,184 +87,246 @@ const GestionProps = () => {
     if (!selectedUser) return;
 
     try {
-      const response = await UserService.rejectProprietaire(
-        selectedUser._id,
-        rejectReason
-      );
-      console.log("Réponse du serveur:", response);
-      setMessage({
-        type: "success",
-        text: "Propriétaire rejeté avec succès!",
-      });
+      await UserService.rejectProprietaire(selectedUser._id, rejectReason);
+      setMessage({ type: "success", text: "Propriétaire rejeté avec succès" });
       closeModal();
-      fetchPendingProprietaires();
+      loadProprietaires();
     } catch (error) {
-      console.error("Erreur détaillée:", error);
-      console.error("Statut:", error.response?.status);
-      console.error("Message d'erreur:", error.response?.data);
-      console.error("Erreur lors du rejet:", error);
-      setMessage({
-        type: "danger",
-        text: `Erreur lors du rejet: ${
-          error.response?.status || error.message
-        }`,
-      });
+      handleError("Erreur lors du rejet", error);
     }
   };
 
   const openRejectModal = (user) => {
-    console.log("openRejectModal appelé avec:", user);
     setSelectedUser(user);
-    setRejectReason("");
     setShowModal(true);
   };
 
   const closeModal = () => {
     setShowModal(false);
-    setSelectedUser(null);
     setRejectReason("");
   };
 
   // Pagination
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredProprietaires.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
   const totalPages = Math.ceil(filteredProprietaires.length / itemsPerPage);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginatedData = filteredProprietaires.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
-    <>
-      <Layout>
-        <div className="proprietaire-list-card">
-          <h3 className="proprietaire-title">
-            Liste des Propriétaires en Attente
-          </h3>
-
-          {message.text && (
-            <div
-              className={`proprietaire-alert proprietaire-alert-${message.type}`}
-            >
-              {message.text}
-              <button
-                className="proprietaire-close-btn"
-                onClick={() => setMessage({ type: "", text: "" })}
-              >
-                &times;
-              </button>
-            </div>
-          )}
-
-          <div className="proprietaire-filter-bar">
-            <input
-              type="text"
-              placeholder="Rechercher un propriétaire..."
-              value={searchTerm}
-              onChange={handleSearch}
-            />
+    <Layout>
+      <div className="gestion-props-container">
+        {/* En-tête */}
+        <header className="gp-header">
+          <div className="gp-title-section">
+            <h1>Validation des Propriétaires</h1>
+            <p className="gp-subtitle">Gestion des demandes en attente</p>
           </div>
 
+          <div className="gp-actions">
+            <div className="gp-search-box">
+              <FiSearch className="search-icon" />
+              <input
+                type="text"
+                placeholder="Rechercher un propriétaire..."
+                value={searchTerm}
+                onChange={(e) => handleSearch(e.target.value)}
+              />
+            </div>
+            <button
+              className="gp-refresh-btn"
+              onClick={loadProprietaires}
+              disabled={loading}
+            >
+              <FiRefreshCw className={loading ? "spin" : ""} />
+              Actualiser
+            </button>
+          </div>
+        </header>
+
+        {/* Message d'état */}
+        {message.text && (
+          <div className={`gp-message gp-${message.type}`}>
+            <div className="message-content">
+              {message.type === "success" ? (
+                <FiCheckCircle />
+              ) : (
+                <FiAlertTriangle />
+              )}
+              <span>{message.text}</span>
+            </div>
+            <button
+              onClick={() => setMessage({ type: "", text: "" })}
+              className="message-close"
+            >
+              <FiXCircle />
+            </button>
+          </div>
+        )}
+
+        {/* Contenu principal */}
+        <main className="gp-main-content">
+          {/* Statistiques */}
+          <div className="gp-stats">
+            <div className="stat-card">
+              <span className="stat-value">{proprietaires.length}</span>
+              <span className="stat-label">Demandes totales</span>
+            </div>
+            <div className="stat-card">
+              <span className="stat-value">{filteredProprietaires.length}</span>
+              <span className="stat-label">Résultats filtrés</span>
+            </div>
+            <div className="stat-card">
+              <span className="stat-value">{totalPages}</span>
+              <span className="stat-label">Pages</span>
+            </div>
+          </div>
+
+          {/* Liste des propriétaires */}
           {loading ? (
-            <div className="proprietaire-loading">Chargement en cours...</div>
+            <div className="gp-loading">
+              <div className="loading-spinner"></div>
+              <p>Chargement en cours...</p>
+            </div>
           ) : filteredProprietaires.length === 0 ? (
-            <div className="proprietaire-no-results">
-              Aucun propriétaire en attente trouvé
+            <div className="gp-empty">
+              <FiInfo size={48} />
+              <h3>Aucune demande trouvée</h3>
+              <p>Aucun propriétaire ne correspond à votre recherche</p>
             </div>
           ) : (
             <>
-              <div className="proprietaire-table">
-                <thead>
-                  <tr>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Email</th>
-                    <th>Téléphone</th>
-                    <th>Adresse</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentItems.map((proprietaire) => (
-                    <tr key={proprietaire._id}>
-                      <td data-label="Nom">{proprietaire.nom}</td>
-                      <td data-label="Prénom">{proprietaire.prenom}</td>
-                      <td data-label="Email">{proprietaire.email}</td>
-                      <td data-label="Téléphone">{proprietaire.tel}</td>
-                      <td data-label="Adresse">{proprietaire.adresse}</td>
-                      <td className="proprietaire-actions">
-                        <button
-                          className="proprietaire-approve-btn"
-                          onClick={() => handleApprove(proprietaire._id)}
-                        >
-                          Approuver
-                        </button>
-                        <button
-                          className="proprietaire-reject-btn"
-                          onClick={() => openRejectModal(proprietaire)}
-                        >
-                          Rejeter
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+              <div className="gp-proprietaires-list">
+                {paginatedData.map((prop) => (
+                  <div key={prop._id} className="proprietaire-card">
+                    <div className="pc-header">
+                      <div className="pc-avatar">
+                        <FiUser size={24} />
+                      </div>
+                      <div className="pc-identity">
+                        <h3>
+                          {prop.prenom} {prop.nom}
+                        </h3>
+                        <div className="pc-email">
+                          <FiMail size={16} />
+                          <span>{prop.email}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pc-details">
+                      <div className="pc-detail-item">
+                        <FiPhone size={16} />
+                        <span>{prop.tel || "Non renseigné"}</span>
+                      </div>
+                      <div className="pc-detail-item">
+                        <FiHome size={16} />
+                        <span>{prop.adresse || "Non renseignée"}</span>
+                      </div>
+                    </div>
+
+                    <div className="pc-actions">
+                      <button
+                        onClick={() => handleApprove(prop._id)}
+                        className="pc-approve"
+                      >
+                        <FiCheckCircle /> Approuver
+                      </button>
+                      <button
+                        onClick={() => openRejectModal(prop)}
+                        className="pc-reject"
+                      >
+                        <FiXCircle /> Rejeter
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
 
+              {/* Pagination */}
               {totalPages > 1 && (
-                <div className="proprietaire-pagination">
-                  {[...Array(totalPages).keys()].map((number) => (
-                    <button
-                      key={number + 1}
-                      className={`proprietaire-page-link ${
-                        currentPage === number + 1 ? "active" : ""
-                      }`}
-                      onClick={() => paginate(number + 1)}
-                    >
-                      {number + 1}
-                    </button>
-                  ))}
+                <div className="gp-pagination">
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                  >
+                    <FiChevronLeft /> Précédent
+                  </button>
+
+                  <div className="page-numbers">
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <button
+                        key={i + 1}
+                        onClick={() => setCurrentPage(i + 1)}
+                        className={currentPage === i + 1 ? "active" : ""}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() =>
+                      setCurrentPage((p) => Math.min(totalPages, p + 1))
+                    }
+                    disabled={currentPage === totalPages}
+                  >
+                    Suivant <FiChevronRight />
+                  </button>
                 </div>
               )}
             </>
           )}
+        </main>
 
-          {showModal && (
-            <div className="proprietaire-modal">
-              <div className="proprietaire-modal-content">
-                <h4>Rejeter le propriétaire</h4>
-                <p>
-                  Êtes-vous sûr de vouloir rejeter {selectedUser.prenom}{" "}
-                  {selectedUser.nom}?
-                </p>
-                <textarea
-                  placeholder="Raison du rejet (optionnel)"
-                  value={rejectReason}
-                  onChange={(e) => setRejectReason(e.target.value)}
-                  rows="4"
-                />
-                <div className="proprietaire-modal-buttons">
-                  <button
-                    className="proprietaire-cancel-btn"
-                    onClick={closeModal}
-                  >
-                    Annuler
-                  </button>
-                  <button
-                    className="proprietaire-confirm-btn"
-                    onClick={handleReject}
-                  >
-                    Confirmer
-                  </button>
+        {/* Modal de rejet */}
+        {showModal && (
+          <div className="gp-modal-overlay">
+            <div className="gp-modal">
+              <div className="gp-modal-header">
+                <h3>Confirmer le rejet</h3>
+                <button onClick={closeModal} className="gp-modal-close">
+                  <FiXCircle />
+                </button>
+              </div>
+
+              <div className="gp-modal-body">
+                <div className="modal-user-info">
+                  <div className="modal-avatar">
+                    <FiUser size={32} />
+                  </div>
+                  <div>
+                    <h4>
+                      {selectedUser?.prenom} {selectedUser?.nom}
+                    </h4>
+                    <p>{selectedUser?.email}</p>
+                  </div>
+                </div>
+
+                <div className="modal-reason">
+                  <label>Motif du rejet (optionnel)</label>
+                  <textarea
+                    value={rejectReason}
+                    onChange={(e) => setRejectReason(e.target.value)}
+                    placeholder="Décrivez la raison du rejet..."
+                    rows={4}
+                  />
                 </div>
               </div>
+
+              <div className="gp-modal-footer">
+                <button onClick={closeModal} className="modal-cancel">
+                  Annuler
+                </button>
+                <button onClick={handleReject} className="modal-confirm">
+                  Confirmer le rejet
+                </button>
+              </div>
             </div>
-          )}
-        </div>
-      </Layout>
-    </>
+          </div>
+        )}
+      </div>
+    </Layout>
   );
 };
 

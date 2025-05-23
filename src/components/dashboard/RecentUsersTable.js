@@ -66,14 +66,15 @@ const RecentUsersTable = ({ users }) => {
         <tbody>
           {users.map((user) => (
             <tr key={user._id}>
-              <td className="user-cell">
-                <div className="user-avatar">
+              <td className="user-cell-user">
+                <div className="user-avatar-user">
                   <img
                     src={getImageSrc(user.url_img)}
                     alt={`${user.prenom} ${user.nom}`}
+                    className="user-avatar-user"
                     onError={(e) => {
-                      e.target.onerror = null; // Éviter les boucles infinies
-                      e.target.src = "/uploads/default-user.jpg";
+                      e.target.onerror = null;
+                      e.target.src = "../mages/avatar.png";
                     }}
                   />
                 </div>

@@ -23,7 +23,7 @@
 }
 
 /* Base du dashboard */
-.admin-dashboard {
+.admin-dashboard-admin {
   padding: 24px;
   max-width: 1920px;
   margin: 0 auto;
@@ -713,9 +713,7 @@
 .pie-tooltip-percent {
   font-weight: bold;
 }
-/* Ajouts pour les nouveaux composants dans AdminDashboard.css */
 
-/* Style pour le tableau des utilisateurs récents */
 .recent-users-table {
   width: 100%;
   overflow-x: auto;
@@ -739,14 +737,14 @@
   background-color: #f9f9f9;
 }
 
-.user-cell {
+.user-cell-user {
   display: flex;
   align-items: center;
 }
 
-.user-avatar {
-  width: 32px;
-  height: 32px;
+.user-avatar-user {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   overflow: hidden;
   margin-right: 10px;
@@ -873,3 +871,5 @@
     grid-template-columns: 1fr;
   }
 }
+
+/*hne*/

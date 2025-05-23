@@ -30,28 +30,19 @@ const ResetPasswordForm = () => {
 
   return (
     <div className="reset-container">
-      {/* Partie gauche (illustration) */}
-      <div className="reset-left">
-        <div>
-          <h1>Réinitialisation du mot de passe</h1>
-          <p>
-            Entrez votre code de réinitialisation et votre nouveau mot de passe.
-          </p>
-          <img src="/images/f5.jpg" alt="Illustration" />
-        </div>
-      </div>
+      {/* Decorative blobs are created with CSS ::before and ::after */}
 
-      {/* Partie droite (formulaire) */}
-      <div className="reset-right">
+      <div className="reset-content">
         <div className="reset-card">
-          {/* Logo centré */}
           <div className="reset-logo2">
             <img src="/images/logo.jpg" alt="Logo" />
           </div>
 
-          <h3 className="reset-title">Réinitialiser le mot de passe</h3>
+          <h3 className="reset-title">Réinitialisation du mot de passe</h3>
+
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
+              <label className="reset-label">Email</label>
               <input
                 type="email"
                 className="reset-form-control"
@@ -59,7 +50,9 @@ const ResetPasswordForm = () => {
                 disabled
               />
             </div>
+
             <div className="mb-3">
+              <label className="reset-label">Code de réinitialisation</label>
               <input
                 type="text"
                 className="reset-form-control"
@@ -69,7 +62,9 @@ const ResetPasswordForm = () => {
                 required
               />
             </div>
+
             <div className="mb-3">
+              <label className="reset-label">Nouveau mot de passe</label>
               <input
                 type="password"
                 className="reset-form-control"
@@ -79,17 +74,27 @@ const ResetPasswordForm = () => {
                 required
               />
             </div>
+
             <button type="submit" className="reset-btn-custom">
               Réinitialiser
             </button>
-            {/* Message d'erreur */}
-            {message && <p className="reset-message-error">{message}</p>}
+
+            {message && (
+              <p
+                className={
+                  message.includes("succès")
+                    ? "reset-message-success"
+                    : "reset-message-error"
+                }
+              >
+                {message}
+              </p>
+            )}
           </form>
 
-          {/* Lien vers la page de login */}
-          <p className="reset-login-link">
+          <div className="reset-login-link">
             <a href="/login">Retour à la page de connexion</a>
-          </p>
+          </div>
         </div>
       </div>
     </div>

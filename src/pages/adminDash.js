@@ -105,7 +105,7 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="admin-dashboard">
+    <div className="admin-dashboard-admin">
       <Layout>
         <div className="dashboard-header">
           <h1>Tableau de bord administrateur</h1>
@@ -376,3 +376,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+//hneee

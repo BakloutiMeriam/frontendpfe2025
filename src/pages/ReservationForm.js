@@ -23,6 +23,8 @@ import {
   FaClock,
   FaExclamationTriangle,
   FaRegCreditCard,
+  FaPercentage,
+  FaGift,
 } from "react-icons/fa";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -46,6 +48,9 @@ const ReservationForm = () => {
   });
   const [datesIndisponibles, setDatesIndisponibles] = useState([]);
   const [showContactModal, setShowContactModal] = useState(false);
+
+  // State pour le type de réservation
+  const [typeReservation, setTypeReservation] = useState("nuit");
 
   useEffect(() => {
     const fetchLogementAndReservations = async () => {
@@ -133,6 +138,72 @@ const ReservationForm = () => {
 
     return Array.from(datesBloquees).sort();
   };
+
+  // Fonction pour vérifier si un mois entier est disponible
+  const estMoisDisponible = (year, month) => {
+    const premiereDate = new Date(year, month - 1, 1);
+    const derniereDate = new Date(year, month, 0); // Dernier jour du mois
+
+    const currentDate = new Date(premiereDate);
+    while (currentDate <= derniereDate) {
+      const dateStr = currentDate.toISOString().split("T")[0];
+      if (datesIndisponibles.includes(dateStr)) {
+        return false;
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return true;
+  };
+
+  // Fonction pour générer la liste des mois disponibles
+  const getMoisDisponibles = () => {
+    const moisDisponibles = [];
+    const maintenant = new Date();
+    const moisNoms = [
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre",
+    ];
+
+    // Générer les 12 prochains mois
+    for (let i = 0; i < 12; i++) {
+      const date = new Date(
+        maintenant.getFullYear(),
+        maintenant.getMonth() + i,
+        1
+      );
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+
+      if (estMoisDisponible(year, month)) {
+        moisDisponibles.push({
+          value: `${year}-${month.toString().padStart(2, "0")}`,
+          label: `${moisNoms[month - 1]} ${year}`,
+          year: year,
+          month: month,
+        });
+      }
+    }
+
+    return moisDisponibles;
+  };
+
+  // Fonction pour calculer le prix mensuel avec remise
+  const calculerPrixMensuel = () => {
+    const prixBase = logement.prix * 30; // Prix pour 30 nuits
+    const remise = 0.3; // 30% de remise
+    return Math.round(prixBase * (1 - remise));
+  };
+
   const calculerNombreNuits = (dateDebut, dateFin) => {
     if (!dateDebut || !dateFin) return 0;
 
@@ -176,76 +247,118 @@ const ReservationForm = () => {
     return false;
   };
 
-  const validationSchema = Yup.object({
-    dateDebut: Yup.date()
-      .required("La date de début est requise")
-      .min(new Date(), "La date doit être dans le futur")
-      .test(
-        "date-disponible",
-        "Cette date est déjà réservée",
-        function (value) {
-          if (!value) return true;
-          return !estDateIndisponible(value.toISOString().split("T")[0]);
-        }
+  // Schéma de validation adapté selon le type de réservation
+  const getValidationSchema = () => {
+    const baseSchema = {
+      nombrePersonnes: Yup.number()
+        .required("Le nombre de personnes est requis")
+        .min(1, "Il doit y avoir au moins une personne")
+        .integer("Le nombre doit être un entier"),
+      message: Yup.string(),
+      acceptTerms: Yup.boolean().oneOf(
+        [true],
+        "Vous devez accepter les conditions"
       ),
-    dateFin: Yup.date()
-      .required("La date de fin est requise")
-      .min(
-        Yup.ref("dateDebut"),
-        "La date de fin doit être postérieure à la date de début"
-      )
-      .test(
-        "date-disponible",
-        "Cette date est déjà réservée",
-        function (value) {
-          if (!value) return true;
-          return !estDateIndisponible(value.toISOString().split("T")[0]);
-        }
-      )
-      .test(
-        "periode-disponible",
-        "Cette période contient des dates déjà réservées",
-        function (value) {
-          const { dateDebut } = this.parent;
-          if (!dateDebut || !value) return true;
-          return !periodeContientDatesIndisponibles(dateDebut, value);
-        }
-      ),
-    nombrePersonnes: Yup.number()
-      .required("Le nombre de personnes est requis")
-      .min(1, "Il doit y avoir au moins une personne")
-      .integer("Le nombre doit être un entier"),
-    message: Yup.string(),
-    acceptTerms: Yup.boolean().oneOf(
-      [true],
-      "Vous devez accepter les conditions"
-    ),
-  });
+    };
+
+    if (typeReservation === "nuit") {
+      return Yup.object({
+        ...baseSchema,
+        dateDebut: Yup.date()
+          .required("La date de début est requise")
+          .min(new Date(), "La date doit être dans le futur")
+          .test(
+            "date-disponible",
+            "Cette date est déjà réservée",
+            function (value) {
+              if (!value) return true;
+              return !estDateIndisponible(value.toISOString().split("T")[0]);
+            }
+          ),
+        dateFin: Yup.date()
+          .required("La date de fin est requise")
+          .min(
+            Yup.ref("dateDebut"),
+            "La date de fin doit être postérieure à la date de début"
+          )
+          .test(
+            "date-disponible",
+            "Cette date est déjà réservée",
+            function (value) {
+              if (!value) return true;
+              return !estDateIndisponible(value.toISOString().split("T")[0]);
+            }
+          )
+          .test(
+            "periode-disponible",
+            "Cette période contient des dates déjà réservées",
+            function (value) {
+              const { dateDebut } = this.parent;
+              if (!dateDebut || !value) return true;
+              return !periodeContientDatesIndisponibles(dateDebut, value);
+            }
+          ),
+      });
+    } else {
+      return Yup.object({
+        ...baseSchema,
+        moisChoisi: Yup.string().required("Veuillez choisir un mois"),
+      });
+    }
+  };
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      if (periodeContientDatesIndisponibles(values.dateDebut, values.dateFin)) {
-        setError("Cette période contient des dates déjà réservées.");
-        setSubmitting(false);
-        return;
-      }
+      let reservationData;
+      let total;
+      let nuits;
 
-      const nuits = calculerNombreNuits(values.dateDebut, values.dateFin);
-      const total = nuits * logement.prix;
+      if (typeReservation === "nuit") {
+        // Logique existante pour les nuitées
+        if (
+          periodeContientDatesIndisponibles(values.dateDebut, values.dateFin)
+        ) {
+          setError("Cette période contient des dates déjà réservées.");
+          setSubmitting(false);
+          return;
+        }
+
+        nuits = calculerNombreNuits(values.dateDebut, values.dateFin);
+        total = nuits * logement.prix;
+
+        reservationData = {
+          dateDebut: values.dateDebut,
+          dateFin: values.dateFin,
+          nombrePersonnes: values.nombrePersonnes,
+          messageDemande: values.message,
+          logement: id,
+          prixTotal: total,
+          typeReservation: "nuit",
+        };
+      } else {
+        // Nouvelle logique pour les réservations mensuelles
+        const [year, month] = values.moisChoisi.split("-");
+        const dateDebut = new Date(parseInt(year), parseInt(month) - 1, 1);
+        const dateFin = new Date(parseInt(year), parseInt(month), 0); // Dernier jour du mois
+
+        nuits = dateFin.getDate(); // Nombre de jours dans le mois
+        total = calculerPrixMensuel();
+
+        reservationData = {
+          dateDebut: dateDebut.toISOString().split("T")[0],
+          dateFin: dateFin.toISOString().split("T")[0],
+          nombrePersonnes: values.nombrePersonnes,
+          messageDemande: values.message,
+          logement: id,
+          prixTotal: total,
+          typeReservation: "mois",
+        };
+      }
 
       setReservationDetails({
         dureeNuits: nuits,
         prixTotal: total,
       });
-
-      const reservationData = {
-        dateDebut: values.dateDebut,
-        dateFin: values.dateFin,
-        nombrePersonnes: values.nombrePersonnes,
-        messageDemande: values.message,
-        logement: id,
-        prixTotal: total,
-      };
 
       const response = await reservationService.createReservation(
         reservationData
@@ -337,13 +450,24 @@ const ReservationForm = () => {
       </div>
     );
 
-  const initialValues = {
-    dateDebut: "",
-    dateFin: "",
-    nombrePersonnes: 1,
-    message: "",
-    acceptTerms: false,
-  };
+  const initialValues =
+    typeReservation === "nuit"
+      ? {
+          dateDebut: "",
+          dateFin: "",
+          nombrePersonnes: 1,
+          message: "",
+          acceptTerms: false,
+        }
+      : {
+          moisChoisi: "",
+          nombrePersonnes: 1,
+          message: "",
+          acceptTerms: false,
+        };
+
+  const moisDisponibles =
+    typeReservation === "mois" ? getMoisDisponibles() : [];
 
   return (
     <>
@@ -400,7 +524,15 @@ const ReservationForm = () => {
                   <div>
                     <div className="modern-highlight-label">Prix</div>
                     <div className="modern-highlight-value">
-                      {logement.prix} par nuitée
+                      {typeReservation === "nuit"
+                        ? `${logement.prix}€ par nuitée`
+                        : `${calculerPrixMensuel()}€ par mois`}
+                      {typeReservation === "mois" && (
+                        <div className="modern-discount-badge">
+                          <FaPercentage />
+                          <span>-30% sur le tarif mensuel</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -412,156 +544,283 @@ const ReservationForm = () => {
                 />
               )}
             </div>
-
-            <div className="modern-host-card">
-              <h3 className="modern-section-title">À propos de l'hôte</h3>
-              <div className="modern-host-info">
-                <div className="modern-host-avatar">
-                  {logement.proprietaire?.url_img ? (
-                    <img
-                      src={logement.proprietaire.url_img}
-                      alt={`${logement.proprietaire?.prenom || "Propriétaire"}`}
-                      className="modern-host-image"
-                    />
-                  ) : (
-                    <FaUser />
-                  )}
-                </div>
-                <div className="modern-host-details">
-                  <h4 className="modern-host-name">
-                    {logement.proprietaire?.prenom || "Propriétaire"}
-                  </h4>
-                  <p className="modern-host-since">
-                    Membre depuis{" "}
-                    {logement.proprietaire?.createdAt
-                      ? new Date(
-                          logement.proprietaire.createdAt
-                        ).toLocaleDateString("fr-FR", {
-                          month: "long",
-                          year: "numeric",
-                        })
-                      : "Janvier 2023"}
-                  </p>
-                  <div className="modern-host-stat">
-                    <FaShieldAlt className="modern-host-icon" />
-                    <span>Identité vérifiée</span>
-                  </div>
-                  <button
-                    className="modern-contact-btn"
-                    onClick={() => setShowContactModal(true)}
-                  >
-                    <FaEnvelope className="modern-btn-icon" />
-                    Contacter le propriétaire
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
 
           <div className="modern-booking-panel">
             <div className="modern-booking-form-container">
               <h2 className="modern-form-title">Réserver votre séjour</h2>
 
+              {/* Sélecteur de type de réservation */}
+              <div className="modern-booking-type-selector">
+                <div className="modern-type-option">
+                  <label
+                    className={`modern-type-label ${
+                      typeReservation === "nuit" ? "active" : ""
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="typeReservation"
+                      value="nuit"
+                      checked={typeReservation === "nuit"}
+                      onChange={(e) => setTypeReservation(e.target.value)}
+                      className="modern-radio-input"
+                    />
+                    <div className="modern-type-content">
+                      <div className="modern-type-header">
+                        <FaCalendar className="modern-type-icon" />
+                        <span className="modern-type-title">Par nuitée</span>
+                      </div>
+                      <span className="modern-type-description">
+                        Réservation flexible par jour
+                      </span>
+                      <span className="modern-type-price">
+                        {logement.prix}€ / nuit
+                      </span>
+                    </div>
+                  </label>
+                </div>
+
+                <div className="modern-type-option">
+                  <label
+                    className={`modern-type-label ${
+                      typeReservation === "mois" ? "active" : ""
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="typeReservation"
+                      value="mois"
+                      checked={typeReservation === "mois"}
+                      onChange={(e) => setTypeReservation(e.target.value)}
+                      className="modern-radio-input"
+                    />
+                    <div className="modern-type-content">
+                      <div className="modern-type-header">
+                        <FaHome className="modern-type-icon monthly" />
+                        <span className="modern-type-title">Par mois</span>
+                        <span className="modern-discount-badge">
+                          <FaGift />
+                          -30%
+                        </span>
+                      </div>
+                      <span className="modern-type-description">
+                        Séjour longue durée avec remise
+                      </span>
+                      <span className="modern-type-price monthly">
+                        {calculerPrixMensuel()}€ / mois
+                        <small className="modern-original-price">
+                          au lieu de {logement.prix * 30}€
+                        </small>
+                      </span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
               <Formik
+                key={typeReservation} // Force re-render when type changes
                 initialValues={initialValues}
-                validationSchema={validationSchema}
+                validationSchema={getValidationSchema()}
                 onSubmit={handleSubmit}
               >
                 {({ values, isSubmitting, errors, touched }) => {
-                  const nuits = calculerNombreNuits(
-                    values.dateDebut,
+                  let nuits = 0;
+                  let total = 0;
+                  let economie = 0;
+
+                  if (
+                    typeReservation === "nuit" &&
+                    values.dateDebut &&
                     values.dateFin
-                  );
-                  const total = nuits * logement.prix;
+                  ) {
+                    nuits = calculerNombreNuits(
+                      values.dateDebut,
+                      values.dateFin
+                    );
+                    total = nuits * logement.prix;
+                  } else if (typeReservation === "mois" && values.moisChoisi) {
+                    const [year, month] = values.moisChoisi.split("-");
+                    nuits = new Date(
+                      parseInt(year),
+                      parseInt(month),
+                      0
+                    ).getDate();
+                    total = calculerPrixMensuel();
+                    economie = nuits * logement.prix - total;
+                  }
 
                   return (
                     <Form className="modern-form">
-                      <div className="modern-form-dates">
+                      {/* Formulaire pour réservation par nuitée */}
+                      {typeReservation === "nuit" && (
+                        <>
+                          <div className="modern-form-dates">
+                            <div className="modern-form-group">
+                              <label
+                                htmlFor="dateDebut"
+                                className="modern-label"
+                              >
+                                <FaCalendar className="modern-input-icon" />
+                                Date d'arrivée
+                              </label>
+                              <Field
+                                type="date"
+                                id="dateDebut"
+                                name="dateDebut"
+                                min={aujourdhui}
+                                className={`modern-input ${
+                                  errors.dateDebut && touched.dateDebut
+                                    ? "modern-input-error"
+                                    : ""
+                                }`}
+                              />
+                              <ErrorMessage
+                                name="dateDebut"
+                                component="div"
+                                className="modern-error-message"
+                              />
+                            </div>
+
+                            <div className="modern-form-group">
+                              <label htmlFor="dateFin" className="modern-label">
+                                <FaCalendar className="modern-input-icon" />
+                                Date de départ
+                              </label>
+                              <Field
+                                type="date"
+                                id="dateFin"
+                                name="dateFin"
+                                min={values.dateDebut || aujourdhui}
+                                className={`modern-input ${
+                                  errors.dateFin && touched.dateFin
+                                    ? "modern-input-error"
+                                    : ""
+                                }`}
+                              />
+                              <ErrorMessage
+                                name="dateFin"
+                                component="div"
+                                className="modern-error-message"
+                              />
+                            </div>
+                          </div>
+
+                          {values.dateDebut && values.dateFin && (
+                            <div className="modern-date-summary">
+                              {values.dateDebut &&
+                              values.dateFin &&
+                              periodeContientDatesIndisponibles(
+                                values.dateDebut,
+                                values.dateFin
+                              ) ? (
+                                <div className="modern-date-warning">
+                                  <FaExclamationTriangle className="modern-warning-icon" />
+                                  <span>
+                                    Cette période contient des dates déjà
+                                    réservées
+                                  </span>
+                                </div>
+                              ) : nuits > 0 ? (
+                                <div className="modern-date-success">
+                                  <FaCheck className="modern-success-icon" />
+                                  <span>
+                                    <strong>
+                                      {nuits} nuit{nuits > 1 ? "s" : ""}
+                                    </strong>
+                                    , du {formatFrenchDate(values.dateDebut)} au{" "}
+                                    {formatFrenchDate(values.dateFin)}
+                                  </span>
+                                </div>
+                              ) : null}
+                            </div>
+                          )}
+                        </>
+                      )}
+
+                      {/* Formulaire pour réservation mensuelle */}
+                      {typeReservation === "mois" && (
                         <div className="modern-form-group">
-                          <label htmlFor="dateDebut">
+                          <label htmlFor="moisChoisi" className="modern-label">
                             <FaCalendar className="modern-input-icon" />
-                            Date d'arrivée
+                            Choisir le mois
                           </label>
-                          <Field
-                            type="date"
-                            id="dateDebut"
-                            name="dateDebut"
-                            min={aujourdhui}
-                            className={`modern-input ${
-                              errors.dateDebut && touched.dateDebut
-                                ? "modern-input-error"
-                                : ""
-                            }`}
-                          />
+                          {moisDisponibles.length > 0 ? (
+                            <>
+                              <Field
+                                as="select"
+                                id="moisChoisi"
+                                name="moisChoisi"
+                                className={`modern-input modern-select ${
+                                  errors.moisChoisi && touched.moisChoisi
+                                    ? "modern-input-error"
+                                    : ""
+                                }`}
+                              >
+                                <option value="">Sélectionnez un mois</option>
+                                {moisDisponibles.map((mois) => (
+                                  <option key={mois.value} value={mois.value}>
+                                    {mois.label}
+                                  </option>
+                                ))}
+                              </Field>
+
+                              {values.moisChoisi && (
+                                <div className="modern-monthly-summary">
+                                  <div className="modern-summary-header">
+                                    <FaCheck className="modern-success-icon" />
+                                    <span>
+                                      Mois entier sélectionné ({nuits} jours)
+                                    </span>
+                                  </div>
+                                  <div className="modern-savings-highlight">
+                                    <FaGift className="modern-gift-icon" />
+                                    <span>
+                                      Vous économisez{" "}
+                                      <strong>{economie}€</strong> avec la
+                                      réduction mensuelle !
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <div className="modern-no-months-available">
+                              <FaInfoCircle className="modern-info-icon" />
+                              <div>
+                                <p>
+                                  <strong>Aucun mois entier disponible</strong>
+                                </p>
+                                <p>
+                                  Certaines dates sont déjà réservées. Essayez
+                                  la réservation par nuitée pour plus de
+                                  flexibilité.
+                                </p>
+                              </div>
+                            </div>
+                          )}
                           <ErrorMessage
-                            name="dateDebut"
+                            name="moisChoisi"
                             component="div"
                             className="modern-error-message"
                           />
-                        </div>
-
-                        <div className="modern-form-group">
-                          <label htmlFor="dateFin">
-                            <FaCalendar className="modern-input-icon" />
-                            Date de départ
-                          </label>
-                          <Field
-                            type="date"
-                            id="dateFin"
-                            name="dateFin"
-                            min={values.dateDebut || aujourdhui}
-                            className={`modern-input ${
-                              errors.dateFin && touched.dateFin
-                                ? "modern-input-error"
-                                : ""
-                            }`}
-                          />
-                          <ErrorMessage
-                            name="dateFin"
-                            component="div"
-                            className="modern-error-message"
-                          />
-                        </div>
-                      </div>
-
-                      {values.dateDebut && values.dateFin && (
-                        <div className="modern-date-summary">
-                          {values.dateDebut &&
-                          values.dateFin &&
-                          periodeContientDatesIndisponibles(
-                            values.dateDebut,
-                            values.dateFin
-                          ) ? (
-                            <div className="modern-date-warning">
-                              <FaExclamationTriangle className="modern-warning-icon" />
-                              <span>
-                                Cette période contient des dates déjà réservées
-                              </span>
-                            </div>
-                          ) : nuits > 0 ? (
-                            <div className="modern-date-success">
-                              <span>
-                                <strong>
-                                  {nuits} nuit{nuits > 1 ? "s" : ""}
-                                </strong>
-                                , du {formatFrenchDate(values.dateDebut)} au{" "}
-                                {formatFrenchDate(values.dateFin)}
-                              </span>
-                            </div>
-                          ) : null}
                         </div>
                       )}
 
                       <div className="modern-form-group">
-                        <label htmlFor="nombrePersonnes">
+                        <label
+                          htmlFor="nombrePersonnes"
+                          className="modern-label"
+                        >
                           <FaUsers className="modern-input-icon" />
-                          Voyageurs
+                          Nombre de personnes
                         </label>
                         <Field
                           type="number"
                           id="nombrePersonnes"
                           name="nombrePersonnes"
                           min="1"
+                          max="10"
                           className={`modern-input ${
                             errors.nombrePersonnes && touched.nombrePersonnes
                               ? "modern-input-error"
@@ -576,73 +835,76 @@ const ReservationForm = () => {
                       </div>
 
                       <div className="modern-form-group">
-                        <label htmlFor="message">
+                        <label htmlFor="message" className="modern-label">
                           <FaEnvelope className="modern-input-icon" />
-                          Message au propriétaire (facultatif)
+                          Message au propriétaire (optionnel)
                         </label>
                         <Field
                           as="textarea"
                           id="message"
                           name="message"
                           rows="3"
+                          placeholder="Présentez-vous et précisez le motif de votre séjour..."
                           className="modern-textarea"
-                          placeholder="Questions spécifiques ou informations à communiquer..."
                         />
                       </div>
 
-                      {values.dateDebut && values.dateFin && nuits > 0 && (
-                        <div className="modern-price-summary">
-                          <div className="modern-price-row">
-                            <span>
-                              {logement.prix}€ × {nuits} nuit
-                              {nuits > 1 ? "s" : ""}
-                            </span>
-                            <span>{total}€</span>
-                          </div>
-                          <div className="modern-price-row">
-                            <span>Frais de service</span>
-                            <span>{Math.round(total * 0.12)}€</span>
-                          </div>
-                          <div className="modern-price-row">
-                            <span>Taxes de séjour</span>
-                            <span>{Math.round(total * 0.03)}€</span>
-                          </div>
-                          <div className="modern-price-total">
-                            <span>Total</span>
-                            <span>{Math.round(total * 1.15)}€</span>
+                      {(nuits > 0 ||
+                        (typeReservation === "mois" && values.moisChoisi)) && (
+                        <div className="modern-booking-summary">
+                          <h4 className="modern-summary-title">
+                            Résumé de la réservation
+                          </h4>
+                          <div className="modern-summary-details">
+                            <div className="modern-summary-row">
+                              <span>
+                                {typeReservation === "nuit"
+                                  ? `${nuits} nuit${nuits > 1 ? "s" : ""}`
+                                  : `1 mois (${nuits} jours)`}{" "}
+                                × {logement.prix}€
+                              </span>
+                              <span>{logement.prix * nuits}€</span>
+                            </div>
+
+                            {typeReservation === "mois" && economie > 0 && (
+                              <div className="modern-summary-row modern-discount-row">
+                                <span>
+                                  <FaPercentage className="modern-discount-icon" />
+                                  Remise mensuelle (30%)
+                                </span>
+                                <span className="modern-discount-amount">
+                                  -{economie}€
+                                </span>
+                              </div>
+                            )}
+
+                            <div className="modern-summary-divider"></div>
+                            <div className="modern-summary-row modern-total-row">
+                              <span>Total</span>
+                              <span>{total}€</span>
+                            </div>
                           </div>
                         </div>
                       )}
 
-                      <div className="modern-form-group modern-terms-group">
-                        <div className="modern-checkbox-container">
+                      <div className="modern-form-group modern-checkbox-group">
+                        <label className="modern-checkbox-label">
                           <Field
                             type="checkbox"
-                            id="acceptTerms"
                             name="acceptTerms"
                             className="modern-checkbox"
                           />
-                          <label
-                            htmlFor="acceptTerms"
-                            className="modern-checkbox-label"
-                          >
-                            J'accepte les conditions de réservation et la
-                            politique d'annulation
-                          </label>
-                        </div>
+                          <span className="modern-checkbox-custom"></span>
+                          <span className="modern-checkbox-text">
+                            J'accepte les conditions générales et la politique
+                            de confidentialité
+                          </span>
+                        </label>
                         <ErrorMessage
                           name="acceptTerms"
                           component="div"
                           className="modern-error-message"
                         />
-                      </div>
-
-                      <div className="modern-payment-info">
-                        <FaRegCreditCard className="modern-payment-icon" />
-                        <p>
-                          Le paiement sera traité après confirmation du
-                          propriétaire.
-                        </p>
                       </div>
 
                       <button
@@ -665,43 +927,85 @@ const ReservationForm = () => {
                           </>
                         )}
                       </button>
+
+                      <div className="modern-info-panel">
+                        <div className="modern-info-block">
+                          <div className="modern-info-header">
+                            <FaShieldAlt className="modern-info-icon" />
+                            <h3>Réservation sécurisée</h3>
+                          </div>
+                          <p>
+                            Votre paiement est protégé par notre garantie et
+                            notre service client est disponible 24/7.
+                          </p>
+                        </div>
+
+                        <div className="modern-info-block">
+                          <div className="modern-info-header">
+                            <FaClock className="modern-info-icon" />
+                            <h3>Annulation flexible</h3>
+                          </div>
+                          <p>
+                            Annulation gratuite jusqu'à 48h avant votre arrivée.
+                            Conditions spécifiques affichées avant la
+                            validation.
+                          </p>
+                        </div>
+                      </div>
                     </Form>
                   );
                 }}
               </Formik>
-            </div>
-
-            <div className="modern-info-panel">
-              <div className="modern-info-block">
-                <div className="modern-info-header">
-                  <FaShieldAlt className="modern-info-icon" />
-                  <h3>Réservation sécurisée</h3>
+              <div className="modern-host-card">
+                <h3 className="modern-section-title">À propos de l'hôte</h3>
+                <div className="modern-host-info">
+                  <div className="modern-host-avatar">
+                    {logement.proprietaire?.url_img ? (
+                      <img
+                        src={logement.proprietaire.url_img}
+                        alt={`${
+                          logement.proprietaire?.prenom || "Propriétaire"
+                        }`}
+                        className="modern-host-image"
+                      />
+                    ) : (
+                      <FaUser />
+                    )}
+                  </div>
+                  <div className="modern-host-details">
+                    <h4 className="modern-host-name">
+                      {logement.proprietaire?.prenom || "Propriétaire"}
+                    </h4>
+                    <p className="modern-host-since">
+                      Membre depuis{" "}
+                      {logement.proprietaire?.createdAt
+                        ? new Date(
+                            logement.proprietaire.createdAt
+                          ).toLocaleDateString("fr-FR", {
+                            month: "long",
+                            year: "numeric",
+                          })
+                        : "Janvier 2023"}
+                    </p>
+                    <div className="modern-host-stat">
+                      <FaShieldAlt className="modern-host-icon" />
+                      <span>Identité vérifiée</span>
+                    </div>
+                    <button
+                      className="modern-contact-btn"
+                      onClick={() => setShowContactModal(true)}
+                    >
+                      <FaEnvelope className="modern-btn-icon" />
+                      Contacter le propriétaire
+                    </button>
+                  </div>
                 </div>
-                <p>
-                  Votre paiement est protégé par notre garantie et notre service
-                  client est disponible 24/7.
-                </p>
-              </div>
-
-              <div className="modern-info-block">
-                <div className="modern-info-header">
-                  <FaClock className="modern-info-icon" />
-                  <h3>Annulation flexible</h3>
-                </div>
-                <p>
-                  Annulation gratuite jusqu'à 48h avant votre arrivée.
-                  Conditions spécifiques affichées avant la validation.
-                </p>
               </div>
             </div>
           </div>
         </div>
-        <ContactModal
-          show={showContactModal}
-          handleClose={() => setShowContactModal(false)}
-          proprietaire={logement.proprietaire || {}}
-          messageType="direct"
-        />
+
+        {/* Modal de succès */}
         <Modal
           show={showSuccessModal}
           onHide={() => setShowSuccessModal(false)}
@@ -711,101 +1015,65 @@ const ReservationForm = () => {
           <Modal.Header closeButton className="modern-modal-header">
             <Modal.Title>
               <FaCheck className="modern-modal-icon success" />
-              Réservation confirmée
+              Demande de réservation envoyée !
             </Modal.Title>
           </Modal.Header>
           <Modal.Body className="modern-modal-body">
-            <div className="modern-success-animation">
-              <svg
-                className="modern-checkmark"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 52 52"
-              >
-                <circle
-                  className="modern-checkmark-circle"
-                  cx="26"
-                  cy="26"
-                  r="25"
-                  fill="none"
-                />
-                <path
-                  className="modern-checkmark-check"
-                  fill="none"
-                  d="M14.1 27.2l7.1 7.2 16.7-16.8"
-                />
-              </svg>
-            </div>
-
-            <p className="modern-modal-message">
-              Votre demande de réservation a été envoyée avec succès ! Vous
-              recevrez bientôt une confirmation du propriétaire.
-            </p>
-
-            {reservationId && (
-              <p className="modern-reservation-id">
-                <strong>Numéro de réservation:</strong> {reservationId}
+            <div className="modern-success-content">
+              <p>
+                Votre demande de réservation a été envoyée avec succès au
+                propriétaire.
               </p>
-            )}
-
-            <div className="modern-modal-summary">
-              <h4>Résumé de votre réservation</h4>
-              <div className="modern-modal-property">
-                <div className="modern-modal-property-image">
-                  {logement.photos && logement.photos.length > 0 ? (
-                    <img src={logement.photos[0]} alt={logement.titre} />
-                  ) : (
-                    <div className="modern-modal-placeholder">
-                      <FaHome />
-                    </div>
-                  )}
-                </div>
-                <div className="modern-modal-property-info">
-                  <h5>{logement.titre}</h5>
-                  <p>
-                    {logement.adresse?.ville}, {logement.adresse?.pays}
-                  </p>
-                </div>
+              <div className="modern-reservation-details">
+                <h5>Détails de votre demande :</h5>
+                <ul>
+                  <li>
+                    <strong>Durée :</strong> {reservationDetails.dureeNuits}{" "}
+                    {typeReservation === "nuit" ? "nuit" : "jour"}
+                    {reservationDetails.dureeNuits > 1 ? "s" : ""}
+                  </li>
+                  <li>
+                    <strong>Montant total :</strong>{" "}
+                    {reservationDetails.prixTotal}€
+                  </li>
+                  <li>
+                    <strong>Type de réservation :</strong>{" "}
+                    {typeReservation === "nuit" ? "Par nuitée" : "Mensuelle"}
+                  </li>
+                </ul>
               </div>
-
-              <div className="modern-modal-details">
-                <div className="modern-modal-detail-row">
-                  <span>Durée</span>
-                  <span>{reservationDetails.dureeNuits} nuits</span>
-                </div>
-                <div className="modern-modal-detail-row">
-                  <span>Prix par nuit</span>
-                  <span>{logement.prix} €</span>
-                </div>
-                <div className="modern-modal-detail-total">
-                  <span>Total</span>
-                  <span>{reservationDetails.prixTotal} €</span>
-                </div>
-              </div>
+              <p className="modern-next-step">
+                Le propriétaire recevra votre demande et pourra l'accepter ou la
+                refuser. Vous recevrez une notification par email dès qu'une
+                décision sera prise.
+              </p>
             </div>
           </Modal.Body>
           <Modal.Footer className="modern-modal-footer">
             <Button
               variant="outline-secondary"
-              className="modern-modal-btn secondary"
-              onClick={() => {
-                setShowSuccessModal(false);
-                navigate("/MesReservations");
-              }}
+              onClick={() => navigate(`/Public-logement-details/${id}`)}
+              className="modern-btn-outline"
             >
-              Voir mes réservations
+              Retour au logement
             </Button>
             <Button
               variant="primary"
-              className="modern-modal-btn primary"
-              onClick={() => {
-                setShowSuccessModal(false);
-                navigate("/");
-              }}
+              onClick={() => navigate("/MesReservations")}
+              className="modern-btn-primary"
             >
-              Retour à l'accueil
+              Voir mes réservations
             </Button>
           </Modal.Footer>
         </Modal>
+
+        <ContactModal
+          show={showContactModal}
+          handleClose={() => setShowContactModal(false)}
+          proprietaire={logement?.proprietaire || {}}
+          logement={logement}
+          messageType="direct"
+        />
       </div>
     </>
   );

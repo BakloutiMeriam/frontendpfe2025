@@ -1069,10 +1069,6 @@ const AddressStep = ({ formData, setFormData, errors }) => {
           <h4 className="addr-address-subtitle">
             Où est situé votre logement?
           </h4>
-          <p className="addr-address-description">
-            Votre adresse n'est partagée avec les voyageurs qu'après leur
-            réservation.
-          </p>
         </div>
 
         <div className="addr-address-mode-selector">

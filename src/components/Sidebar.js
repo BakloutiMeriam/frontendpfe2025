@@ -290,7 +290,6 @@ const Sidebar = () => {
                     "/FavorisPage",
                     "/MesReservations",
                     "/mes-commandes",
-                    "/historique",
                   ])
                     ? "active"
                     : ""
@@ -298,7 +297,7 @@ const Sidebar = () => {
                 onClick={() => toggleMenu("client")}
               >
                 <i className="fas fa-user sidebar-icon"></i>
-                <span>Mon Espace</span>
+                <span>Mon espace</span>
                 <i
                   className={`${openMenus.client ? "up" : "down"} ms-auto`}
                 ></i>
@@ -335,15 +334,7 @@ const Sidebar = () => {
                     <span>Mes commandes</span>
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    to="/historique"
-                    className={`sidebar-sublink ${isActive("/historique")}`}
-                  >
-                    <i className="fas fa-history sidebar-icon"></i>
-                    <span>Historique</span>
-                  </Link>
-                </li>
+                <li></li>
               </ul>
             </li>
           </>

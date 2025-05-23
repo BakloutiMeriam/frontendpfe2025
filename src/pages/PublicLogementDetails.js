@@ -359,7 +359,7 @@ const PublicLogementDetails = () => {
                 <span className="ldp-price-value">
                   {renderSafely(logement.prix, "0")} €
                 </span>
-                <span className="ldp-price-period">/ nuitée</span>
+                <span className="ldp-price-period">/ nuit</span>
               </div>
 
               <div className="ldp-booking-info">

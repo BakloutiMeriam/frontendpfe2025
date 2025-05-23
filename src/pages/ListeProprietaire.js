@@ -14,8 +14,6 @@ const ListProprietaire = () => {
   const [usersPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("table"); // table or card
-
-  // États pour le modal de contact
   const [showContactModal, setShowContactModal] = useState(false);
   const [selectedProprietaire, setSelectedProprietaire] = useState(null);
 
@@ -49,7 +47,10 @@ const ListProprietaire = () => {
       proprietaire.nom?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       proprietaire.prenom?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       proprietaire.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      proprietaire.tel?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      proprietaire.tel
+        ?.toString()
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
       proprietaire.adresse?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -320,3 +321,4 @@ const ListProprietaire = () => {
 };
 
 export default ListProprietaire;
+//hnee

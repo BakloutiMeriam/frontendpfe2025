@@ -181,11 +181,11 @@ const AjouterAvisModal = ({ show, onHide, logementId, onSuccess }) => {
       centered
       backdrop="static"
       size="lg"
-      className="avis-modal"
+      className="avis-form-modal"
     >
       <Modal.Header closeButton className="bg-primary text-white">
         <Modal.Title>
-          <FaComment className="me-2" />
+          <FaComment className="avis-form-me-2" />
           {logementDetails
             ? `Laisser un avis pour ${logementDetails.titre}`
             : "Laisser un avis"}
@@ -194,23 +194,23 @@ const AjouterAvisModal = ({ show, onHide, logementId, onSuccess }) => {
 
       <Modal.Body>
         {isLoading ? (
-          <div className="text-center py-4">
-            <div className="spinner-border text-primary" role="status">
+          <div className="avis-form-loading-container">
+            <div className="avis-form-spinner-border" role="status">
               <span className="visually-hidden">Chargement...</span>
             </div>
-            <p className="mt-2">Chargement en cours...</p>
+            <p className="avis-form-mt-2">Chargement en cours...</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
             {/* Notation par étoiles */}
-            <div className="mb-4">
-              <label className="form-label">Votre note</label>
-              <div className="star-rating">
+            <div className="avis-form-mb-4">
+              <label className="avis-form-label">Votre note</label>
+              <div className="avis-form-star-rating">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <FaStar
                     key={star}
                     size={30}
-                    className="me-1"
+                    className="avis-form-me-1"
                     color={star <= note ? "#ffc107" : "#e4e5e9"}
                     style={{ cursor: "pointer" }}
                     onClick={() => handleStarClick(star)}
@@ -220,12 +220,12 @@ const AjouterAvisModal = ({ show, onHide, logementId, onSuccess }) => {
             </div>
 
             {/* Commentaire */}
-            <div className="mb-4">
-              <label htmlFor="commentaire" className="form-label">
+            <div className="avis-form-mb-4">
+              <label htmlFor="commentaire" className="avis-form-label">
                 Votre commentaire
               </label>
               <textarea
-                className="form-control"
+                className="avis-form-control"
                 id="commentaire"
                 rows="5"
                 value={commentaire}
@@ -236,32 +236,37 @@ const AjouterAvisModal = ({ show, onHide, logementId, onSuccess }) => {
             </div>
 
             {/* Upload de photos */}
-            <div className="mb-4">
-              <label className="form-label">Ajouter des photos (max 5)</label>
-              <div className="input-group mb-3">
+            <div className="avis-form-mb-4">
+              <label className="avis-form-label">
+                Ajouter des photos (max 5)
+              </label>
+              <div className="avis-form-input-group avis-form-mb-3">
                 <input
                   type="file"
-                  className="form-control"
+                  className="avis-form-control"
                   id="photos"
                   accept="image/*"
                   multiple
                   onChange={handleFileChange}
                   disabled={photos.length >= 5}
                 />
-                <label className="input-group-text" htmlFor="photos">
+                <label className="avis-form-input-group-text" htmlFor="photos">
                   <BsUpload />
                 </label>
               </div>
 
               {/* Prévisualisation des photos */}
               {previewImages.length > 0 && (
-                <div className="d-flex flex-wrap mt-2">
+                <div className="avis-form-d-flex avis-form-flex-wrap avis-form-mt-2">
                   {previewImages.map((src, index) => (
-                    <div className="position-relative me-2 mb-2" key={index}>
+                    <div
+                      className="avis-form-position-relative avis-form-me-2 avis-form-mb-2"
+                      key={index}
+                    >
                       <img
                         src={src}
                         alt={`Preview ${index + 1}`}
-                        className="img-thumbnail"
+                        className="avis-form-img-thumbnail"
                         style={{
                           width: "100px",
                           height: "100px",
@@ -270,7 +275,7 @@ const AjouterAvisModal = ({ show, onHide, logementId, onSuccess }) => {
                       />
                       <button
                         type="button"
-                        className="btn btn-danger btn-sm position-absolute top-0 end-0"
+                        className="avis-form-btn-danger position-absolute top-0 end-0"
                         onClick={() => removePhoto(index)}
                       >
                         <BsTrash size={12} />
@@ -279,7 +284,7 @@ const AjouterAvisModal = ({ show, onHide, logementId, onSuccess }) => {
                   ))}
                 </div>
               )}
-              <small className="text-muted">
+              <small className="avis-form-text-muted">
                 {photos.length}/5 photos sélectionnées
               </small>
             </div>
@@ -288,18 +293,23 @@ const AjouterAvisModal = ({ show, onHide, logementId, onSuccess }) => {
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
+        <Button
+          variant="secondary"
+          onClick={onHide}
+          className="avis-form-btn avis-form-btn-secondary"
+        >
           Annuler
         </Button>
         <Button
           variant="primary"
           onClick={handleSubmit}
           disabled={loading || isLoading}
+          className="avis-form-btn avis-form-btn-primary"
         >
           {loading ? (
             <>
               <span
-                className="spinner-border spinner-border-sm me-2"
+                className="avis-form-spinner-border avis-form-me-2"
                 role="status"
                 aria-hidden="true"
               ></span>
