@@ -1,124 +1,10 @@
-// context/ChatbotContext.js
-/*import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
-import { chatbotService } from "../services/chatbotService";
-import { AuthContext } from "./AuthContext";
-
-const ChatbotContext = createContext();
-
-export const useChatbot = () => useContext(ChatbotContext);
-
-export const ChatbotProvider = ({ children }) => {
-  // Correction ici: utiliser useContext avec AuthContext
-  const { user } = useContext(AuthContext);
-
-  const [conversations, setConversations] = useState([]);
-  const [currentConversation, setCurrentConversation] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  // Utilisation de useCallback pour mémoriser la fonction fetchUserConversations
-  const fetchUserConversations = useCallback(async () => {
-    if (!user || !user._id) return;
-
-    try {
-      setLoading(true);
-      const data = await chatbotService.getConversations(user._id);
-      setConversations(data.conversations);
-      setLoading(false);
-    } catch (err) {
-      setError(err.message);
-      setLoading(false);
-    }
-  }, [user]);
-
-  // Charger les conversations de l'utilisateur
-  useEffect(() => {
-    if (user && user._id) {
-      fetchUserConversations();
-    }
-  }, [user, fetchUserConversations]);
-
-  const startNewConversation = async (initialMessage) => {
-    try {
-      setLoading(true);
-      const result = await chatbotService.createConversation(initialMessage);
-      setConversations((prev) => [result.conversation, ...prev]);
-      setCurrentConversation(result.conversation);
-      setLoading(false);
-      return result.conversation;
-    } catch (err) {
-      setError(err.message);
-      setLoading(false);
-      throw err;
-    }
-  };
-
-  const sendMessage = async (conversationId, message) => {
-    try {
-      setLoading(true);
-      const result = await chatbotService.sendMessage(conversationId, message);
-
-      // Mettre à jour la conversation actuelle
-      if (currentConversation?._id === conversationId) {
-        setCurrentConversation(result.conversation);
-      }
-
-      // Mettre à jour la liste des conversations
-      setConversations((prev) =>
-        prev.map((conv) =>
-          conv._id === conversationId ? result.conversation : conv
-        )
-      );
-
-      setLoading(false);
-      return result.response;
-    } catch (err) {
-      setError(err.message);
-      setLoading(false);
-      throw err;
-    }
-  };
-
-  const loadConversation = async (conversationId) => {
-    try {
-      setLoading(true);
-      const result = await chatbotService.getConversation(conversationId);
-      setCurrentConversation(result.conversation);
-      setLoading(false);
-    } catch (err) {
-      setError(err.message);
-      setLoading(false);
-    }
-  };
-
-  const value = {
-    conversations,
-    currentConversation,
-    loading,
-    error,
-    startNewConversation,
-    sendMessage,
-    loadConversation,
-    refreshConversations: fetchUserConversations,
-  };
-
-  return (
-    <ChatbotContext.Provider value={value}>{children}</ChatbotContext.Provider>
-  );
-};*/
-// context/ChatbotContext.js
 import React, {
   createContext,
   useContext,
   useState,
   useEffect,
   useCallback,
+  useRef,
 } from "react";
 import { chatbotService } from "../services/chatbotService";
 import { AuthContext } from "./AuthContext";
@@ -128,7 +14,6 @@ const ChatbotContext = createContext();
 export const useChatbot = () => useContext(ChatbotContext);
 
 export const ChatbotProvider = ({ children }) => {
-  // Correction ici: utiliser useContext avec AuthContext
   const { user } = useContext(AuthContext);
 
   const [conversations, setConversations] = useState([]);
@@ -136,85 +21,146 @@ export const ChatbotProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Utilisation de useCallback pour mémoriser la fonction fetchUserConversations
-  const fetchUserConversations = useCallback(async () => {
-    if (!user || !user._id) return;
+  const currentUserRef = useRef(null);
+
+  const resetState = useCallback(() => {
+    setConversations([]);
+    setCurrentConversation(null);
+    setError(null);
+    setLoading(false);
+  }, []);
+
+  const fetchUserConversations = useCallback(async (userId) => {
+    if (!userId) return;
+
+    currentUserRef.current = userId;
 
     try {
       setLoading(true);
-      const data = await chatbotService.getConversations(user._id);
-      setConversations(data.conversations);
-      setLoading(false);
+      setError(null);
+
+      const data = await chatbotService.getConversations(userId);
+
+      if (currentUserRef.current === userId) {
+        setConversations(data.conversations || []);
+        setLoading(false);
+      }
     } catch (err) {
-      setError(err.message);
-      setLoading(false);
+      if (currentUserRef.current === userId) {
+        console.error("Erreur lors du chargement des conversations:", err);
+        setError(err.message);
+        setConversations([]);
+        setLoading(false);
+      }
     }
-  }, [user]);
+  }, []);
 
-  // Réinitialiser l'état lors du changement d'utilisateur
   useEffect(() => {
-    // Réinitialiser les états lors du changement d'utilisateur
-    setCurrentConversation(null);
-    setConversations([]);
+    resetState();
 
-    // Charger les conversations du nouvel utilisateur
     if (user && user._id) {
-      fetchUserConversations();
+      fetchUserConversations(user._id);
+    } else {
+      currentUserRef.current = null;
     }
-  }, [user, fetchUserConversations]);
+
+    return () => {
+      currentUserRef.current = null;
+    };
+  }, [user, resetState, fetchUserConversations]);
 
   const startNewConversation = async (initialMessage) => {
+    if (!user || !user._id) {
+      throw new Error("Utilisateur non connecté");
+    }
+
     try {
       setLoading(true);
+      setError(null);
+
       const result = await chatbotService.createConversation(initialMessage);
-      setConversations((prev) => [result.conversation, ...prev]);
-      setCurrentConversation(result.conversation);
-      setLoading(false);
-      return result.conversation;
+
+      if (currentUserRef.current === user._id) {
+        setConversations((prev) => [result.conversation, ...prev]);
+        setCurrentConversation(result.conversation);
+        setLoading(false);
+        return result.conversation;
+      }
     } catch (err) {
-      setError(err.message);
-      setLoading(false);
+      if (currentUserRef.current === user._id) {
+        setError(err.message);
+        setLoading(false);
+      }
       throw err;
     }
   };
 
   const sendMessage = async (conversationId, message) => {
+    if (!user || !user._id) {
+      throw new Error("Utilisateur non connecté");
+    }
+
     try {
       setLoading(true);
+      setError(null);
+
       const result = await chatbotService.sendMessage(conversationId, message);
 
-      // Mettre à jour la conversation actuelle
-      if (currentConversation?._id === conversationId) {
-        setCurrentConversation(result.conversation);
+      if (currentUserRef.current === user._id) {
+        if (currentConversation?._id === conversationId) {
+          setCurrentConversation(result.conversation);
+        }
+
+        setConversations((prev) =>
+          prev.map((conv) =>
+            conv._id === conversationId ? result.conversation : conv
+          )
+        );
+
+        setLoading(false);
+        return result.response;
       }
-
-      // Mettre à jour la liste des conversations
-      setConversations((prev) =>
-        prev.map((conv) =>
-          conv._id === conversationId ? result.conversation : conv
-        )
-      );
-
-      setLoading(false);
-      return result.response;
     } catch (err) {
-      setError(err.message);
-      setLoading(false);
+      if (currentUserRef.current === user._id) {
+        setError(err.message);
+        setLoading(false);
+      }
       throw err;
     }
   };
 
   const loadConversation = async (conversationId) => {
+    if (!user || !user._id) {
+      throw new Error("Utilisateur non connecté");
+    }
+
     try {
       setLoading(true);
+      setError(null);
+
       const result = await chatbotService.getConversation(conversationId);
-      setCurrentConversation(result.conversation);
-      setLoading(false);
+
+      if (currentUserRef.current === user._id) {
+        setCurrentConversation(result.conversation);
+        setLoading(false);
+      }
     } catch (err) {
-      setError(err.message);
-      setLoading(false);
+      if (currentUserRef.current === user._id) {
+        setError(err.message);
+        setLoading(false);
+      }
     }
   };
+
+  const refreshConversations = useCallback(() => {
+    if (user && user._id) {
+      fetchUserConversations(user._id);
+    }
+  }, [user, fetchUserConversations]);
+
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
 
   const value = {
     conversations,
@@ -224,7 +170,9 @@ export const ChatbotProvider = ({ children }) => {
     startNewConversation,
     sendMessage,
     loadConversation,
-    refreshConversations: fetchUserConversations,
+    refreshConversations,
+    clearError,
+    resetState,
   };
 
   return (

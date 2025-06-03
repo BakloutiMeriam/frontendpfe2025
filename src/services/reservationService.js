@@ -312,4 +312,29 @@ export const reservationService = {
       throw error;
     }
   },
+
+  annulerReservationConfirmee: async (reservationId) => {
+    try {
+      const response = await fetch(
+        `${API_URL}/${reservationId}/annuler-confirmee`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getToken()}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erreur lors de l'annulation");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Erreur service annulation réservation confirmée:", error);
+      throw error;
+    }
+  },
 };

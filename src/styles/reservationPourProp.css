@@ -574,3 +574,51 @@
     flex-direction: column;
   }
 }
+/* Ajoutez ces styles dans votre fichier reservationPourProp.css */
+
+.action-button.cancel-confirmed {
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+}
+
+.action-button.cancel-confirmed:hover {
+  background-color: #ff5252;
+  transform: translateY(-1px);
+}
+
+.action-button.cancel-confirmed:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.payment-warning {
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #8a6d3b;
+}
+
+.payment-warning i {
+  color: #f39c12;
+}
+
+/* Style pour les réservations confirmées avec bouton d'annulation */
+.reservation-card.status-confirmée .payment-warning {
+  border-left: 3px solid #f39c12;
+}

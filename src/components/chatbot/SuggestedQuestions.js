@@ -1,7 +1,6 @@
 import React from "react";
 
 const SuggestedQuestions = ({ onSelectQuestion }) => {
-  // Liste des questions fréquentes
   const suggestedQuestions = [
     "Comment fonctionne le processus de réservation?",
     "Comment puis-je contacter un propriétaire?",

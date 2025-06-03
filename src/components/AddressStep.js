@@ -499,7 +499,7 @@ const AddressStep = ({ formData, setFormData, errors }) => {
 
       // IMPORTANT: Utilisez HTTPS au lieu de HTTP pour éviter les erreurs de contenu mixte
       const response = await fetch(
-        `https://secure.geonames.org/searchJSON?country=FR&featureClass=A&featureCode=ADM1&maxRows=1000&username=contactlemonde
+        `https://secure.geonames.org/searchJSON?country=${countryCode}&featureClass=A&featureCode=ADM1&maxRows=1000&username=contactlemonde
 `
       );
 

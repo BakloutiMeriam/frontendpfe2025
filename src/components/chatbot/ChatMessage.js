@@ -1,7 +1,5 @@
-// components/chatbot/ChatMessage.js
 import React from "react";
 const ChatMessage = ({ message }) => {
-  // Vérifier plusieurs façons possibles d'identifier un message utilisateur
   const isUser =
     message.sender === "user" ||
     message.role === "user" ||
